@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry sourcepath="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.5.4/3bc504d7330fbbc432a0fa97e64ae118632d1a86/gdx-1.5.4-sources.jar" kind="lib" path="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.5.4/c16e1a0088ae7f0cac4a8d6595be32432e6069f4/gdx-1.5.4.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.5.4/fce96db46da0eea469508891af1af98d063f6fba/gdx-box2d-1.5.4-sources.jar" kind="lib" path="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.5.4/6b0e1e0ef1b4ee3010f4e55cceaa22ba9ace5cf2/gdx-box2d-1.5.4.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-controllers/1.5.4/fb06b44592fee909b3fd16ddb30029e254a1906a/gdx-controllers-1.5.4-sources.jar" kind="lib" path="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-controllers/1.5.4/2e267699397e2fcd5eadbb322be2fceed548767c/gdx-controllers-1.5.4.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype/1.5.4/a40493c0d68ed00ae2902657908beae64deaf042/gdx-freetype-1.5.4-sources.jar" kind="lib" path="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype/1.5.4/907d182cd9d32e9d77834baf1ae0d91abc2e0a0a/gdx-freetype-1.5.4.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-ai/1.5.0/1ecf751f2ed8e80f693a018219f3aa5e74b10da4/gdx-ai-1.5.0-sources.jar" kind="lib" path="/Users/kyle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-ai/1.5.0/5f694a1d54a6e15884ac50b83b7927df771d69b0/gdx-ai-1.5.0.jar" exported="true"/>
+</classpath>
