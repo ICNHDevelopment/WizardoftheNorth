@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.gamestate;
 
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.gui.Container;
 
 /**
  * Created by kyle on 5/30/15.
@@ -26,9 +27,5 @@ public abstract class GameState {
     public abstract void update();
     public abstract void draw();
 
-}
-
-enum GameStates {
-    MENU, PAUSE, WORLD
 }
 

@@ -11,6 +11,8 @@ import static com.badlogic.gdx.Gdx.*;
 
 /**
  * Created by kyle on 5/30/15.
+ * Most of this code should be self-explanatory.
+ * Since LibGdx renders the bottom right as (0, 0), we have to invert the Y axis for mouse position.
  */
 
 public class CInputProcessor implements InputProcessor {
