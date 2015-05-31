@@ -41,7 +41,7 @@ public class Container {
         position = pos;
         size = sz;
 
-        parent.add(this);
+        parent.addChild(this);
     }
 
     /**
@@ -60,11 +60,15 @@ public class Container {
         float tempY = Game.HEIGHT * percY;
         size = new Vector2(tempX, tempY);
 
-        parent.add(this);
+        parent.addChild(this);
     }
 
-    public void add(Container c) {
-
+    /**
+     * Self explanatory. Adds the child to the children array.
+     * @param c
+     */
+    void addChild(Container c) {
+        children.add(c);
     }
 
     /**
