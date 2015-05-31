@@ -22,11 +22,14 @@ public class Fonts {
     }
 
     public static BitmapFont loadFont(String name, int size, Color fontColor, Color borderColor) {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/" + name + ".ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/" + name + ".ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = size;
         parameter.color = fontColor;
         parameter.borderColor = borderColor;
+        if (borderColor != fontColor) {
+            parameter.borderWidth = (int)((float)size/12.0);
+        }
         BitmapFont temp = generator.generateFont(parameter);
         generator.dispose();
         return temp;

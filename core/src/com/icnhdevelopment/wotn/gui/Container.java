@@ -16,6 +16,7 @@ public class Container {
     Container parent;
     Vector2 position;
     Vector2 size;
+    boolean visible = true;
 
     ArrayList<Container> children;
 
@@ -26,6 +27,8 @@ public class Container {
         position = Vector2.Zero;
         size = new Vector2(Game.WIDTH, Game.HEIGHT);
         parent = null;
+
+        children = new ArrayList<>();
     }
 
     /**
@@ -42,6 +45,7 @@ public class Container {
         size = sz;
 
         parent.addChild(this);
+        children = new ArrayList<>();
     }
 
     /**
@@ -61,6 +65,7 @@ public class Container {
         size = new Vector2(tempX, tempY);
 
         parent.addChild(this);
+        children = new ArrayList<>();
     }
 
     /**
@@ -77,8 +82,10 @@ public class Container {
      * @param batch - SpriteBatch to render images
      */
     public void render(SpriteBatch batch) {
-        for (Container child : children) {
-            child.render(batch);
+        if (visible) {
+            for (Container child : children) {
+                child.render(batch);
+            }
         }
     }
 
@@ -97,7 +104,11 @@ public class Container {
      * @return
      */
     public Vector2 getAbsolutePosition() {
-        return null;
+        Vector2 temp = Vector2.Zero;
+        if (parent != null) {
+            temp = parent.getAbsolutePosition();
+        }
+        return new Vector2(temp.x + position.x, temp.y + position.y);
     }
 
 }
