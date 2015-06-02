@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
  * Created by kyle on 5/31/15.
  */
 public class Label extends Container {
-
     String text;
     int fontSize = 12;
     Color color = Color.WHITE;
@@ -25,27 +24,38 @@ public class Label extends Container {
     int fontX = 0, fontY = 0;
     float fontWidth, fontHeight;
 
-    public Label(Container pa, Vector2 pos, Vector2 sz, String text) {
-        this(pa, pos, sz, text, 12);
-    }
-    public Label(Container pa, Vector2 pos, Vector2 sz, String text, int size) {
-        this(pa, pos, sz, text, size, Fonts.OPEN_SANS);
-    }
-    public Label(Container pa, Vector2 pos, Vector2 sz, String text, int size, String font) {
-        this(pa, pos, sz, text, size, font, Color.WHITE, Color.WHITE);
-    }
-    public Label(Container pa, Vector2 pos, Vector2 sz, String text, int size, String font, Color fColor, Color bColor) {
-        this.parent = pa;
+    public void setText(String text) {
         this.text = text;
-        this.fontSize = size;
-        this.fontType = font;
-        this.color = fColor;
-        this.borderColor = bColor;
-        this.position = pos;
-        this.size = sz;
-        parent.addChild(this);
+    }
 
-        createFont();
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public void sethAlignment(Alignment hAlignment) {
+        this.hAlignment = hAlignment;
+    }
+
+    public void setvAlignment(Alignment vAlignment) {
+        this.vAlignment = vAlignment;
+    }
+
+    public void setFontType(String fontType) {
+        this.fontType = fontType;
+    }
+
+    public Label(Container pa, Vector2 pos, Vector2 sz, String text) {
+        super(pa, pos, sz);
+
+        this.text = text;
     }
 
     /**
@@ -53,7 +63,7 @@ public class Label extends Container {
      * Since LEFT and BOTTOM are default we can ignore those cases.
      * Remember that (0, 0) is bottom left, so bottom and left should be default.
      */
-    void createFont() {
+    public void createFont() {
         font = Fonts.loadFont(Fonts.OPEN_SANS, fontSize, color, borderColor);
         BitmapFont.TextBounds bounds = font.getBounds(text);
         fontWidth = bounds.width;
@@ -81,9 +91,17 @@ public class Label extends Container {
         /* Todo: Add render text code
         * Probably will have to implement getAbsolutePosition() here
         */
+        if (font == null) {
+            this.createFont();
+        }
+        float yOffset = fontHeight, xOffset = 0;
+        if (color != borderColor) {
+            yOffset += fontSize/12;
+            xOffset += fontSize/12;
+        }
         if (visible) {
             Vector2 temp = getAbsolutePosition();
-            font.draw(batch, text, temp.x + fontX, temp.y + fontY + fontHeight);
+            font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
 
             super.render(batch);
         }

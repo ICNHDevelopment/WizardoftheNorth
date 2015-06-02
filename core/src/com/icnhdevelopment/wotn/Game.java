@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.gui.Label;
@@ -21,7 +22,15 @@ public class Game extends ApplicationAdapter {
 	CInputProcessor inputProcessor;
 	Container main;
 
-	public static int WIDTH, HEIGHT;
+	static int WIDTH, HEIGHT;
+
+	public static int WIDTH() {
+		return WIDTH;
+	}
+
+	public static int HEIGHT() {
+		return HEIGHT;
+	}
 	
 	@Override
 	public void create () {
@@ -32,7 +41,12 @@ public class Game extends ApplicationAdapter {
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
 		main = new Container();
-		new Label(main, Vector2.Zero, new Vector2(100, 100), "This is a test", 40, Fonts.OPEN_SANS, Color.WHITE, Color.RED);
+		Label l = new Label(main, new Vector2(0, Game.HEIGHT()-44), new Vector2(Game.WIDTH(), 40), "The Wizard of the North");
+		l.setFontSize(40);
+		l.setColor(Color.MAGENTA);
+		l.setBorderColor(Color.RED);
+		l.sethAlignment(Alignment.CENTER);
+		l.createFont();
 	}
 
 	@Override

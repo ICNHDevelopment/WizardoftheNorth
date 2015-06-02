@@ -17,16 +17,16 @@ import static com.badlogic.gdx.Gdx.*;
 
 public class CInputProcessor implements InputProcessor {
 
-    boolean lastButtonLeft = false, buttonLeft = false;
-    boolean lastButtonRight = false, buttonRight = false;
-    Vector2 mousePosition = Vector2.Zero;
+    private boolean lastButtonLeft = false, buttonLeft = false;
+    private boolean lastButtonRight = false, buttonRight = false;
+    private Vector2 mousePosition = Vector2.Zero;
 
     public CInputProcessor () {
 
     }
 
     public void update() {
-        mousePosition = new Vector2(input.getX(), Game.HEIGHT-input.getY());
+        mousePosition = new Vector2(input.getX(), Game.HEIGHT()-input.getY());
 
         lastButtonLeft = buttonLeft;
         buttonLeft = input.isButtonPressed(Input.Buttons.LEFT);

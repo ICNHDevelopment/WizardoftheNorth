@@ -25,7 +25,7 @@ public class Container {
      */
     public Container() {
         position = Vector2.Zero;
-        size = new Vector2(Game.WIDTH, Game.HEIGHT);
+        size = new Vector2(Game.WIDTH(), Game.HEIGHT());
         parent = null;
 
         children = new ArrayList<>();
@@ -37,7 +37,7 @@ public class Container {
      * LibGdx automatically resizes elements when the window is resized.
      * @param pa - The parent Container
      * @param pos - The position of the Container ((0, 0) is at the bottom left).
-     * @param sz - The size of the Container in pixels. Use Conatiner(Container pa, Vector2 pos, double percX, double percY) for percentage setup.
+     * @param sz - The size of the Container in pixels. Use Container(Container pa, Vector2 pos, double percX, double percY) for percentage setup.
      */
     public Container(Container pa, Vector2 pos, Vector2 sz) {
         parent = pa;
@@ -60,8 +60,8 @@ public class Container {
     public Container(Container pa, Vector2 pos, float percX, float percY) {
         parent = pa;
         position = pos;
-        float tempX = Game.WIDTH * percX;
-        float tempY = Game.HEIGHT * percY;
+        float tempX = Game.WIDTH() * percX;
+        float tempY = Game.HEIGHT() * percY;
         size = new Vector2(tempX, tempY);
 
         parent.addChild(this);
@@ -70,7 +70,7 @@ public class Container {
 
     /**
      * Self explanatory. Adds the child to the children array.
-     * @param c
+     * @param c Container object
      */
     void addChild(Container c) {
         children.add(c);
@@ -91,7 +91,7 @@ public class Container {
 
     /**
      * Gets the position within the parent, basically the position field.
-     * @return
+     * @return position within the parent
      */
     public Vector2 getRelativePosition() {
         return position;
@@ -101,9 +101,9 @@ public class Container {
      * UNIMPLEMENTED
      * Gets the absolute position of the element in the game window.
      * Should be used for human interaction.
-     * @return
+     * @return position on the screen
      */
-    public Vector2 getAbsolutePosition() {
+    Vector2 getAbsolutePosition() {
         Vector2 temp = Vector2.Zero;
         if (parent != null) {
             temp = parent.getAbsolutePosition();
