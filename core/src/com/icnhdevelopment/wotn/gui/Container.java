@@ -1,6 +1,9 @@
 package com.icnhdevelopment.wotn.gui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 
@@ -17,8 +20,13 @@ public class Container {
     Vector2 position;
     Vector2 size;
     boolean visible = true;
+    Color backColor = null;
+    float backColorOpacity = 1f;
 
     ArrayList<Container> children;
+    public ArrayList<Button> buttons;
+
+    ShapeRenderer shapeRenderer;
 
     /**
      * When creating interfaces, use this constructor to create a parent Container the size of the screen.
@@ -29,6 +37,8 @@ public class Container {
         parent = null;
 
         children = new ArrayList<>();
+        shapeRenderer = new ShapeRenderer();
+        buttons = new ArrayList<>();
     }
 
     /**
@@ -46,6 +56,8 @@ public class Container {
 
         parent.addChild(this);
         children = new ArrayList<>();
+        shapeRenderer = new ShapeRenderer();
+        buttons = new ArrayList<>();
     }
 
     /**
@@ -66,6 +78,8 @@ public class Container {
 
         parent.addChild(this);
         children = new ArrayList<>();
+        shapeRenderer = new ShapeRenderer();
+        buttons = new ArrayList<>();
     }
 
     /**
@@ -77,15 +91,36 @@ public class Container {
     }
 
     /**
+     * DO NOT USE THIS, IT IS BUGGY, THANKS OBAMA
+     */
+    public void renderBackground(SpriteBatch batch) {
+        if (visible) {
+            if (backColor != null) {
+                shapeRenderer.begin(ShapeType.Filled);
+                shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, backColorOpacity);
+                shapeRenderer.rect(position.x, position.y, size.x, size.y);
+                shapeRenderer.end();
+            }
+            for (Container child : children) {
+                child.renderBackground(batch);
+            }
+        }
+    }
+
+    void renderChildren(SpriteBatch batch) {
+        for (Container child : children) {
+            child.render(batch);
+        }
+    }
+
+    /**
      * The render method first draws itself if required, then calls the render method of each child.
      * Children will be drawn on top of the parent.
      * @param batch - SpriteBatch to render images
      */
     public void render(SpriteBatch batch) {
         if (visible) {
-            for (Container child : children) {
-                child.render(batch);
-            }
+            renderChildren(batch);
         }
     }
 
@@ -103,12 +138,24 @@ public class Container {
      * Should be used for human interaction.
      * @return position on the screen
      */
-    Vector2 getAbsolutePosition() {
+    public Vector2 getAbsolutePosition() {
         Vector2 temp = Vector2.Zero;
         if (parent != null) {
             temp = parent.getAbsolutePosition();
         }
         return new Vector2(temp.x + position.x, temp.y + position.y);
+    }
+
+    public Vector2 getSize() {
+        return size;
+    }
+
+    public void setBackColor(Color c) {
+        backColor = c;
+    }
+
+    public void setBackColorOpacity(float opacity) {
+        this.backColorOpacity = opacity;
     }
 
 }

@@ -2,8 +2,10 @@ package com.icnhdevelopment.wotn.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.handlers.ColorCodes;
 
 /**
  * Created by kyle on 5/31/15.
@@ -52,6 +54,13 @@ public class Label extends Container {
         this.fontType = fontType;
     }
 
+    /**
+     * Constructor yay
+     * @param pa The parent container
+     * @param pos Position in the parent container
+     * @param sz The button will default to the size of the text. This should be used to add to width and height.
+     * @param text Kind of obvious what this does
+     */
     public Label(Container pa, Vector2 pos, Vector2 sz, String text) {
         super(pa, pos, sz);
 
@@ -63,11 +72,15 @@ public class Label extends Container {
      * Since LEFT and BOTTOM are default we can ignore those cases.
      * Remember that (0, 0) is bottom left, so bottom and left should be default.
      */
-    public void createFont() {
+    public void createFont(boolean useFontSize) {
         font = Fonts.loadFont(Fonts.OPEN_SANS, fontSize, color, borderColor);
         BitmapFont.TextBounds bounds = font.getBounds(text);
         fontWidth = bounds.width;
         fontHeight = bounds.height;
+        if (useFontSize) {
+            size.x = fontWidth + size.x + (fontSize / 12);
+            size.y = fontHeight + size.y + (fontSize / 12);
+        }
 
         //<editor-fold desc="Alignments">
         if (hAlignment == Alignment.CENTER) { //Centered horizontally
@@ -86,24 +99,25 @@ public class Label extends Container {
 
     }
 
-    @Override
-    public void render(SpriteBatch batch) {
-        /* Todo: Add render text code
-        * Probably will have to implement getAbsolutePosition() here
-        */
+    void renderText(SpriteBatch batch) {
         if (font == null) {
-            this.createFont();
+            System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
         }
         float yOffset = fontHeight, xOffset = 0;
         if (color != borderColor) {
             yOffset += fontSize/12;
             xOffset += fontSize/12;
         }
-        if (visible) {
-            Vector2 temp = getAbsolutePosition();
-            font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
+        Vector2 temp = getAbsolutePosition();
+        font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
+    }
 
-            super.render(batch);
+    @Override
+    public void render(SpriteBatch batch) {
+        if (visible) {
+            renderText(batch);
+
+            renderChildren(batch);
         }
     }
 

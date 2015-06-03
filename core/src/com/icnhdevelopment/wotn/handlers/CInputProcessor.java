@@ -46,7 +46,7 @@ public class CInputProcessor implements InputProcessor {
         return (!buttonRight && lastButtonRight);
     }
 
-    public boolean mouseHovered(int x, int y, int width, int height) {
+    public boolean mouseHovered(float x, float y, float width, float height) {
         return (new Rectangle(x, y, width, height).contains(new Rectangle(mousePosition.x, mousePosition.y, 1, 1)));
     }
 
