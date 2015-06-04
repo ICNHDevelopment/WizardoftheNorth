@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 
 import java.util.ArrayList;
 
@@ -90,9 +91,18 @@ public class Container {
         children.add(c);
     }
 
-    /**
-     * DO NOT USE THIS, IT IS BUGGY, THANKS OBAMA
-     */
+    public void updateChildren(CInputProcessor processor) {
+        for (Button button : buttons) {
+            Vector2 butPos = button.getAbsolutePosition();
+            Vector2 butSize = button.getSize();
+            if (processor.mouseHovered(butPos.x, butPos.y, butSize.x, butSize.y)) {
+                if (processor.didMouseClick()) {
+                    button.Click();
+                }
+            }
+        }
+    }
+
     public void renderBackground(SpriteBatch batch) {
         if (visible) {
             if (backColor != null) {

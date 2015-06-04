@@ -43,9 +43,8 @@ public class Game extends ApplicationAdapter {
 		l.setBorderColor(Color.RED);
 		l.sethAlignment(Alignment.CENTER);
 		l.setBackColor(Color.BLUE);
-		l.setBackColorOpacity(1f);
 		l.createFont(false);
-		Button b = new Button(main, new Vector2(0, 0), new Vector2(2, 2), "Exit") {
+		Button b = new Button(main, new Vector2(0, 0), new Vector2(4, 4), "Exit") {
 			@Override
 			public void Click() {
 				Game.EXIT();
@@ -65,6 +64,7 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		main.updateChildren(inputProcessor);
 		batch.begin();
 		main.renderBackground(batch);
 		batch.end();
@@ -72,13 +72,6 @@ public class Game extends ApplicationAdapter {
 		main.render(batch);
 		batch.end();
 		inputProcessor.update();
-		for (Button exit : main.buttons) {
-			Vector2 exitPos = exit.getAbsolutePosition();
-			Vector2 exitSize = exit.getSize();
-			if (inputProcessor.didMouseClick() && inputProcessor.mouseHovered(exitPos.x, exitPos.y, exitSize.x, exitSize.y)) {
-				exit.Click();
-			}
-		}
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 }
