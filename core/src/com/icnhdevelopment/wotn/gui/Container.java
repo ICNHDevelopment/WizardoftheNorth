@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
@@ -158,6 +159,10 @@ public class Container {
 
     public Vector2 getSize() {
         return size;
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(position.x, position.y, size.x, size.y);
     }
 
     public void setBackColor(Color c) {

@@ -56,6 +56,9 @@ public class Game extends ApplicationAdapter {
 		b.setBackColor(Color.YELLOW);
 		b.createFont(true);
 		main.buttons.add(b);
+		ImageLabel il = new ImageLabel(main, new Vector2(200, 0), new Vector2(400, 600), new Texture(Gdx.files.internal("badlogic.jpg")));
+		il.setImageAlignment(Alignment.CENTER);
+		il.setBackColor(Color.RED);
 	}
 
 	@Override
