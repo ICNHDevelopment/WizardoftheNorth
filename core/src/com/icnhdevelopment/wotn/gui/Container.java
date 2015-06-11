@@ -21,6 +21,8 @@ public class Container {
     Container parent;
     Vector2 position;
     Vector2 size;
+    Vector2 positionScale;
+    Vector2 sizeScale;
     boolean visible = true;
     Color backColor = null;
     float backColorOpacity = 1f;
@@ -34,13 +36,7 @@ public class Container {
      * When creating interfaces, use this constructor to create a parent Container the size of the screen.
      */
     public Container() {
-        position = Vector2.Zero;
-        size = new Vector2(Game.WIDTH(), Game.HEIGHT());
-        parent = null;
-
-        children = new ArrayList<>();
-        shapeRenderer = new ShapeRenderer();
-        buttons = new ArrayList<>();
+        init(null, Vector2.Zero, new Vector2(Game.WIDTH(), Game.HEIGHT()));
     }
 
     /**
@@ -52,14 +48,9 @@ public class Container {
      * @param sz - The size of the Container in pixels. Use Container(Container pa, Vector2 pos, double percX, double percY) for percentage setup.
      */
     public Container(Container pa, Vector2 pos, Vector2 sz) {
-        parent = pa;
-        position = pos;
-        size = sz;
+        init(pa, pos, sz);
 
         parent.addChild(this);
-        children = new ArrayList<>();
-        shapeRenderer = new ShapeRenderer();
-        buttons = new ArrayList<>();
     }
 
     /**
@@ -72,16 +63,87 @@ public class Container {
      * @param percY - The percent of the height of the parent to set this height to. 1 = 100%, .5 = 50%, etc.
      */
     public Container(Container pa, Vector2 pos, float percX, float percY) {
-        parent = pa;
-        position = pos;
         float tempX = Game.WIDTH() * percX;
         float tempY = Game.HEIGHT() * percY;
-        size = new Vector2(tempX, tempY);
+        Vector2 tempSize = new Vector2(tempX, tempY);
+        init(pa, pos, tempSize);
 
         parent.addChild(this);
+    }
+
+    void init(Container pa, Vector2 pos, Vector2 sz) {
+        parent = pa;
+        position = pos;
+        size = sz;
+        if (parent == null) {
+            sizeScale = new Vector2(1f, 1f);
+            positionScale = new Vector2(0f, 0f);
+        } else {
+            Rectangle paRec = parent.getBounds();
+            float wS = size.x/paRec.width;
+            float hS = size.y/paRec.height;
+            sizeScale = new Vector2(wS, hS);
+            float xS = position.x/paRec.width;
+            float yS = position.y/paRec.height;
+            positionScale = new Vector2(xS, yS);
+        }
+
         children = new ArrayList<>();
         shapeRenderer = new ShapeRenderer();
         buttons = new ArrayList<>();
+    }
+
+    public void reposition() {
+        if (parent != null) {
+            Vector2 paPos = parent.getSize();
+            position = new Vector2(paPos.x*positionScale.x, paPos.y*positionScale.y);
+        }
+        for (Container child : children) {
+            child.reposition();
+        }
+    }
+
+    public void resize() {
+        Vector2 oldT = size;
+        Vector2 newT = size;
+        if (parent != null) {
+            Rectangle paRec = parent.getBounds();
+            size = new Vector2(paRec.width*sizeScale.x, paRec.height*sizeScale.y);
+            newT = size;
+        }
+        for (Container child : children) {
+            if (child instanceof Label) {
+                ((Label)child).resize(oldT, newT);
+            }
+            else {
+                child.resize();
+            }
+        }
+    }
+
+    public void reposition(float x, float y) {
+        position = new Vector2(x, y);
+    }
+
+    public void resize(float x, float y) {
+        Vector2 oldT = size;
+        size = new Vector2(x, y);
+        Vector2 newT = size;
+        if (parent != null) {
+            Vector2 paRec = parent.getSize();
+            float wS = size.x / paRec.x;
+            float hS = size.y / paRec.y;
+            sizeScale = new Vector2(wS, hS);
+        }
+        for (Container child : children) {
+            if (child instanceof Label) {
+            ((Label)child).resize(oldT, newT);
+            }
+            else {
+                child.resize();
+            }
+            child.reposition();
+        }
     }
 
     /**
@@ -109,7 +171,8 @@ public class Container {
             if (backColor != null) {
                 shapeRenderer.begin(ShapeType.Filled);
                 shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, backColorOpacity);
-                shapeRenderer.rect(position.x, position.y, size.x, size.y);
+                Vector2 temp = getAbsolutePosition();
+                shapeRenderer.rect(temp.x, temp.y, size.x, size.y);
                 shapeRenderer.end();
             }
             for (Container child : children) {
@@ -157,6 +220,10 @@ public class Container {
         return new Vector2(temp.x + position.x, temp.y + position.y);
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     public Vector2 getSize() {
         return size;
     }
@@ -171,6 +238,16 @@ public class Container {
 
     public void setBackColorOpacity(float opacity) {
         this.backColorOpacity = opacity;
+    }
+
+    public Container getParent() {
+        if (parent == null) return this;
+        return parent;
+    }
+
+    public Container getAbsoluteParent() {
+        if (parent == null) return this;
+        return getParent().getAbsoluteParent();
     }
 
 }

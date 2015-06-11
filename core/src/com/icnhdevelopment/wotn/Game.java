@@ -11,11 +11,15 @@ import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Label;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Game extends ApplicationAdapter {
 
 	SpriteBatch batch;
 	CInputProcessor inputProcessor;
-	Container main;
+	static Container main;
 
 	static int WIDTH, HEIGHT;
 
@@ -57,8 +61,31 @@ public class Game extends ApplicationAdapter {
 		b.createFont(true);
 		main.buttons.add(b);
 		ImageLabel il = new ImageLabel(main, new Vector2(200, 0), new Vector2(400, 600), new Texture(Gdx.files.internal("badlogic.jpg")));
-		il.setImageAlignment(Alignment.CENTER);
+		il.setImageAlignment(Alignment.TILED);
 		il.setBackColor(Color.RED);
+		il.setBackColorOpacity(.2f);
+		b = new Button(il, new Vector2(10, 10), new Vector2(2, 2), "Invisitize") {
+			@Override
+			public void Click() {
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						if (main.getSize().x > 800) {
+							main.getAbsoluteParent().resize(main.getSize().x-16, main.getSize().y);
+						}
+						if (main.getSize().y > 450) {
+							main.getAbsoluteParent().resize(main.getSize().x, main.getSize().y-9);
+						}
+						if (main.getSize().x <= 800 && main.getSize().y <= 450) {
+							this.cancel();
+						}
+					}
+				}, new Date(), 10);
+			}
+		};
+		b.setBackColor(Color.ORANGE);
+		b.createFont(true);
+		main.buttons.add(b);
 	}
 
 	@Override

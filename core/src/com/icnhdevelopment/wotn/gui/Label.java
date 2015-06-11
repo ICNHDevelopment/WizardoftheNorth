@@ -99,17 +99,27 @@ public class Label extends Container {
 
     }
 
+    public void resize(Vector2 old, Vector2 newS) {
+        super.resize();
+
+        float xDiff = newS.x/old.x;
+        float yDiff = newS.y/old.y;
+        font.setScale(Math.abs(font.getScaleX()*xDiff), Math.abs(font.getScaleY()*yDiff));
+    }
+
     void renderText(SpriteBatch batch) {
-        if (font == null) {
-            System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
+        if (visible) {
+            if (font == null) {
+                System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
+            }
+            float yOffset = fontHeight, xOffset = 0;
+            if (color != borderColor) {
+                yOffset += fontSize / 12;
+                xOffset += fontSize / 12;
+            }
+            Vector2 temp = getAbsolutePosition();
+            font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
         }
-        float yOffset = fontHeight, xOffset = 0;
-        if (color != borderColor) {
-            yOffset += fontSize/12;
-            xOffset += fontSize/12;
-        }
-        Vector2 temp = getAbsolutePosition();
-        font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
     }
 
     @Override
