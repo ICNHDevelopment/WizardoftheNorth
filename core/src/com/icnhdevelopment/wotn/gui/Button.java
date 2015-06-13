@@ -9,10 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 /**
  * Created by kyle on 6/1/15.
  */
-public class Button extends Label implements ImageDisplay {
+public class Button extends Label{
 
     private Image image;
-    private Alignment imageVAlignment = Alignment.BOTTOM, imageHAlignment = Alignment.TOP;
+    private Alignment imageAlignment = Alignment.SINGLE;
+    Vector2 imagePosition, imageSize;
 
     public Button(Container pa, Vector2 pos, Vector2 sz, String text) {
         super(pa, pos, sz, text);
@@ -27,20 +28,5 @@ public class Button extends Label implements ImageDisplay {
 
     public void Click() {
 
-    }
-
-    @Override
-    public void setImage(Image i) {
-        this.image = i;
-    }
-
-    @Override
-    public void setImageVAlignment(Alignment a) {
-        this.imageVAlignment = a;
-    }
-
-    @Override
-    public void setImageHAlignment(Alignment a) {
-        this.imageHAlignment = a;
     }
 }

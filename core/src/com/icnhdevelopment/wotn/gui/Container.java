@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.gui;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -31,6 +32,7 @@ public class Container {
     public ArrayList<Button> buttons;
 
     ShapeRenderer shapeRenderer;
+    OrthographicCamera renderCam;
 
     /**
      * When creating interfaces, use this constructor to create a parent Container the size of the screen.
@@ -75,6 +77,19 @@ public class Container {
         parent = pa;
         position = pos;
         size = sz;
+        setSizeScale();
+
+        children = new ArrayList<>();
+        shapeRenderer = new ShapeRenderer();
+        buttons = new ArrayList<>();
+        if (parent == null) {
+            renderCam = new OrthographicCamera(Game.WIDTH(), Game.HEIGHT());
+            renderCam.position.set(renderCam.viewportWidth/2, renderCam.viewportHeight/2, 0);
+            renderCam.update();
+        }
+    }
+
+    void setSizeScale() {
         if (parent == null) {
             sizeScale = new Vector2(1f, 1f);
             positionScale = new Vector2(0f, 0f);
@@ -87,10 +102,6 @@ public class Container {
             float yS = position.y/paRec.height;
             positionScale = new Vector2(xS, yS);
         }
-
-        children = new ArrayList<>();
-        shapeRenderer = new ShapeRenderer();
-        buttons = new ArrayList<>();
     }
 
     public void reposition() {
@@ -248,6 +259,10 @@ public class Container {
     public Container getAbsoluteParent() {
         if (parent == null) return this;
         return getParent().getAbsoluteParent();
+    }
+
+    public OrthographicCamera getRenderCam() {
+        return renderCam;
     }
 
 }

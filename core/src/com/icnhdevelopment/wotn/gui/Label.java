@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.handlers.ColorCodes;
 
@@ -81,22 +82,33 @@ public class Label extends Container {
             size.x = fontWidth + size.x + (fontSize / 12);
             size.y = fontHeight + size.y + (fontSize / 12);
         }
+        setSizeScale();
+        alignText();
 
-        //<editor-fold desc="Alignments">
+    }
+
+    void alignText() {
+        BitmapFont.TextBounds bounds = font.getBounds(text);
+        fontWidth = bounds.width;
+        fontHeight = bounds.height;
         if (hAlignment == Alignment.CENTER) { //Centered horizontally
-            fontX = (int)(super.position.x + (super.size.x-fontWidth)/2);
+            fontX = (int)((super.size.x-fontWidth)/2);
         }
         else if (hAlignment == Alignment.RIGHT) {
-            fontX = (int)(super.position.x + super.size.x - fontWidth);
+            fontX = (int)(super.size.x - fontWidth);
+        }
+        else {
+            fontX = 0;
         }
         if (vAlignment == Alignment.MIDDLE) { //Centered vertically
-            fontY = (int)(super.position.y + (super.size.y-fontHeight)/2);
+            fontY = (int)((super.size.y-fontHeight)/2);
         }
         else if (vAlignment == Alignment.TOP) {
-            fontY = (int)(super.position.y + super.size.y - fontHeight);
+            fontY = (int)(size.y-fontHeight);
         }
-        //</editor-fold>
-
+        else {
+            fontY = 0;
+        }
     }
 
     public void resize(Vector2 old, Vector2 newS) {
@@ -105,6 +117,7 @@ public class Label extends Container {
         float xDiff = newS.x/old.x;
         float yDiff = newS.y/old.y;
         font.setScale(Math.abs(font.getScaleX()*xDiff), Math.abs(font.getScaleY()*yDiff));
+        alignText();
     }
 
     void renderText(SpriteBatch batch) {
@@ -114,8 +127,8 @@ public class Label extends Container {
             }
             float yOffset = fontHeight, xOffset = 0;
             if (color != borderColor) {
-                yOffset += fontSize / 12;
-                xOffset += fontSize / 12;
+                yOffset += fontSize / 12f * font.getScaleY();
+                xOffset += fontSize / 12f * font.getScaleX();
             }
             Vector2 temp = getAbsolutePosition();
             font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);

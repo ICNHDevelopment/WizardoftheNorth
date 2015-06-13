@@ -10,6 +10,7 @@ import com.icnhdevelopment.wotn.gui.*;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Label;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.sun.java.swing.action.AlignRightAction;
 
 import java.util.Date;
 import java.util.Timer;
@@ -58,10 +59,11 @@ public class Game extends ApplicationAdapter {
 		b.setColor(Color.BLACK);
 		b.setBorderColor(Color.WHITE);
 		b.setBackColor(Color.YELLOW);
+		b.setvAlignment(Alignment.MIDDLE);
 		b.createFont(true);
 		main.buttons.add(b);
 		ImageLabel il = new ImageLabel(main, new Vector2(200, 0), new Vector2(400, 600), new Texture(Gdx.files.internal("badlogic.jpg")));
-		il.setImageAlignment(Alignment.TILED);
+		il.setImageAlignment(Alignment.CENTER);
 		il.setBackColor(Color.RED);
 		il.setBackColorOpacity(.2f);
 		b = new Button(il, new Vector2(10, 10), new Vector2(2, 2), "Invisitize") {
@@ -71,16 +73,16 @@ public class Game extends ApplicationAdapter {
 					@Override
 					public void run() {
 						if (main.getSize().x > 800) {
-							main.getAbsoluteParent().resize(main.getSize().x-16, main.getSize().y);
+							main.getAbsoluteParent().resize(main.getSize().x-14, main.getSize().y);
 						}
 						if (main.getSize().y > 450) {
-							main.getAbsoluteParent().resize(main.getSize().x, main.getSize().y-9);
+							main.getAbsoluteParent().resize(main.getSize().x, main.getSize().y-8);
 						}
 						if (main.getSize().x <= 800 && main.getSize().y <= 450) {
 							this.cancel();
 						}
 					}
-				}, new Date(), 10);
+				}, new Date(), 20);
 			}
 		};
 		b.setBackColor(Color.ORANGE);
@@ -95,6 +97,7 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		main.updateChildren(inputProcessor);
+		batch.setProjectionMatrix(main.getRenderCam().combined);
 		batch.begin();
 		main.renderBackground(batch);
 		batch.end();
