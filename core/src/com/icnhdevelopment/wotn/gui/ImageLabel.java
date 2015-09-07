@@ -46,6 +46,12 @@ public class ImageLabel extends Container {
         }
     }
 
+    public void resize(){
+        super.resize();
+
+        setImageAlignment(imageAlignment);
+    }
+
     void renderImage(SpriteBatch batch) {
         if (imageAlignment.equals(Alignment.STRETCHED)) {
             imageSize = size;

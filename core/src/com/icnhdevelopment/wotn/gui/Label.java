@@ -12,6 +12,7 @@ import com.icnhdevelopment.wotn.handlers.ColorCodes;
  * Created by kyle on 5/31/15.
  */
 public class Label extends Container {
+
     String text;
     int fontSize = 12;
     Color color = Color.WHITE;
@@ -79,35 +80,38 @@ public class Label extends Container {
         fontWidth = bounds.width;
         fontHeight = bounds.height;
         if (useFontSize) {
-            size.x = fontWidth + size.x + (fontSize / 12);
-            size.y = fontHeight + size.y + (fontSize / 12);
+            size.x = fontWidth + size.x + (fontSize / 12f);
+            size.y = fontHeight + size.y + (fontSize / 12f);
         }
         setSizeScale();
         alignText();
-
     }
 
     void alignText() {
         BitmapFont.TextBounds bounds = font.getBounds(text);
         fontWidth = bounds.width;
         fontHeight = bounds.height;
+        float borderSize = 0;
+        if (borderColor != color) {
+            borderSize = fontSize / 12f;
+        }
         if (hAlignment == Alignment.CENTER) { //Centered horizontally
-            fontX = (int)((super.size.x-fontWidth)/2);
+            fontX = (int)((super.size.x-(fontWidth + borderSize*font.getScaleX()*2))/2);
         }
         else if (hAlignment == Alignment.RIGHT) {
-            fontX = (int)(super.size.x - fontWidth);
+            fontX = (int)(super.size.x - (fontWidth + borderSize*font.getScaleX()));
         }
         else {
-            fontX = 0;
+            fontX = 0;//(int)(borderSize*font.getScaleX()/2);
         }
         if (vAlignment == Alignment.MIDDLE) { //Centered vertically
-            fontY = (int)((super.size.y-fontHeight)/2);
+            fontY = (int)((super.size.y-(fontHeight+borderSize*font.getScaleY()*2))/2);
         }
         else if (vAlignment == Alignment.TOP) {
-            fontY = (int)(size.y-fontHeight);
+            fontY = (int)(size.y-(fontHeight+borderSize*font.getScaleY()));
         }
         else {
-            fontY = 0;
+            fontY = 0;//(int)(borderSize*font.getScaleY()/2);
         }
     }
 
@@ -127,8 +131,8 @@ public class Label extends Container {
             }
             float yOffset = fontHeight, xOffset = 0;
             if (color != borderColor) {
-                yOffset += fontSize / 12f * font.getScaleY();
-                xOffset += fontSize / 12f * font.getScaleX();
+                yOffset += fontSize / 12f;// * font.getScaleY();
+                xOffset += fontSize / 12f;// * font.getScaleX();
             }
             Vector2 temp = getAbsolutePosition();
             font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);

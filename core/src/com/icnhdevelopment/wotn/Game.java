@@ -10,7 +10,7 @@ import com.icnhdevelopment.wotn.gui.*;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Label;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
-import com.sun.java.swing.action.AlignRightAction;
+import com.icnhdevelopment.wotn.handlers.ColorCodes;
 
 import java.util.Date;
 import java.util.Timer;
@@ -36,6 +36,7 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		System.out.println(ColorCodes.GREEN + "Initializing The Wizard of the North...");
 		batch = new SpriteBatch();
 		inputProcessor = new CInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
@@ -57,16 +58,17 @@ public class Game extends ApplicationAdapter {
 		};
 		b.setFontSize(30);
 		b.setColor(Color.BLACK);
-		b.setBorderColor(Color.WHITE);
+		b.setBorderColor(Color.GREEN);
 		b.setBackColor(Color.YELLOW);
-		b.setvAlignment(Alignment.MIDDLE);
+		//b.setvAlignment(Alignment.MIDDLE);
+		//b.sethAlignment(Alignment.CENTER);
 		b.createFont(true);
 		main.buttons.add(b);
-		ImageLabel il = new ImageLabel(main, new Vector2(200, 0), new Vector2(400, 600), new Texture(Gdx.files.internal("badlogic.jpg")));
-		il.setImageAlignment(Alignment.CENTER);
+		ImageLabel il = new ImageLabel(main, new Vector2(300, 300), new Vector2(256, 256), new Texture(Gdx.files.internal("badlogic.jpg")));
+		il.setImageAlignment(Alignment.STRETCHED);
 		il.setBackColor(Color.RED);
 		il.setBackColorOpacity(.2f);
-		b = new Button(il, new Vector2(10, 10), new Vector2(2, 2), "Invisitize") {
+		b = new Button(il, new Vector2(10, 10), new Vector2(2, 2), "Shrink :D") {
 			@Override
 			public void Click() {
 				new Timer().schedule(new TimerTask() {
@@ -86,6 +88,8 @@ public class Game extends ApplicationAdapter {
 			}
 		};
 		b.setBackColor(Color.ORANGE);
+		b.sethAlignment(Alignment.CENTER);
+		b.setvAlignment(Alignment.MIDDLE);
 		b.createFont(true);
 		main.buttons.add(b);
 	}
