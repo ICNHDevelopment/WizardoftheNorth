@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -111,6 +112,10 @@ public class Container {
         }
         for (Container child : children) {
             child.reposition();
+            if (child instanceof ImageLabel){
+                ImageLabel c = (ImageLabel)child;
+                c.setImageAlignment(c.imageAlignment);
+            }
         }
     }
 
