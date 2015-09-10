@@ -19,6 +19,9 @@ public class Menu {
 
     public Container mainContainer;
 
+    //Main Menu
+    //Albert replace this code with the xml loading code
+    //(all the important properties have get/set methods)
     public void init(){
         mainContainer = new Container();
         Label l = new Label(mainContainer, new Vector2(0, Game.HEIGHT()-44), new Vector2(Game.WIDTH(), 40), "The Wizard of the North");
