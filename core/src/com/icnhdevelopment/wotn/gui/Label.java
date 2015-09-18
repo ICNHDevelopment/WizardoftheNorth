@@ -58,9 +58,10 @@ public class Label extends Container {
 
     /**
      * Constructor yay
-     * @param pa The parent container
-     * @param pos Position in the parent container
-     * @param sz The button will default to the size of the text. This should be used to add to width and height.
+     *
+     * @param pa   The parent container
+     * @param pos  Position in the parent container
+     * @param sz   The button will default to the size of the text. This should be used to add to width and height.
      * @param text Kind of obvious what this does
      */
     public Label(Container pa, Vector2 pos, Vector2 sz, String text) {
@@ -96,21 +97,17 @@ public class Label extends Container {
             borderSize = fontSize / 12f;
         }
         if (hAlignment == Alignment.CENTER) { //Centered horizontally
-            fontX = (int)((super.size.x-(fontWidth + borderSize*font.getScaleX()*2))/2);
-        }
-        else if (hAlignment == Alignment.RIGHT) {
-            fontX = (int)(super.size.x - (fontWidth + borderSize*font.getScaleX()));
-        }
-        else {
+            fontX = (int) ((super.size.x - (fontWidth + borderSize * font.getScaleX() * 2)) / 2);
+        } else if (hAlignment == Alignment.RIGHT) {
+            fontX = (int) (super.size.x - (fontWidth + borderSize * font.getScaleX()));
+        } else {
             fontX = 0;//(int)(borderSize*font.getScaleX()/2);
         }
         if (vAlignment == Alignment.MIDDLE) { //Centered vertically
-            fontY = (int)((super.size.y-(fontHeight+borderSize*font.getScaleY()*2))/2);
-        }
-        else if (vAlignment == Alignment.TOP) {
-            fontY = (int)(size.y-(fontHeight+borderSize*font.getScaleY()));
-        }
-        else {
+            fontY = (int) ((super.size.y - (fontHeight + borderSize * font.getScaleY() * 2)) / 2);
+        } else if (vAlignment == Alignment.TOP) {
+            fontY = (int) (size.y - (fontHeight + borderSize * font.getScaleY()));
+        } else {
             fontY = 0;//(int)(borderSize*font.getScaleY()/2);
         }
     }
@@ -118,30 +115,31 @@ public class Label extends Container {
     public void resize(Vector2 old, Vector2 newS) {
         super.resize();
 
-        float xDiff = newS.x/old.x;
-        float yDiff = newS.y/old.y;
-        font.setScale(Math.abs(font.getScaleX()*xDiff), Math.abs(font.getScaleY()*yDiff));
+        float xDiff = newS.x / old.x;
+        float yDiff = newS.y / old.y;
+        font.setScale(Math.abs(font.getScaleX() * xDiff), Math.abs(font.getScaleY() * yDiff));
         alignText();
     }
 
     void renderText(SpriteBatch batch) {
-        if (visible) {
-            if (font == null) {
-                System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
-            }
-            float yOffset = fontHeight, xOffset = 0;
-            if (color != borderColor) {
-                yOffset += fontSize / 12f;// * font.getScaleY();
-                xOffset += fontSize / 12f;// * font.getScaleX();
-            }
-            Vector2 temp = getAbsolutePosition();
-            font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
+        if (font == null) {
+            System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
         }
+        float yOffset = fontHeight, xOffset = 0;
+        if (color != borderColor) {
+            yOffset += fontSize / 12f;// * font.getScaleY();
+            xOffset += fontSize / 12f;// * font.getScaleX();
+        }
+        Vector2 temp = getAbsolutePosition();
+        batch.begin();
+        font.draw(batch, text, temp.x + fontX + xOffset, temp.y + fontY + yOffset);
+        batch.end();
     }
 
     @Override
     public void render(SpriteBatch batch) {
         if (visible) {
+            renderBackground(batch);
             renderText(batch);
 
             renderChildren(batch);

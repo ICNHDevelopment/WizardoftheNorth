@@ -80,11 +80,7 @@ public class Menu {
     }
 
     public void render(SpriteBatch batch){
-        batch.begin();
         mainContainer.renderBackground(batch);
-        batch.end();
-        batch.begin();
         mainContainer.render(batch);
-        batch.end();
     }
 }

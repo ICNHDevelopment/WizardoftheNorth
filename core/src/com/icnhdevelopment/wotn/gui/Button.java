@@ -22,6 +22,7 @@ public class Button extends Label{
 
     @Override
     public void render(SpriteBatch batch) {
+        renderBackground(batch);
         renderText(batch);
         renderChildren(batch);
     }

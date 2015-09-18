@@ -46,9 +46,10 @@ public class Container {
      * This constructor automatically adds itself to it's parent, so there is no need to to it manually.
      * The size set will be in pixels, so it might not work on some screens.
      * LibGdx automatically resizes elements when the window is resized.
-     * @param pa - The parent Container
+     *
+     * @param pa  - The parent Container
      * @param pos - The position of the Container ((0, 0) is at the bottom left).
-     * @param sz - The size of the Container in pixels. Use Container(Container pa, Vector2 pos, double percX, double percY) for percentage setup.
+     * @param sz  - The size of the Container in pixels. Use Container(Container pa, Vector2 pos, double percX, double percY) for percentage setup.
      */
     public Container(Container pa, Vector2 pos, Vector2 sz) {
         init(pa, pos, sz);
@@ -60,8 +61,9 @@ public class Container {
      * This constructor automatically adds itself to it's parent, so there is no need to to it manually.
      * The size is set using percentages, so it should scale based on the screen size.
      * LibGdx automatically resizes elements when the window is resized.
-     * @param pa - The parent Container
-     * @param pos - The position of the Container ((0, 0) is at the bottom left).
+     *
+     * @param pa    - The parent Container
+     * @param pos   - The position of the Container ((0, 0) is at the bottom left).
      * @param percX - The percent of the width of the parent to set this width to. 1 = 100%, .5 = 50%, etc.
      * @param percY - The percent of the height of the parent to set this height to. 1 = 100%, .5 = 50%, etc.
      */
@@ -85,7 +87,7 @@ public class Container {
         buttons = new ArrayList<>();
         if (parent == null) {
             renderCam = new OrthographicCamera(Game.WIDTH(), Game.HEIGHT());
-            renderCam.position.set(renderCam.viewportWidth/2, renderCam.viewportHeight/2, 0);
+            renderCam.position.set(renderCam.viewportWidth / 2, renderCam.viewportHeight / 2, 0);
             renderCam.update();
         }
     }
@@ -96,11 +98,11 @@ public class Container {
             positionScale = new Vector2(0f, 0f);
         } else {
             Rectangle paRec = parent.getBounds();
-            float wS = size.x/paRec.width;
-            float hS = size.y/paRec.height;
+            float wS = size.x / paRec.width;
+            float hS = size.y / paRec.height;
             sizeScale = new Vector2(wS, hS);
-            float xS = position.x/paRec.width;
-            float yS = position.y/paRec.height;
+            float xS = position.x / paRec.width;
+            float yS = position.y / paRec.height;
             positionScale = new Vector2(xS, yS);
         }
     }
@@ -108,12 +110,12 @@ public class Container {
     public void reposition() {
         if (parent != null) {
             Vector2 paPos = parent.getSize();
-            position = new Vector2(paPos.x*positionScale.x, paPos.y*positionScale.y);
+            position = new Vector2(paPos.x * positionScale.x, paPos.y * positionScale.y);
         }
         for (Container child : children) {
             child.reposition();
-            if (child instanceof ImageLabel){
-                ImageLabel c = (ImageLabel)child;
+            if (child instanceof ImageLabel) {
+                ImageLabel c = (ImageLabel) child;
                 c.setImageAlignment(c.imageAlignment);
             }
         }
@@ -124,14 +126,13 @@ public class Container {
         Vector2 newT = size;
         if (parent != null) {
             Rectangle paRec = parent.getBounds();
-            size = new Vector2(paRec.width*sizeScale.x, paRec.height*sizeScale.y);
+            size = new Vector2(paRec.width * sizeScale.x, paRec.height * sizeScale.y);
             newT = size;
         }
         for (Container child : children) {
             if (child instanceof Label) {
-                ((Label)child).resize(oldT, newT);
-            }
-            else {
+                ((Label) child).resize(oldT, newT);
+            } else {
                 child.resize();
             }
         }
@@ -153,9 +154,8 @@ public class Container {
         }
         for (Container child : children) {
             if (child instanceof Label) {
-            ((Label)child).resize(oldT, newT);
-            }
-            else {
+                ((Label) child).resize(oldT, newT);
+            } else {
                 child.resize();
             }
             child.reposition();
@@ -164,6 +164,7 @@ public class Container {
 
     /**
      * Self explanatory. Adds the child to the children array.
+     *
      * @param c Container object
      */
     void addChild(Container c) {
@@ -183,17 +184,14 @@ public class Container {
     }
 
     public void renderBackground(SpriteBatch batch) {
-        if (visible) {
-            if (backColor != null) {
-                shapeRenderer.begin(ShapeType.Filled);
-                shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, backColorOpacity);
-                Vector2 temp = getAbsolutePosition();
-                shapeRenderer.rect(temp.x, temp.y, size.x, size.y);
-                shapeRenderer.end();
-            }
-            for (Container child : children) {
-                child.renderBackground(batch);
-            }
+        if (backColor != null) {
+            batch.begin();
+            shapeRenderer.begin(ShapeType.Filled);
+            shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, backColorOpacity);
+            Vector2 temp = getAbsolutePosition();
+            shapeRenderer.rect(temp.x, temp.y, size.x, size.y);
+            shapeRenderer.end();
+            batch.end();
         }
     }
 
@@ -206,16 +204,19 @@ public class Container {
     /**
      * The render method first draws itself if required, then calls the render method of each child.
      * Children will be drawn on top of the parent.
+     *
      * @param batch - SpriteBatch to render images
      */
     public void render(SpriteBatch batch) {
         if (visible) {
+            renderBackground(batch);
             renderChildren(batch);
         }
     }
 
     /**
      * Gets the position within the parent, basically the position field.
+     *
      * @return position within the parent
      */
     public Vector2 getRelativePosition() {
@@ -226,6 +227,7 @@ public class Container {
      * UNIMPLEMENTED
      * Gets the absolute position of the element in the game window.
      * Should be used for human interaction.
+     *
      * @return position on the screen
      */
     public Vector2 getAbsolutePosition() {
