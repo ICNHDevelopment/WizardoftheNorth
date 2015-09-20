@@ -57,25 +57,6 @@ public class Container {
         parent.addChild(this);
     }
 
-    /**
-     * This constructor automatically adds itself to it's parent, so there is no need to to it manually.
-     * The size is set using percentages, so it should scale based on the screen size.
-     * LibGdx automatically resizes elements when the window is resized.
-     *
-     * @param pa    - The parent Container
-     * @param pos   - The position of the Container ((0, 0) is at the bottom left).
-     * @param percX - The percent of the width of the parent to set this width to. 1 = 100%, .5 = 50%, etc.
-     * @param percY - The percent of the height of the parent to set this height to. 1 = 100%, .5 = 50%, etc.
-     */
-    public Container(Container pa, Vector2 pos, float percX, float percY) {
-        float tempX = Game.WIDTH() * percX;
-        float tempY = Game.HEIGHT() * percY;
-        Vector2 tempSize = new Vector2(tempX, tempY);
-        init(pa, pos, tempSize);
-
-        parent.addChild(this);
-    }
-
     void init(Container pa, Vector2 pos, Vector2 sz) {
         parent = pa;
         position = pos;
