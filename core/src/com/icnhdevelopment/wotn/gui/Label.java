@@ -11,7 +11,7 @@ import com.icnhdevelopment.wotn.handlers.ColorCodes;
 /**
  * Created by kyle on 5/31/15.
  */
-public class Label extends Container {
+public class Label extends Container implements Button {
 
     String text;
     int fontSize = 12;
@@ -146,4 +146,8 @@ public class Label extends Container {
         }
     }
 
+    @Override
+    public void Click() {
+
+    }
 }

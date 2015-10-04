@@ -27,7 +27,6 @@ public class Container {
     Vector2 sizeScale;
     boolean visible = true;
     Color backColor = null;
-    float backColorOpacity = 1f;
 
     ArrayList<Container> children;
     public ArrayList<Button> buttons;
@@ -154,8 +153,9 @@ public class Container {
 
     public void updateChildren(CInputProcessor processor) {
         for (Button button : buttons) {
-            Vector2 butPos = button.getAbsolutePosition();
-            Vector2 butSize = button.getSize();
+            Container but = (Container)button;
+            Vector2 butPos = but.getAbsolutePosition();
+            Vector2 butSize = but.getSize();
             if (processor.mouseHovered(butPos.x, butPos.y, butSize.x, butSize.y)) {
                 if (processor.didMouseClick()) {
                     button.Click();
@@ -168,7 +168,7 @@ public class Container {
         if (backColor != null) {
             batch.begin();
             shapeRenderer.begin(ShapeType.Filled);
-            shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, backColorOpacity);
+            shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, 1);
             Vector2 temp = getAbsolutePosition();
             shapeRenderer.rect(temp.x, temp.y, size.x, size.y);
             shapeRenderer.end();
@@ -233,10 +233,6 @@ public class Container {
 
     public void setBackColor(Color c) {
         backColor = c;
-    }
-
-    public void setBackColorOpacity(float opacity) {
-        this.backColorOpacity = opacity;
     }
 
     public Container getParent() {

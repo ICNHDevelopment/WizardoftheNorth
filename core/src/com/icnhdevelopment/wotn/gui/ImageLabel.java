@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by kyle on 6/5/15.
  */
-public class ImageLabel extends Container {
+public class ImageLabel extends Container implements Button {
 
     Texture image;
     Alignment imageAlignment = Alignment.SINGLE;
@@ -103,5 +103,10 @@ public class ImageLabel extends Container {
 
             renderChildren(batch);
         }
+    }
+
+    @Override
+    public void Click() {
+
     }
 }

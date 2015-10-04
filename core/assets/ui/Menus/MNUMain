@@ -28,7 +28,6 @@
             <Size>(224, 98)</Size>
             <TextureFile>"ui/PlayBTN.png"</TextureFile>
             <BackColor>RED</BackColor>
-            <BackColorOpacity>0.2</BackColorOpacity>
             <ImageAlignment>STRETCHED</ImageAlignment>
         </ImageLabel>
     </Children>
