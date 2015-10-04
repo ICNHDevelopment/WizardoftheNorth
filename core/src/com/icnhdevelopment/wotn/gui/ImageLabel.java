@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by kyle on 6/5/15.
  */
-public class ImageLabel extends Container {
+public class ImageLabel extends Container implements Button {
 
     Texture image;
     Alignment imageAlignment = Alignment.SINGLE;
@@ -52,6 +52,7 @@ public class ImageLabel extends Container {
     }
 
     void renderImage(SpriteBatch batch) {
+        batch.begin();
         if (imageAlignment.equals(Alignment.STRETCHED)) {
             imageSize = size;
         }
@@ -91,14 +92,21 @@ public class ImageLabel extends Container {
         else {
             batch.draw(image, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x, imageSize.y);
         }
+        batch.end();
     }
 
     @Override
     public void render(SpriteBatch batch) {
         if (visible) {
+            renderBackground(batch);
             renderImage(batch);
 
             renderChildren(batch);
         }
+    }
+
+    @Override
+    public void Click() {
+
     }
 }

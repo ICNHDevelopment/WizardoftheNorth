@@ -31,7 +31,7 @@ public class Menu {
         l.sethAlignment(Alignment.CENTER);
         l.setBackColor(Color.BLUE);
         l.createFont(false);
-        Button b = new Button(mainContainer, new Vector2(0, 0), new Vector2(4, 4), "Exit") {
+        Label b = new Label(mainContainer, new Vector2(0, 0), new Vector2(4, 4), "Exit") {
             @Override
             public void Click() {
                 Game.EXIT();
@@ -45,23 +45,26 @@ public class Menu {
         //b.sethAlignment(Alignment.CENTER);
         b.createFont(true);
         mainContainer.buttons.add(b);
-        ImageLabel il = new ImageLabel(mainContainer, new Vector2(300, 300), new Vector2(256, 256), new Texture(Gdx.files.internal("badlogic.jpg")));
+        ImageLabel il = new ImageLabel(mainContainer, new Vector2(30, 30), new Vector2(224*3, 98*3), new Texture(Gdx.files.internal("ui/PlayBTN.png"))){
+            @Override
+            public void Click() {
+
+            }
+        };
         il.setImageAlignment(Alignment.STRETCHED);
-        il.setBackColor(Color.RED);
-        il.setBackColorOpacity(.2f);
-        b = new Button(il, new Vector2(10, 10), new Vector2(2, 2), "Shrink :D") {
+        b = new Label(il, new Vector2(10, 10), new Vector2(20, 20), "Shrink :D") {
             @Override
             public void Click() {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if (mainContainer.getSize().x > 800) {
-                            mainContainer.getAbsoluteParent().resize(mainContainer.getSize().x-14, mainContainer.getSize().y);
+                        if (mainContainer.getSize().x > Game.WIDTH()/3) {
+                            mainContainer.getAbsoluteParent().resize(mainContainer.getSize().x-9, mainContainer.getSize().y);
                         }
-                        if (mainContainer.getSize().y > 450) {
-                            mainContainer.getAbsoluteParent().resize(mainContainer.getSize().x, mainContainer.getSize().y-8);
+                        if (mainContainer.getSize().y > Game.HEIGHT()/3) {
+                            mainContainer.getAbsoluteParent().resize(mainContainer.getSize().x, mainContainer.getSize().y-9);
                         }
-                        if (mainContainer.getSize().x <= 800 && mainContainer.getSize().y <= 450) {
+                        if (mainContainer.getSize().x <= Game.WIDTH()/3 && mainContainer.getSize().y <= Game.HEIGHT()/3) {
                             this.cancel();
                         }
                     }
@@ -80,11 +83,7 @@ public class Menu {
     }
 
     public void render(SpriteBatch batch){
-        batch.begin();
         mainContainer.renderBackground(batch);
-        batch.end();
-        batch.begin();
         mainContainer.render(batch);
-        batch.end();
     }
 }
