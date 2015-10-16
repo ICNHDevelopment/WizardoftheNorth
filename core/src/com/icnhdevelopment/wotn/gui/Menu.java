@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.gamestate.WorldState;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.world.World;
 
 import java.util.Date;
 import java.util.Timer;
@@ -48,10 +50,12 @@ public class Menu {
         ImageLabel il = new ImageLabel(mainContainer, new Vector2(30, 30), new Vector2(224*3, 98*3), new Texture(Gdx.files.internal("ui/PlayBTN.png"))){
             @Override
             public void Click() {
-
+                Game.currentWorld.create("Sewer.tmx");
+                Game.GAME_STATE = new WorldState(Game.game);
             }
         };
         il.setImageAlignment(Alignment.STRETCHED);
+        mainContainer.buttons.add(il);
         b = new Label(il, new Vector2(10, 10), new Vector2(20, 20), "Shrink :D") {
             @Override
             public void Click() {

@@ -9,6 +9,4 @@ import java.util.ArrayList;
  */
 public class Map {
 
-    ArrayList<NonPlayer> npcs;
-
 }
