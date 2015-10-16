@@ -4,10 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.icnhdevelopment.wotn.gamestate.*;
 import com.icnhdevelopment.wotn.gui.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.ColorCodes;
+import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.world.World;
 
 public class Game extends ApplicationAdapter {
@@ -15,9 +15,9 @@ public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
 	CInputProcessor inputProcessor;
 	static Menu currentMenu;
-	public static GameState GAME_STATE;
 	public static World currentWorld;
 	public static Game game;
+	public static GameState GAME_STATE;
 
 	static int WIDTH, HEIGHT;
 
@@ -40,9 +40,9 @@ public class Game extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputProcessor);
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
+		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init();
-		GAME_STATE = new MenuState(this);
 		currentWorld = new World();
 	}
 
@@ -52,14 +52,19 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		if (GAME_STATE instanceof MenuState || GAME_STATE instanceof PauseState){
+		if (GAME_STATE.equals(GameState.MENU)){
 			currentMenu.update(inputProcessor);
 			batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
 			currentMenu.render(batch);
-		}else if (GAME_STATE instanceof WorldState){
-			currentWorld.render();
+		}else if (GAME_STATE.equals(GameState.WORLD)){
+			currentWorld.update(inputProcessor);
+			currentWorld.render(batch);
 		}
 		inputProcessor.update();
+
+		batch.begin();
+		batch.draw(new Texture("Inventory.png"), WIDTH/2-192, (int)(HEIGHT-(HEIGHT*0.9)), 192*2, 288*2);
+		batch.end();
 
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}

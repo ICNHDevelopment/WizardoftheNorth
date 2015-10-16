@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
-import com.icnhdevelopment.wotn.gamestate.WorldState;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.Date;
@@ -51,7 +51,7 @@ public class Menu {
             @Override
             public void Click() {
                 Game.currentWorld.create("Sewer.tmx");
-                Game.GAME_STATE = new WorldState(Game.game);
+                Game.GAME_STATE = GameState.WORLD;
             }
         };
         il.setImageAlignment(Alignment.STRETCHED);
