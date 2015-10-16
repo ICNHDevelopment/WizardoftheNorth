@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="23">
+ <tileset firstgid="1" name="Sewer" tilewidth="32" tileheight="32" tilecount="400">
+  <image source="Sewer.png" trans="ff00ff" width="640" height="640"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztmWtS2zAURkVnYAn0DzugLd0BtOkO4qSsoHmwg+bRJbR76CLazXQvlWbuN5GF7MhAiMHnxxnFTmzCPb5XusqJc+7EeANH58Tho080+cDT8X2UcOzv+9rBR79IY42LfvnIncfF8X3se0+MPJeed573ng8Fx1c9+L/7ymNzIPi49tx4Pnk+FxzjY7+PENfxA2IVrlt75p6FvV55Np6lnZvY8dRT4eNJfMR1Ka0/Ie5bz8zuUZmDlTlY2PmlHafXU9vqPhTrsY1p3DWq7qT1J8Rf+VAZsYuNuZrZZ9Lr49dDr23ycW0+rjNx17ix+E6NUJsmdt3UxoXFfW4ob/S5yu3q1trYGlX0maVdM1Qfa4ubnu15FO9N9PqL5+sTc2Eec/e+7UGMjuFDz76e0bWd29rxxrXPL28jun6Hkf2doeVCmw/VoVXkQHNyeG9uTg4Rs5HLz/NNx6/Zm3yEeCs3phb7lVE90EduTXaZucfI3Jf2MUPwEXIi1CitkabmYOLqPcWVK997jHvFeEzvMYruH3LxzvO7hS7f4SWieqG1zdbV10OqV1rvdLnvT8+vZMz5CM9BWE8E9z8G7uOjK18L3Xb0URJP9aLq54eeH4cixPmP528yttWrkKdDz4+SuDb17G2xCdepN1T/vm7woT2WkCdpfsglPnbxaurZ9/lYWZzV088bfKifT/Pjm9vNY/I0NB+nLXGN+3X1hyX3nBR4U82K8+O72+WYPA3Jx2mDD+0JquZoX6qpjqVj5e73IPH9tV+1dffnD63NhlivmnyEOC3crj8Jz6v2H28KxrVr7kFUr5Y2sr5qR+vR4ES9u55l7W2pnmkemNn5Khq1ZznL+FhF92F9td9Hrq/LjfEe7YW5Sc+layztL6sWkh/7fbTFJ43Vmefc1fdt09jn5hf16ORHO13797hfGbt6r6Lal/utq/S3lS57BEPnzNX7lTj28qE9Mu2JLV23tTPU+Zch9aG5WzVIc3hbrvHcP85Bmw/Nzdon6bpXD0/ro2SfHZ7PB+ui/vhomiOYH57PR+C00Bkc3of2vfDRDx+l9QyO4+S8B9/3tVOaB7gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAl8h/vYGPmw==
+  </data>
+ </layer>
+ <objectgroup name="items">
+  <object id="14" name="Key" type="keySewer" x="1344" y="737">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="objectF">
+  <object id="15" type="torch" x="543.5" y="804">
+   <ellipse/>
+  </object>
+  <object id="17" type="torch" x="735" y="803">
+   <ellipse/>
+  </object>
+  <object id="18" type="torch" x="924.5" y="799">
+   <ellipse/>
+  </object>
+  <object id="19" type="torch" x="732" y="959.5">
+   <ellipse/>
+  </object>
+  <object id="20" type="torch" x="832.5" y="959.5">
+   <ellipse/>
+  </object>
+  <object id="21" type="torch" x="1027" y="931">
+   <ellipse/>
+  </object>
+  <object id="22" type="torch" x="416.5" y="705">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>
