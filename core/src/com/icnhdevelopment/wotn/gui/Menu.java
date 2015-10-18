@@ -72,7 +72,7 @@ public class Menu {
                             this.cancel();
                         }
                     }
-                }, new Date(), 20);
+                }, 20);
             }
         };
         b.setBackColor(Color.ORANGE);

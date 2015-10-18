@@ -62,9 +62,9 @@ public class Game extends ApplicationAdapter {
 		}
 		inputProcessor.update();
 
-		batch.begin();
-		batch.draw(new Texture("Inventory.png"), WIDTH/2-192, (int)(HEIGHT-(HEIGHT*0.9)), 192*2, 288*2);
-		batch.end();
+		//batch.begin();
+		//batch.draw(new Texture("Inventory.png"), WIDTH/2-192, (int)(HEIGHT-(HEIGHT*0.9)), 192*2, 288*2);
+		//batch.end();
 
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
