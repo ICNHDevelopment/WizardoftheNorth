@@ -59,7 +59,7 @@ public class World {
         mapRenderer.setView(camera);
 
         mainCharacter = new Character();
-        mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(26*32, 22*32));
+        mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)));
     }
 
     void loadMap (String filename){
