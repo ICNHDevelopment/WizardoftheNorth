@@ -26,7 +26,7 @@ public class XMLConverter {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        XML_Converter(new File("assets/ui/Menus/MNUMain.xml"));
+        XML_Converter(new File("core/assets/ui/Menus/MNUMain"));
 
     }
 
@@ -62,6 +62,7 @@ public class XMLConverter {
     }
 
     public static void w(Object o){ System.out.println(o); }
+
     public static void set(Object obj, String fld, String value){
         //Sets an object's property value without using (object.property = value;)
         Class<?> cl = obj.getClass();

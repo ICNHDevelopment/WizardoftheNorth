@@ -112,13 +112,17 @@ public class World {
         else if (input.isKeyDown(Input.Keys.D)){
             mainCharacter.move(new Vector2(1, 0), walls);
         }
-        TICK++;
+        else{
+            mainCharacter.animate(false);
+        }
         for (Spawner s : spawners){
             if (s.spawn){
                 s.spawn();
                 s.spawn = false;
             }
         }
+
+        TICK++;
     }
 
     public void render(SpriteBatch batch){

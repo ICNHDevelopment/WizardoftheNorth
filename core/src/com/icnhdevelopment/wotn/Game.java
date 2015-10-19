@@ -8,7 +8,10 @@ import com.icnhdevelopment.wotn.gui.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.ColorCodes;
 import com.icnhdevelopment.wotn.handlers.GameState;
+import com.icnhdevelopment.wotn.handlers.XMLConverter;
 import com.icnhdevelopment.wotn.world.World;
+
+import java.io.File;
 
 public class Game extends ApplicationAdapter {
 
@@ -44,6 +47,8 @@ public class Game extends ApplicationAdapter {
 		currentMenu = new Menu();
 		currentMenu.init();
 		currentWorld = new World();
+		Container l = XMLConverter.XML_Converter(new File("core/assets/ui/Menus/MNUMain")).get(0);
+
 	}
 
 	@Override

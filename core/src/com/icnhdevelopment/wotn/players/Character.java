@@ -36,18 +36,30 @@ public class Character {
         this.position = position;
     }
 
-    public void animate(){
-        if (World.TICK%5==0) {
-            frame++;
-            if (frame >= maxFrames) {
-                animating = false;
-                frame = 0;
+    public void animate(boolean moving) {
+        if (World.TICK % 5 == 0) {
+            if (moving) {
+                frame++;
+                if (frame >= maxFrames) {
+                    animating = false;
+                    frame = 0;
+                }
+            } else if (frame > 0) {
+                if (frame < maxFrames / 2) {
+                    frame--;
+                } else {
+                    frame++;
+                    if (frame >= maxFrames) {
+                        animating = false;
+                        frame = 0;
+                    }
+                }
             }
         }
     }
 
     public void move(Vector2 amount, ArrayList<Rectangle> walls){
-        animate();
+        animate(true);
         Rectangle next = new Rectangle(position.x + amount.x*SPEED, position.y + amount.y*SPEED, width, height);
         Rectangle nextFootBox = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
         for (Rectangle r : walls){
