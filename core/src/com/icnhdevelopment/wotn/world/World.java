@@ -39,11 +39,15 @@ public class World {
     ArrayList<Monster> enemies;
     ArrayList<Spawner> spawners;
     ArrayList<Rectangle> walls;
+    ArrayList<Rectangle> overWalls;
+    ArrayList<AnimatedSprite> animatedSprites;
 
     public void create(String filename){
         enemies = new ArrayList<>();
         spawners = new ArrayList<>();
         walls = new ArrayList<>();
+        overWalls = new ArrayList<>();
+        animatedSprites = new ArrayList<>();
 
         loadMap(filename);
         mapProperties = map.getProperties();
@@ -59,7 +63,7 @@ public class World {
         mapRenderer.setView(camera);
 
         mainCharacter = new Character();
-        mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)));
+        mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5);
     }
 
     void loadMap (String filename){
@@ -67,13 +71,14 @@ public class World {
         map = tml.load(filename);
         loadWalls(map);
         loadSpawners(map);
+        loadAnimatedSprites(map);
+        loadOverwallRecs(map);
     }
 
     void loadWalls(TiledMap m){
         MapLayer layer = m.getLayers().get("walls");
         MapObjects objs = layer.getObjects();
         for (MapObject obj : objs) {
-            String type = (String) obj.getProperties().get("type");
             float tx = (float) obj.getProperties().get("x");
             float ty = (float) obj.getProperties().get("y");
             float tw = (float) obj.getProperties().get("width");
@@ -92,6 +97,36 @@ public class World {
             Spawner s = new Spawner(Monster.getMonster(type), this, new Vector2(tx, ty));
             spawners.add(s);
             s.start();
+        }
+    }
+
+    void loadAnimatedSprites(TiledMap m){
+        MapLayer layer = m.getLayers().get("objectF");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs) {
+            String frames = (String) obj.getProperties().get("type");
+            int f = Integer.parseInt(frames);
+            String name = obj.getName();
+            float tx = (float) obj.getProperties().get("x");
+            float ty = (float) obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            String file = "world/images/" + name + "SS.png";
+            AnimatedSprite temp = new AnimatedSprite();
+            temp.create(file, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
+            animatedSprites.add(temp);
+        }
+    }
+
+    void loadOverwallRecs(TiledMap m){
+        MapLayer layer = m.getLayers().get("overwallRecs");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs){
+            float tx = (float)obj.getProperties().get("x");
+            float ty = (float)obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            overWalls.add(new Rectangle(tx, ty, tw, th));
         }
     }
 
@@ -115,6 +150,8 @@ public class World {
         else{
             mainCharacter.animate(false);
         }
+        mainCharacter.updateWalls(map, overWalls);
+
         for (Spawner s : spawners){
             if (s.spawn){
                 s.spawn();
@@ -133,6 +170,9 @@ public class World {
         mapRenderer.setView(camera);
         mapRenderer.render();
         batch.begin();
+        for (AnimatedSprite as : animatedSprites){
+            as.render(batch);
+        }
         mainCharacter.render(batch);
         for (Monster m : enemies){
             m.render(batch);

@@ -1,52 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="60">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="98">
  <tileset firstgid="1" name="Sewer" tilewidth="32" tileheight="32" tilecount="400">
   <image source="Sewer.png" trans="ff00ff" width="640" height="640"/>
  </tileset>
  <layer name="mainLayer" width="50" height="40">
   <data encoding="base64" compression="zlib">
-   eJzlV+1x2zAMhXvnjJD+yQZumm7gNO4GktVMUMnKBtVHRmh36BDJMt0l4B3eGWJImpQtf7Q/3lGUJeg9AATgGRHNBB8uGDP6t3Vcmr5ZIk7N93/SsUvXqbmm6PDF6dQ8x+rY9RuwYiwYnxi3jM8R+7sj64iB0bFk3DO+Mh4i9lPqMHyyEd8w77WMirGR64bRMWq5t5Z9wchPrEPnj50nhm/PKMVGLtwb4b6R+7Xs7fcPkYPQsJBvLRx8sSI/7DzJlf9zgdbQicZSnrHf19djcxA6lqJj6eCLtRNehaAVv2eyz+R3w7cSIE54LqdtfrWCXpCrZ2p5J1VHK9+DLyvFs1PX3xjfD4wb0e+y/ZioA76GT1q518u+o/D5+agwpub1Cb4P6UC+NIo7zupG4tPt+a2QDtf59+1dHKCjUrEohHMjyEfqcNW4hcPGSnwW24dCOkwMTC6h5hTCfU3DnnBH8TOl7pF6tW2slH0T+yfGnwB8HBBX1IqehvUFebUO2PDZ/cX4ba0uHcZ/pfjseaSOLxRfWx4TdcTwQA9G/x8bj6lg+L0wXq01lFfFHvGI4ePr8SGb5j30RPT71qMDs0zmiAd8cAgdvh6/S0cj/DADVB4d6P92PH7Q9pxCX6yOeYCP7u9Zgs11hF7klo7HTxVT6Iv55tyjA7MecgNzky/f7DWn9z1E28c81dP784Fal5JXPh3G/oa2/aWi7Vx5H7G25O8hyKta1qnqFeqi0YJeD99h9kLeIc9LuZ+rFbNo6dDRKDtT1itXP3Otema9EU32PbtmYd5Gzk4Zj5Bd+xtXjGsazrE2Z9f5QU+fKh6p/V73m4yGvQY56vqPFvvfJmWmGIsrGvYbzRk6MMNhZqsprYYfCn8dsHXgTCNXcLZDsT2Gn13cQzpwZjGPpM7856IjZl6/BB3nMG/vq8N3Bo6R//vqMJhHaj1nHZjLLl1HbN6dA1J4Xx+Z2xvbY2U4
+   eJzlV9tx2zAQhDIjl+D8uAPZcTqQE6UDUowrCCm6g/CREpIeUkTSjHsxMLM7PGIACKBEPZKPHRCUeNy9O9wdF0qpBfDuirFQ/7aOa9O3SMS5+f5POvbpOjfXFB2+OJ2b51Qd+34jNhorjXuNB40PEfvHE+uIgdGx1njS+KTxOWI/pw7DJ5vwDvNcq1Fp7HDdaHQaNe5tsS808jPrkPlj54nh22uUsJGDewPuO9yvsbefP0YOUsMK71o5+HJlfth5kgv/54DU0EFjif/Yz8vrqTlIHWvoWDv4cu3AqwBa+D3DPsPvhm8FME78X66G/GqBHsjFf2o8k6qjxfvoy0rw7MT1F42vR8Yd9LtsPyfqoK/pkxb3euw7FT4/7wWm1Lw+wfchHcyXRnDnWd0hPt2B7wrpcJ1/397FgToqEYsCnBsgn6jDVeNWDhsb+Cy2D4V0mBiYXGLNKcB9q8Y94VHFz5SyR8rVtrER9k3sXzR+B+DjwLiyVvRqXF+YV9uADZ/dnxq/rNWlw/ivhM9+TNTxUcXXludEHTE82IPZ/6fGYy4Yfn80/lprKK+KA+IRw8fX40M2zXPsiez3rUcHZ5nMEQ/64Bg6fD1+n44G/DgDVB4d7P92PL6p4ZxSX6yOZYCP7O9ZwCZjKOse65Evr5hbMh7fRUypL0bH0qODsx5zg3OTL9+ooVXD7Gj3ELtebWHXPh+sdSl55dPRw5fsL5Ua5sonz8p5kPHz9RDmVY11rnrFutirodfTd5y9mHfM8xL3c7FyFi0dOhphZ8565epnrlXOrHfQZN+zaxbnbebsnPEI2bXfcaNxq8ZzrM3ZPk/85ihnjEdqv5f9JlPjXsMcdX2jxX7bpMwUU3Gjxv1GcqYOznCsx7UK1/C58OqArYNnmrnCsx2K7Sn87OIe0sEzy3kkdea/FB0x8/o16LiEeftQHb4zcIr8P1SHwTJS6yXr4Fx27Tpi8+4SkML79sTc3gDfGmh9
+  </data>
+ </layer>
+ <layer name="overwalls" width="50" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztxcENACAIADH2kR10/6ngwQT+jG1yuQgAAAAA+FN2a/6y0+05AABwrwDLGgFD
   </data>
  </layer>
  <objectgroup name="items">
   <object id="14" name="Key" type="keySewer" x="1344" y="737">
    <ellipse/>
   </object>
-  <object id="31" x="1585" y="283">
-   <ellipse/>
-  </object>
  </objectgroup>
  <objectgroup name="objectF">
-  <object id="15" type="torch" x="543.5" y="804">
+  <object id="15" name="Torch" type="7" x="543.5" y="804" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="17" type="torch" x="735" y="803">
+  <object id="17" name="Torch" type="7" x="705" y="802" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="18" type="torch" x="924.5" y="799">
+  <object id="18" name="Torch" type="7" x="912.085" y="802" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="19" type="torch" x="732" y="959.5">
+  <object id="19" name="Torch" type="7" x="732" y="959.5" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="20" type="torch" x="832.5" y="959.5">
+  <object id="20" name="Torch" type="7" x="832.5" y="959.5" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="21" type="torch" x="1027" y="931">
+  <object id="21" name="Torch" type="7" x="1027" y="931" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="22" type="torch" x="416.5" y="705">
+  <object id="22" name="Torch" type="7" x="416.5" y="705" width="11" height="30">
    <ellipse/>
   </object>
-  <object id="26" x="1069" y="172.5" width="1">
-   <ellipse/>
-  </object>
-  <object id="57" x="762.476" y="543.515" width="171.168" height="119.007"/>
-  <object id="58" x="762.806" y="654.142" width="4.86552" height="81.6327"/>
-  <object id="59" x="928.234" y="655.494" width="4.86552" height="80.7905"/>
- </objectgroup>
- <objectgroup name="spawners">
-  <object id="33" type="Slime" x="784.811" y="1044.94"/>
  </objectgroup>
  <objectgroup name="walls">
   <object id="36" x="699.091" y="931.212" width="68.7879" height="60"/>
@@ -60,12 +53,43 @@
   <object id="47" x="311.518" y="734.496" width="8.21663" height="139.683"/>
   <object id="48" x="314.733" y="872.035" width="331.881" height="61.4461"/>
   <object id="49" x="512.09" y="716.812" width="8.59419" height="114.61"/>
-  <object id="50" x="514.727" y="822.72" width="317.485" height="8.70184"/>
+  <object id="50" x="514.727" y="827.849" width="317.485" height="3.57311"/>
   <object id="51" x="640.245" y="864.251" width="127.891" height="8.70184"/>
   <object id="52" x="799.647" y="863.669" width="128.55" height="8.70184"/>
   <object id="53" x="921.351" y="868.988" width="6.83585" height="124.077"/>
   <object id="54" x="920.088" y="991.878" width="203.504" height="8.70184"/>
-  <object id="55" x="863.856" y="822.324" width="103.367" height="8.70184"/>
+  <object id="55" x="863.856" y="767.584" width="81.7201" height="5.87748"/>
   <object id="56" x="960.377" y="767.872" width="127.617" height="191.441"/>
+  <object id="60" x="1082.84" y="416.788" width="4.86552" height="353.713"/>
+  <object id="61" x="384.817" y="415.502" width="698.242" height="8.42408"/>
+  <object id="62" x="384.709" y="422.896" width="4.86552" height="189.207"/>
+  <object id="63" x="58.1294" y="608.329" width="326.795" height="6.6802"/>
+  <object id="64" x="58.6031" y="353.427" width="4.86552" height="260.272"/>
+  <object id="65" x="60.4546" y="287.741" width="34.9852" height="127.885"/>
+  <object id="76" x="1120.8" y="415.929" width="165.695" height="127.527"/>
+  <object id="77" x="762.588" y="543.542" width="171.168" height="119.007"/>
+  <object id="78" x="347.144" y="272.654" width="196.214" height="111.027"/>
+  <object id="80" x="928.457" y="283.513" width="356.301" height="99.7753"/>
+  <object id="81" x="1119.84" y="927.949" width="6.83585" height="70.9776"/>
+  <object id="82" x="127.943" y="287.767" width="223.852" height="127.885"/>
+  <object id="83" x="541.417" y="231.874" width="389.773" height="55.5502"/>
+  <object id="84" x="927.417" y="655.521" width="5.79382" height="115.572"/>
+  <object id="85" x="1119.85" y="927.921" width="78.2735" height="8.70184"/>
+  <object id="86" x="1193.02" y="542.406" width="15.6145" height="393.892"/>
+  <object id="87" x="1280.29" y="377.392" width="6.83585" height="48.3045"/>
+  <object id="92" x="863.929" y="768.725" width="4.86552" height="62.2803"/>
+  <object id="93" x="863.92" y="822.272" width="103.367" height="8.70184"/>
+  <object id="94" x="762.996" y="654.068" width="4.86552" height="113.827"/>
+  <object id="95" x="731.694" y="759.244" width="33.9008" height="8.70184"/>
+  <object id="96" x="731.549" y="763.989" width="4.86552" height="64.0311"/>
+ </objectgroup>
+ <objectgroup name="overwallRecs">
+  <object id="97" x="736.597" y="768.081" width="95.6277" height="59.7673"/>
+ </objectgroup>
+ <objectgroup name="spawners">
+  <object id="33" type="Slime" x="784.811" y="1044.94"/>
+ </objectgroup>
+ <objectgroup name="doors">
+  <object id="66" type="LEVEL_NAME_HERE" x="95.2784" y="287.741" width="33.1875" height="15.6949"/>
  </objectgroup>
 </map>
