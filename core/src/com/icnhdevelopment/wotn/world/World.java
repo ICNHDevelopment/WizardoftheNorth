@@ -55,6 +55,7 @@ public class World {
         mapProperties = map.getProperties();
         TileWidth = mapProperties.get("tilewidth", Integer.class);
         TileHeight = mapProperties.get("tileheight", Integer.class);
+        initMap(map);
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (int)(Game.WIDTH()/SCALE), (int)(Game.HEIGHT()/SCALE));
@@ -72,6 +73,9 @@ public class World {
     void loadMap (String filename){
         TmxMapLoader tml = new TmxMapLoader();
         map = tml.load(filename);
+    }
+
+    void initMap(TiledMap m){
         loadWalls(map);
         loadSpawners(map);
         loadAnimatedSprites(map);
@@ -88,6 +92,7 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             walls.add(new Rectangle(tx, ty, tw, th));
         }
+        smoothRecs(walls);
     }
 
     void loadSpawners(TiledMap m){
@@ -131,11 +136,22 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             overWalls.add(new Rectangle(tx, ty, tw, th));
         }
+        smoothRecs(overWalls);
     }
 
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
+    }
+
+    void smoothRecs(ArrayList<Rectangle> recs){
+        for (int i =0; i<recs.size(); i++){
+            Rectangle r = recs.get(i);
+            r.x = Math.round(r.x / TileWidth)*TileWidth;
+            r.y = Math.round(r.y/TileHeight)*TileHeight;
+            r.width = Math.round(r.width/TileWidth)*TileWidth;
+            r.height = Math.round(r.height/TileHeight)*TileHeight;
+        }
     }
 
     public void update(CInputProcessor input){
