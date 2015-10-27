@@ -117,4 +117,6 @@ public class Character extends AnimatedSprite {
     }
 
     public boolean isPlayer() { return player; }
+
+    public Rectangle getHitBox() { return new Rectangle(footBox.x, footBox.y, footBox.width, footBox.height); }
 }

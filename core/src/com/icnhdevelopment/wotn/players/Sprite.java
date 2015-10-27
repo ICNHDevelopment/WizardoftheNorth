@@ -2,6 +2,7 @@ package com.icnhdevelopment.wotn.players;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -26,4 +27,5 @@ public class Sprite {
 
     public Vector2 getPosition() { return position; }
     public Vector2 getSize() { return new Vector2(width, height); }
+    public Rectangle getHitbox() { return new Rectangle(position.x, position.y, width, height); }
 }

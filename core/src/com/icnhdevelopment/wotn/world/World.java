@@ -41,6 +41,7 @@ public class World {
     ArrayList<Rectangle> walls;
     ArrayList<Rectangle> overWalls;
     ArrayList<AnimatedSprite> animatedSprites;
+    ArrayList<Sprite> multiDSprites;
 
     public void create(String filename){
         enemies = new ArrayList<>();
@@ -48,6 +49,7 @@ public class World {
         walls = new ArrayList<>();
         overWalls = new ArrayList<>();
         animatedSprites = new ArrayList<>();
+        multiDSprites = new ArrayList<>();
 
         loadMap(filename);
         mapProperties = map.getProperties();
@@ -64,6 +66,7 @@ public class World {
 
         mainCharacter = new Character();
         mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5);
+        multiDSprites.add(mainCharacter);
     }
 
     void loadMap (String filename){
@@ -132,6 +135,7 @@ public class World {
 
     public void spawn(Monster m){
         enemies.add(m);
+        multiDSprites.add(m);
     }
 
     public void update(CInputProcessor input){
@@ -158,8 +162,24 @@ public class World {
                 s.spawn = false;
             }
         }
+        sortMultiDSprites();
 
         TICK++;
+    }
+
+    void sortMultiDSprites(){
+        boolean madeChange = true;
+        while (madeChange){
+            madeChange = false;
+            for (int i = 0; i<multiDSprites.size()-1; i++){
+                if (multiDSprites.get(i).getHitbox().y<multiDSprites.get(i+1).getHitbox().y){
+                    Sprite s = multiDSprites.get(i);
+                    multiDSprites.set(i, multiDSprites.get(i+1));
+                    multiDSprites.set(i+1, s);
+                    madeChange = true;
+                }
+            }
+        }
     }
 
     public void render(SpriteBatch batch){
@@ -168,16 +188,21 @@ public class World {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
-        mapRenderer.render();
+        mapRenderer.render(new int[]{0});
+        if (map.getLayers().get(1).getOpacity()==1) {
+            mapRenderer.render(new int[]{1});
+        }
         batch.begin();
         for (AnimatedSprite as : animatedSprites){
             as.render(batch);
         }
-        mainCharacter.render(batch);
-        for (Monster m : enemies){
+        for (Sprite m : multiDSprites){
             m.render(batch);
         }
         batch.end();
+        if (map.getLayers().get(1).getOpacity()<1) {
+            mapRenderer.render(new int[]{1});
+        }
     }
 
 }
