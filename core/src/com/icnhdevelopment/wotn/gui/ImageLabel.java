@@ -21,6 +21,10 @@ public class ImageLabel extends Container implements Button {
         imageSize = new Vector2(im.getWidth(), im.getHeight());
     }
 
+    public ImageLabel(){
+        super();
+    }
+
     /**
      * Set the alignment of the image within its bounds.
      * @param a Use SINGLE, CENTER, TILED, or STRETCHED; The other Alignments are for text.

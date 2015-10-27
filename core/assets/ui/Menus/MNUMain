@@ -13,16 +13,6 @@
             <HAlignment>CENTER</HAlignment>
             <UseFontSize>false</UseFontSize>
         </Label>
-        <Button>
-            <Position>(0, 0)</Position>
-            <Size>(4, 4)</Size>
-            <Text>"Exit"</Text>
-            <FontSize>30</FontSize>
-            <Color>BLACK</Color>
-            <BorderColor>GREEN</BorderColor>
-            <BackColor>YELLOW</BackColor>
-            <UseFontSize>true</UseFontSize>
-        </Button>
         <ImageLabel>
             <Position>(30, 30)</Position>
             <Size>(224, 98)</Size>
