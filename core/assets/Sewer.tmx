@@ -13,12 +13,12 @@
    eJztxbEJACAMAEEbl3AF3UH3n8oUKSzFTriD50sBAAAAgHstqkc/G1HP/2xFMw8AALzb3TABbA==
   </data>
  </layer>
- <objectgroup name="items">
+ <objectgroup name="items" visible="0">
   <object id="14" name="Key" type="keySewer" x="1344" y="737">
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="objectF">
+ <objectgroup name="objectF" visible="0">
   <object id="15" name="Torch" type="7" x="543.5" y="804" width="11" height="30">
    <ellipse/>
   </object>
@@ -41,7 +41,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="walls">
+ <objectgroup name="walls" visible="0">
   <object id="36" x="699.091" y="931.212" width="68.7879" height="60"/>
   <object id="38" x="697.22" y="991.369" width="6.77163" height="135.196"/>
   <object id="39" x="702.904" y="1066.23" width="163.459" height="60.4398"/>
@@ -83,13 +83,18 @@
   <object id="95" x="731.694" y="759.244" width="33.9008" height="8.70184"/>
   <object id="96" x="731.549" y="763.989" width="4.86552" height="64.0311"/>
  </objectgroup>
+<<<<<<< HEAD
  <objectgroup name="overwallRecs">
   <object id="97" x="736.597" y="735.5" width="95.6277" height="92.3483"/>
+=======
+ <objectgroup name="overwallRecs" visible="0">
+  <object id="97" x="736.597" y="768.081" width="95.6277" height="59.7673"/>
+>>>>>>> 661b476207a52d49004574ec209de849894c1dfc
  </objectgroup>
- <objectgroup name="spawners">
+ <objectgroup name="spawners" visible="0">
   <object id="33" type="Slime" x="784.811" y="1044.94"/>
  </objectgroup>
- <objectgroup name="doors">
+ <objectgroup name="doors" visible="0">
   <object id="66" type="LEVEL_NAME_HERE" x="95.2784" y="287.741" width="33.1875" height="15.6949"/>
  </objectgroup>
 </map>

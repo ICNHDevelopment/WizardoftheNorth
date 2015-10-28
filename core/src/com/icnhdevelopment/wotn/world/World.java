@@ -41,6 +41,7 @@ public class World {
     ArrayList<Rectangle> walls;
     ArrayList<Rectangle> overWalls;
     ArrayList<AnimatedSprite> animatedSprites;
+    ArrayList<Sprite> multiDSprites;
 
     public void create(String filename){
         enemies = new ArrayList<>();
@@ -48,11 +49,13 @@ public class World {
         walls = new ArrayList<>();
         overWalls = new ArrayList<>();
         animatedSprites = new ArrayList<>();
+        multiDSprites = new ArrayList<>();
 
         loadMap(filename);
         mapProperties = map.getProperties();
         TileWidth = mapProperties.get("tilewidth", Integer.class);
         TileHeight = mapProperties.get("tileheight", Integer.class);
+        initMap(map);
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (int)(Game.WIDTH()/SCALE), (int)(Game.HEIGHT()/SCALE));
@@ -64,11 +67,15 @@ public class World {
 
         mainCharacter = new Character();
         mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5);
+        multiDSprites.add(mainCharacter);
     }
 
     void loadMap (String filename){
         TmxMapLoader tml = new TmxMapLoader();
         map = tml.load(filename);
+    }
+
+    void initMap(TiledMap m){
         loadWalls(map);
         loadSpawners(map);
         loadAnimatedSprites(map);
@@ -85,6 +92,7 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             walls.add(new Rectangle(tx, ty, tw, th));
         }
+        smoothRecs(walls);
     }
 
     void loadSpawners(TiledMap m){
@@ -128,10 +136,22 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             overWalls.add(new Rectangle(tx, ty, tw, th));
         }
+        smoothRecs(overWalls);
     }
 
     public void spawn(Monster m){
         enemies.add(m);
+        multiDSprites.add(m);
+    }
+
+    void smoothRecs(ArrayList<Rectangle> recs){
+        for (int i =0; i<recs.size(); i++){
+            Rectangle r = recs.get(i);
+            r.x = Math.round(r.x / TileWidth)*TileWidth;
+            r.y = Math.round(r.y/TileHeight)*TileHeight;
+            r.width = Math.round(r.width/TileWidth)*TileWidth;
+            r.height = Math.round(r.height/TileHeight)*TileHeight;
+        }
     }
 
     public void update(CInputProcessor input){
@@ -158,8 +178,24 @@ public class World {
                 s.spawn = false;
             }
         }
+        sortMultiDSprites();
 
         TICK++;
+    }
+
+    void sortMultiDSprites(){
+        boolean madeChange = true;
+        while (madeChange){
+            madeChange = false;
+            for (int i = 0; i<multiDSprites.size()-1; i++){
+                if (multiDSprites.get(i).getHitbox().y<multiDSprites.get(i+1).getHitbox().y){
+                    Sprite s = multiDSprites.get(i);
+                    multiDSprites.set(i, multiDSprites.get(i+1));
+                    multiDSprites.set(i+1, s);
+                    madeChange = true;
+                }
+            }
+        }
     }
 
     public void render(SpriteBatch batch){
@@ -168,16 +204,21 @@ public class World {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
-        mapRenderer.render();
+        mapRenderer.render(new int[]{0});
+        if (map.getLayers().get(1).getOpacity()==1) {
+            mapRenderer.render(new int[]{1});
+        }
         batch.begin();
         for (AnimatedSprite as : animatedSprites){
             as.render(batch);
         }
-        mainCharacter.render(batch);
-        for (Monster m : enemies){
+        for (Sprite m : multiDSprites){
             m.render(batch);
         }
         batch.end();
+        if (map.getLayers().get(1).getOpacity()<1) {
+            mapRenderer.render(new int[]{1});
+        }
     }
 
 }

@@ -34,6 +34,12 @@ public class Container {
     ShapeRenderer shapeRenderer;
     OrthographicCamera renderCam;
 
+    public static Container getContainer(String typeName){
+        if (typeName.equals("Label")) return new Label();
+        else if (typeName.equals("ImageLabel")) return new ImageLabel();
+        return null;
+    }
+
     /**
      * When creating interfaces, use this constructor to create a parent Container the size of the screen.
      */

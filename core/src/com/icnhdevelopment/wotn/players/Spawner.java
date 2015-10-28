@@ -34,7 +34,7 @@ public class Spawner {
             @Override
             public void run() {
                 if (children < maxChildren) {
-                    delay = (int) (10 + new Random().nextInt(20)) * 1000;
+                    delay = (10 + new Random().nextInt(20)) * 1000;
                     spawn = true;
                     System.out.println("Spawned " + type.getClass().getSimpleName());
                     spawner.cancel();

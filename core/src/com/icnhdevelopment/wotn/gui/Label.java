@@ -56,6 +56,10 @@ public class Label extends Container implements Button {
         this.fontType = fontType;
     }
 
+    public Label(){
+        super();
+    }
+
     /**
      * Constructor yay
      *
