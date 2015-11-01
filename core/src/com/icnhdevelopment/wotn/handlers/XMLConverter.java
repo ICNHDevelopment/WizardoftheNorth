@@ -46,9 +46,11 @@ public class XMLConverter {
                     //Element elemento = (Element) node.getChildNodes().item((i*2)+1);
                     Element elemento = (Element) node;
                     temp = Container.getContainer(elemento.getNodeName());
-                    w(elemento.getElementsByTagName(node.getChildNodes().item((j*2)+1).getNodeName()).item(0).getTextContent());
-                    w(node.getChildNodes().item((j*2)+1).getNodeName());
-                    set(temp, temp.getClass(), node.getChildNodes().item((j * 2) + 1).getNodeName().toLowerCase(), elemento.getElementsByTagName(node.getChildNodes().item((j * 2) + 1).getNodeName()).item(0).getNodeValue());
+                    String nodeName = node.getNodeName();
+                    String nodePropertyName = node.getChildNodes().item((j*2)+1).getNodeName();
+                    String nodePropertyValue = elemento.getElementsByTagName(node.getChildNodes().item((j*2)+1).getNodeName()).item(0).getTextContent();
+                    w(nodeName + "." + nodePropertyName + ": " + nodePropertyValue);
+                    set(temp, temp.getClass(), nodePropertyName.toLowerCase(), nodePropertyValue);
                     //Sets node value to object property value by matching node name with object property name.
                 }
                 if (temp!=null) children.add(temp);
