@@ -11,8 +11,16 @@ import com.badlogic.gdx.math.Vector2;
 public class ImageLabel extends Container implements Button {
 
     Texture image;
-    Alignment imageAlignment = Alignment.SINGLE;
+    String texturefile;
+    Alignment imagealignment = Alignment.SINGLE;
     Vector2 imagePosition, imageSize;
+
+    public ImageLabel(Container pa, Vector2 pos, Vector2 sz) {
+        super(pa, pos, sz);
+
+        this.image = new Texture(texturefile);
+        imageSize = new Vector2(image.getWidth(), image.getHeight());
+    }
 
     public ImageLabel(Container pa, Vector2 pos, Vector2 sz, Texture im) {
         super(pa, pos, sz);
@@ -29,14 +37,14 @@ public class ImageLabel extends Container implements Button {
      * Set the alignment of the image within its bounds.
      * @param a Use SINGLE, CENTER, TILED, or STRETCHED; The other Alignments are for text.
      */
-    public void setImageAlignment(Alignment a) {
-        this.imageAlignment = a;
+    public void setImagealignment(Alignment a) {
+        this.imagealignment = a;
 
         setImagePositioning();
     }
 
     void setImagePositioning() {
-        switch (imageAlignment) {
+        switch (imagealignment) {
             case CENTER:
             {
                 imagePosition = new Vector2(0-(imageSize.x-size.x)/2, 0-(imageSize.y-size.y)/2);
@@ -52,15 +60,15 @@ public class ImageLabel extends Container implements Button {
     public void resize(){
         super.resize();
 
-        setImageAlignment(imageAlignment);
+        setImagealignment(imagealignment);
     }
 
     void renderImage(SpriteBatch batch) {
         batch.begin();
-        if (imageAlignment.equals(Alignment.STRETCHED)) {
+        if (imagealignment.equals(Alignment.STRETCHED)) {
             imageSize = size;
         }
-        if (imageAlignment.equals(Alignment.TILED)) {
+        if (imagealignment.equals(Alignment.TILED)) {
             /*
             My Dearest Albert,
                 Here you can see a bunch of math. It was a fucking pain in the ass

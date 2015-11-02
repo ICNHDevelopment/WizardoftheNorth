@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +25,7 @@ public class Container {
     Vector2 positionScale;
     Vector2 sizeScale;
     boolean visible = true;
-    Color backColor = null;
+    Color backcolor = null;
 
     ArrayList<Container> children;
     public ArrayList<Button> buttons;
@@ -102,7 +101,7 @@ public class Container {
             child.reposition();
             if (child instanceof ImageLabel) {
                 ImageLabel c = (ImageLabel) child;
-                c.setImageAlignment(c.imageAlignment);
+                c.setImagealignment(c.imagealignment);
             }
         }
     }
@@ -171,10 +170,10 @@ public class Container {
     }
 
     public void renderBackground(SpriteBatch batch) {
-        if (backColor != null) {
+        if (backcolor != null) {
             batch.begin();
             shapeRenderer.begin(ShapeType.Filled);
-            shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, 1);
+            shapeRenderer.setColor(backcolor.r, backcolor.g, backcolor.b, 1);
             Vector2 temp = getAbsolutePosition();
             shapeRenderer.rect(temp.x, temp.y, size.x, size.y);
             shapeRenderer.end();
@@ -237,8 +236,8 @@ public class Container {
         return new Rectangle(position.x, position.y, size.x, size.y);
     }
 
-    public void setBackColor(Color c) {
-        backColor = c;
+    public void setBackcolor(Color c) {
+        backcolor = c;
     }
 
     public Container getParent() {

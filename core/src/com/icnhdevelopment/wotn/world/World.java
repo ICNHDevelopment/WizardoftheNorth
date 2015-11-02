@@ -30,7 +30,7 @@ public class World {
     TiledMapRenderer mapRenderer;
     TiledMap map;
     MapProperties mapProperties;
-    public static double SCALE = 1.4;
+    public static double SCALE = 2.4;
     Character mainCharacter;
     public static int TileWidth, TileHeight;
 

@@ -7,9 +7,9 @@
             <Size>(1280, 40)</Size>
             <Text>"The Wizard of the North"</Text>
             <FontSize>40</FontSize>
-            <Color>WHITE</Color>
-            <BorderColor>RED</BorderColor>
-            <BackColor>BLUE</BackColor>
+            <Color>000000FF</Color>
+            <BorderColor>FF0000FF</BorderColor>
+            <BackColor>0000FFFF</BackColor>
             <HAlignment>CENTER</HAlignment>
             <UseFontSize>false</UseFontSize>
         </Label>
@@ -17,7 +17,7 @@
             <Position>(30, 30)</Position>
             <Size>(224, 98)</Size>
             <TextureFile>"ui/PlayBTN.png"</TextureFile>
-            <BackColor>RED</BackColor>
+            <BackColor>FF0000FF</BackColor>
             <ImageAlignment>STRETCHED</ImageAlignment>
         </ImageLabel>
     </Children>

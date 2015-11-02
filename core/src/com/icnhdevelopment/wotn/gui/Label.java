@@ -2,9 +2,7 @@ package com.icnhdevelopment.wotn.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.handlers.ColorCodes;
 
@@ -14,42 +12,49 @@ import com.icnhdevelopment.wotn.handlers.ColorCodes;
 public class Label extends Container implements Button {
 
     String text;
-    int fontSize = 12;
+    int fontsize = 12;
     Color color = Color.WHITE;
-    Color borderColor = Color.WHITE;
+    Color bordercolor = Color.WHITE;
     /**
-     * hAlignment determines the horizontal alignment. Should be LEFT, CENTER, or RIGHT
-     * vAlignment determines the vertical alignment. Should be TOP, MIDDLE, or BOTTOM
+     * halignment determines the horizontal alignment. Should be LEFT, CENTER, or RIGHT
+     * valignment determines the vertical alignment. Should be TOP, MIDDLE, or BOTTOM
      */
-    Alignment hAlignment = Alignment.LEFT;
-    Alignment vAlignment = Alignment.BOTTOM;
+    Alignment halignment = Alignment.LEFT;
+    Alignment valignment = Alignment.BOTTOM;
     String fontType = Fonts.OPEN_SANS;
     BitmapFont font;
     int fontX = 0, fontY = 0;
     float fontWidth, fontHeight;
 
+
+    boolean usefontsize;
+
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setUsefontsize(boolean usefontsize) {
+        this.usefontsize = usefontsize;
     }
 
     public void setColor(Color color) {
         this.color = color;
     }
 
-    public void setFontSize(int fontSize) {
-        this.fontSize = fontSize;
+    public void setFontsize(int fontsize) {
+        this.fontsize = fontsize;
     }
 
-    public void setBorderColor(Color borderColor) {
-        this.borderColor = borderColor;
+    public void setBordercolor(Color bordercolor) {
+        this.bordercolor = bordercolor;
     }
 
-    public void sethAlignment(Alignment hAlignment) {
-        this.hAlignment = hAlignment;
+    public void sethalignment(Alignment halignment) {
+        this.halignment = halignment;
     }
 
-    public void setvAlignment(Alignment vAlignment) {
-        this.vAlignment = vAlignment;
+    public void setvalignment(Alignment valignment) {
+        this.valignment = valignment;
     }
 
     public void setFontType(String fontType) {
@@ -79,14 +84,14 @@ public class Label extends Container implements Button {
      * Since LEFT and BOTTOM are default we can ignore those cases.
      * Remember that (0, 0) is bottom left, so bottom and left should be default.
      */
-    public void createFont(boolean useFontSize) {
-        font = Fonts.loadFont(Fonts.OPEN_SANS, fontSize, color, borderColor);
+    public void createFont() {
+        font = Fonts.loadFont(Fonts.OPEN_SANS, fontsize, color, bordercolor);
         BitmapFont.TextBounds bounds = font.getBounds(text);
         fontWidth = bounds.width;
         fontHeight = bounds.height;
-        if (useFontSize) {
-            size.x = fontWidth + size.x + (fontSize / 12f);
-            size.y = fontHeight + size.y + (fontSize / 12f);
+        if (usefontsize) {
+            size.x = fontWidth + size.x + (fontsize / 12f);
+            size.y = fontHeight + size.y + (fontsize / 12f);
         }
         setSizeScale();
         alignText();
@@ -97,19 +102,19 @@ public class Label extends Container implements Button {
         fontWidth = bounds.width;
         fontHeight = bounds.height;
         float borderSize = 0;
-        if (borderColor != color) {
-            borderSize = fontSize / 12f;
+        if (bordercolor != color) {
+            borderSize = fontsize / 12f;
         }
-        if (hAlignment == Alignment.CENTER) { //Centered horizontally
+        if (halignment == Alignment.CENTER) { //Centered horizontally
             fontX = (int) ((super.size.x - (fontWidth + borderSize * font.getScaleX() * 2)) / 2);
-        } else if (hAlignment == Alignment.RIGHT) {
+        } else if (halignment == Alignment.RIGHT) {
             fontX = (int) (super.size.x - (fontWidth + borderSize * font.getScaleX()));
         } else {
             fontX = 0;//(int)(borderSize*font.getScaleX()/2);
         }
-        if (vAlignment == Alignment.MIDDLE) { //Centered vertically
+        if (valignment == Alignment.MIDDLE) { //Centered vertically
             fontY = (int) ((super.size.y - (fontHeight + borderSize * font.getScaleY() * 2)) / 2);
-        } else if (vAlignment == Alignment.TOP) {
+        } else if (valignment == Alignment.TOP) {
             fontY = (int) (size.y - (fontHeight + borderSize * font.getScaleY()));
         } else {
             fontY = 0;//(int)(borderSize*font.getScaleY()/2);
@@ -130,9 +135,9 @@ public class Label extends Container implements Button {
             System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
         }
         float yOffset = fontHeight, xOffset = 0;
-        if (color != borderColor) {
-            yOffset += fontSize / 12f;// * font.getScaleY();
-            xOffset += fontSize / 12f;// * font.getScaleX();
+        if (color != bordercolor) {
+            yOffset += fontsize / 12f;// * font.getScaleY();
+            xOffset += fontsize / 12f;// * font.getScaleX();
         }
         Vector2 temp = getAbsolutePosition();
         batch.begin();

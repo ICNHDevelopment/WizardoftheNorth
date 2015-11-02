@@ -3,7 +3,12 @@ package com.icnhdevelopment.wotn.handlers;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.Container;
+import com.icnhdevelopment.wotn.gui.Label;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -54,6 +59,9 @@ public class XMLConverter {
                     //Sets node value to object property value by matching node name with object property name.
                 }
                 if (temp!=null) children.add(temp);
+                if (temp instanceof Label){
+                    ((Label)temp).createFont();
+                }
             }
             //w(getter(container.get(0)), "position");
 
@@ -67,15 +75,45 @@ public class XMLConverter {
 
     public static void set(Object obj, Class<?> cl, String fld, String value){
         //Sets an object's property value without using (object.property = value;)
-
-        //ALBERT VALUE IS NULL SOMETIMES BUT WHEN IT IS NOT NULL IT SHOULD WORK
-
         w(value);
         Class<?> cls = cl;
         try {
             Field field = cls.getDeclaredField(fld);
             field.setAccessible(true);
-            field.set(obj, field.getType().cast(value));
+            try {
+                field.set(obj, field.getType().cast(value));
+            } catch (ClassCastException e){
+                w(ColorCodes.PURPLE + e.toString() + ColorCodes.RESET);
+                try{
+                    int val = Integer.valueOf(Integer.parseInt(value)).intValue();
+                    field.set(obj, val);
+                }
+                catch (NumberFormatException c) {
+                    w(ColorCodes.PURPLE + c.toString() + ColorCodes.RESET);
+                    for (Alignment a : Alignment.values()){
+                        if (value.equals(a.toString())){
+                            field.set(obj, a);
+                            return;
+                        }
+                    }
+                    try{
+                        Color col = Color.valueOf(value);
+                        field.set(obj, col);
+                    }catch (Exception p) {
+                        w(ColorCodes.PURPLE + p.toString() + ColorCodes.RESET);
+                        try {
+                            String p1 = value.substring(1, value.indexOf((", ")));
+                            String p2 = value.substring(value.indexOf(" ") + 1, value.length() - 1);
+                            Vector2 a = new Vector2(Integer.parseInt(p1), Integer.parseInt(p2));
+                            field.set(obj, field.getType().cast(a));
+                        } catch (StringIndexOutOfBoundsException nf){
+                            w(ColorCodes.PURPLE + nf.toString() + ColorCodes.RESET);
+                            boolean b = Boolean.parseBoolean(value);
+                            field.set(obj, b);
+                        }
+                    }
+                }
+            }
         }
         catch (NoSuchFieldException  | IllegalAccessException e){
             cls = cls.getSuperclass();

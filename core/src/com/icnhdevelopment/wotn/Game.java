@@ -47,7 +47,7 @@ public class Game extends ApplicationAdapter {
 		currentMenu = new Menu();
 		currentMenu.init();
 		currentWorld = new World();
-		Container l = XMLConverter.XML_Converter(new File("core/assets/ui/Menus/MNUMain")).get(0);
+		//Container l = XMLConverter.XML_Converter(new File("core/assets/ui/Menus/MNUMain")).get(0);
 
 	}
 
