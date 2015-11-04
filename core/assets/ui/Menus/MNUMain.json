@@ -2,7 +2,7 @@
     "Container": {
         "Position": "(0, 0)",
         "Size": "(1280, 720)",
-        "Children": {
+        "Children": [
             "Label": {
                 "Position": "(0, 676)",
                 "Size": "(1280, 40)",
@@ -21,6 +21,6 @@
                 "BackColor": "FF0000FF",
                 "ImageAlignment": "STRETCHED"
             }
-        }
+        ]
     }
 }
