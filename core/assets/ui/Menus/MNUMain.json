@@ -3,7 +3,7 @@
         "Position": "(0, 0)",
         "Size": "(1280, 720)",
         "Children": [
-            "Label": {
+            {   "Type": "Label",
                 "Position": "(0, 676)",
                 "Size": "(1280, 40)",
                 "Text": "\"The Wizard of the North\"",
@@ -14,7 +14,7 @@
                 "HAlignment": "CENTER",
                 "UseFontSize": "false"
             },
-            "ImageLabel": {
+            {   "Type": "ImageLabel",
                 "Position": "(30, 30)",
                 "Size": "(224, 98)",
                 "TextureFile": "\"ui/PlayBTN.png\"",
