@@ -21,6 +21,7 @@ public class Character extends AnimatedSprite {
     Rectangle footBox;
     boolean player;
     boolean isTransitioningLayer = false;
+    boolean hasRandomMovement = false, isMovingRandomly = true;
 
     final int SPEED = 2;
 
@@ -91,6 +92,53 @@ public class Character extends AnimatedSprite {
                 }
             }
         }, new Date(), 1);
+    }
+
+    public void setRandomMovementTimer(ArrayList<Rectangle> w){
+        final ArrayList<Rectangle> walls = w;
+        final Random r = new Random();
+
+        final Thread movementThread = new Thread(){
+            @Override
+            public  void run(){
+                boolean running = true;
+                while (running) {
+                    long delay = (long) (1000 * (2 + r.nextDouble() * 1));
+                    try {
+                        Thread.sleep(delay);
+                        moveRandomly(walls);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        running = false;
+                    }
+                }
+            }
+        };
+
+        movementThread.start();
+    }
+
+    void moveRandomly(ArrayList<Rectangle> w){
+        if (isMovingRandomly){
+            Random r = new Random();
+            int xDir = r.nextInt(3)-1, yDir = r.nextInt(3)-1;
+            while (xDir==0&&yDir==0){
+                xDir = r.nextInt(3)-1;
+                yDir = r.nextInt(3)-1;
+            }
+            animating = true;
+            while (animating) {
+                move(new Vector2(xDir, yDir), w);
+                try {
+                    Thread.sleep(speed*speed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            frame = 0;
+        }else {
+            //Pathfind to a target
+        }
     }
 
     public void animate(boolean moving) {

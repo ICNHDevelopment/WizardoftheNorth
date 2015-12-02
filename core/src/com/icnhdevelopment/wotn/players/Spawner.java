@@ -46,14 +46,17 @@ public class Spawner {
     }
 
     public void spawn() {
+        Monster m = null;
         if (type instanceof Slime){
-            Slime s = new Slime();
+            m = new Slime();
+        }
+        if (m!=null) {
             int tx, ty;
-            tx = (int)(center.x - 64 + new Random().nextInt(128));
-            ty = (int)(center.y - 64 + new Random().nextInt(128));
-            s.create(s.defaultFile, s.defaultMaxFrames, new Vector2(tx, ty), 5);
-            s.spawner = this;
-            world.spawn(s);
+            tx = (int) (center.x - 4 + new Random().nextInt(8));
+            ty = (int) (center.y - 4 + new Random().nextInt(8));
+            m.create(m.defaultFile, m.defaultMaxFrames, new Vector2(tx, ty), 5);
+            m.spawner = this;
+            world.spawn(m);
             children++;
         }
     }

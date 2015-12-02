@@ -30,7 +30,7 @@ public class World {
     TiledMapRenderer mapRenderer;
     TiledMap map;
     MapProperties mapProperties;
-    public static double SCALE = 2.4;
+    public static double SCALE = 2;
     Character mainCharacter;
     public static int TileWidth, TileHeight;
 
@@ -142,6 +142,7 @@ public class World {
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
+        m.setRandomMovementTimer(walls);
     }
 
     void smoothRecs(ArrayList<Rectangle> recs){

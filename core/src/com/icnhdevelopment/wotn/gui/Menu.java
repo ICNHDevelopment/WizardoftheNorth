@@ -26,8 +26,6 @@ public class Menu {
     //(all the important properties have get/set methods)
     public void init(){
         mainContainer = new Container();
-        mainContainer = XMLConverter.XML_Converter(new File("core/assets/ui/Menus/MNUMain")).get(0);
-        /*
         Label l = new Label(mainContainer, new Vector2(0, Game.HEIGHT()-44), new Vector2(Game.WIDTH(), 40), "The Wizard of the North");
         l.setFontsize(40);
         l.setColor(Color.WHITE);
@@ -85,7 +83,6 @@ public class Menu {
         b.setUsefontsize(true);
         b.createFont();
         mainContainer.buttons.add(b);
-        */
     }
 
     public void update(CInputProcessor inputProcessor){
