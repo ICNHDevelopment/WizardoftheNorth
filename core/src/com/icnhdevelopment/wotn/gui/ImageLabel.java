@@ -88,10 +88,10 @@ public class ImageLabel extends Container implements Button {
                     TextureRegion reg;
                     float texX = 0, texY = 0, texW = imageSize.x, texH = imageSize.y;
                     if (posX + imageSize.x > size.x) {
-                        texW = (float) (size.x - (maxWidth-1)*imageSize.x);
+                        texW = (size.x - (maxWidth-1)*imageSize.x);
                     }
                     if (posY + imageSize.y > size.y) {
-                        texH = (float) (size.y - (maxHeight-1)*imageSize.y);
+                        texH = (size.y - (maxHeight-1)*imageSize.y);
                     }
                     texY = imageSize.y-texH;
                     reg = new TextureRegion(image, (int)texX, (int)texY, (int)texW, (int)texH);

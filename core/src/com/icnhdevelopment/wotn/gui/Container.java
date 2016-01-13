@@ -24,7 +24,7 @@ public class Container {
     Vector2 size;
     Vector2 positionScale;
     Vector2 sizeScale;
-    boolean visible = true;
+    protected boolean visible = true;
     Color backcolor = null;
 
     protected ArrayList<Container> children;
@@ -181,7 +181,7 @@ public class Container {
         }
     }
 
-    void renderChildren(SpriteBatch batch) {
+    protected void renderChildren(SpriteBatch batch) {
         for (Container child : children) {
             child.render(batch);
         }

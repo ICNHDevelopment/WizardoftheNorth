@@ -1,7 +1,5 @@
 package com.icnhdevelopment.wotn.world;
 
-import com.icnhdevelopment.wotn.players.NonPlayer;
-
 import java.util.ArrayList;
 
 /**

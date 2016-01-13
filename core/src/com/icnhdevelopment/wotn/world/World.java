@@ -236,7 +236,10 @@ public class World {
         if (map.getLayers().get(1).getOpacity()<1) {
             mapRenderer.render(new int[]{1});
         }
-        inventory.render(batch);
+        if (showInventory) {
+            batch.setProjectionMatrix(inventory.getRenderCam().combined);
+            inventory.render(batch);
+        }
     }
 
 }
