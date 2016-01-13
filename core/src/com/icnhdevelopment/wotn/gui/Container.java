@@ -27,7 +27,7 @@ public class Container {
     boolean visible = true;
     Color backcolor = null;
 
-    ArrayList<Container> children;
+    protected ArrayList<Container> children;
     public ArrayList<Button> buttons;
 
     ShapeRenderer shapeRenderer;

@@ -86,7 +86,7 @@
  <objectgroup name="overwallRecs">
   <object id="97" x="735.837" y="736.623" width="96.3875" height="65.2157"/>
  </objectgroup>
- <objectgroup name="spawners" visible="0">
+ <objectgroup name="spawners">
   <object id="33" type="Slime" x="784.811" y="1044.94"/>
  </objectgroup>
  <objectgroup name="doors" visible="0">

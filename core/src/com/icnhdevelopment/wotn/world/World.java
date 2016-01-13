@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.gui.special.Inventory;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
@@ -43,6 +44,9 @@ public class World {
     ArrayList<AnimatedSprite> animatedSprites;
     ArrayList<Sprite> multiDSprites;
 
+    Inventory inventory;
+    boolean showInventory = false;
+
     public void create(String filename){
         enemies = new ArrayList<>();
         spawners = new ArrayList<>();
@@ -68,6 +72,9 @@ public class World {
         mainCharacter = new Character();
         mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5);
         multiDSprites.add(mainCharacter);
+
+        inventory = new Inventory();
+        inventory.setVisible(false);
     }
 
     void loadMap (String filename){
@@ -156,32 +163,41 @@ public class World {
     }
 
     public void update(CInputProcessor input){
-        if (input.isKeyDown(Input.Keys.W)){
-            mainCharacter.move(new Vector2(0, 1), walls);
-        }
-        else if (input.isKeyDown(Input.Keys.S)){
-            mainCharacter.move(new Vector2(0, -1), walls);
-        }
-        else if (input.isKeyDown(Input.Keys.A)){
-            mainCharacter.move(new Vector2(-1, 0), walls);
-        }
-        else if (input.isKeyDown(Input.Keys.D)){
-            mainCharacter.move(new Vector2(1, 0), walls);
-        }
-        else{
-            mainCharacter.animate(false);
-        }
-        mainCharacter.updateWalls(map, overWalls);
+        if (!showInventory) {
+            if (input.isKeyDown(Input.Keys.W)) {
+                mainCharacter.move(new Vector2(0, 1), walls);
+            } else if (input.isKeyDown(Input.Keys.S)) {
+                mainCharacter.move(new Vector2(0, -1), walls);
+            } else if (input.isKeyDown(Input.Keys.A)) {
+                mainCharacter.move(new Vector2(-1, 0), walls);
+            } else if (input.isKeyDown(Input.Keys.D)) {
+                mainCharacter.move(new Vector2(1, 0), walls);
+            } else {
+                mainCharacter.animate(false);
+            }
+            mainCharacter.updateWalls(map, overWalls);
 
-        for (Spawner s : spawners){
-            if (s.spawn){
-                s.spawn();
-                s.spawn = false;
+            for (Spawner s : spawners) {
+                if (s.spawn) {
+                    s.spawn();
+                    s.spawn = false;
+                }
+            }
+            sortMultiDSprites();
+
+            TICK++;
+            if (input.isKeyDown(Input.Keys.E)) {
+                showInventory = true;
+                inventory.setVisible(true);
             }
         }
-        sortMultiDSprites();
+        else {
 
-        TICK++;
+            if (input.isKeyDown(Input.Keys.ESCAPE)){
+                showInventory = false;
+                inventory.setVisible(false);
+            }
+        }
     }
 
     void sortMultiDSprites(){
@@ -220,6 +236,7 @@ public class World {
         if (map.getLayers().get(1).getOpacity()<1) {
             mapRenderer.render(new int[]{1});
         }
+        inventory.render(batch);
     }
 
 }

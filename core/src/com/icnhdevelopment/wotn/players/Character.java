@@ -144,7 +144,7 @@ public class Character extends AnimatedSprite {
     public void animate(boolean moving) {
         if (World.TICK % speed == 0) {
             if (moving) {
-                super.animate();
+                this.animate();
             } else if (frame > 0) {
                 if (frame < maxFrames / 2) {
                     frame--;
