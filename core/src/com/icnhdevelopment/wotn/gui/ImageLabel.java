@@ -12,7 +12,6 @@ public class ImageLabel extends Container implements Button {
 
     Texture image;
     protected Texture hoverImage;
-    protected boolean isHovering = false;
     String texturefile;
     Alignment imagealignment = Alignment.SINGLE;
     protected Vector2 imagePosition, imageSize;
@@ -139,10 +138,10 @@ public class ImageLabel extends Container implements Button {
     }
 
     public boolean isHovering() {
-        return isHovering;
+        return isHovered;
     }
 
     public void setHovering(boolean hovering) {
-        isHovering = hovering;
+        isHovered = hovering;
     }
 }

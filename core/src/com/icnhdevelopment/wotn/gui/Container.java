@@ -25,6 +25,7 @@ public class Container {
     Vector2 positionScale;
     Vector2 sizeScale;
     protected boolean visible = true;
+    protected boolean isHovered = false;
     Color backcolor = null;
 
     protected ArrayList<Container> children;
@@ -162,9 +163,12 @@ public class Container {
             Vector2 butPos = but.getAbsolutePosition();
             Vector2 butSize = but.getSize();
             if (processor.mouseHovered(butPos.x, butPos.y, butSize.x, butSize.y)) {
+                ((Container) button).isHovered = true;
                 if (processor.didMouseClick()) {
                     button.Click();
                 }
+            }else{
+                ((Container) button).isHovered = false;
             }
         }
     }
