@@ -8,6 +8,7 @@ import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.ImageLabel;
+import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
 
 import java.util.ArrayList;
@@ -75,6 +76,10 @@ public class Inventory extends Container {
         ItemSlot is = new ItemSlot(invenImage, new Vector2(160, textureSize.y-(286)), new Vector2(60, 60), it.image);
         is.setImagealignment(Alignment.STRETCHED);
         defaultInventory.add(is);
+    }
+
+    public void update(CInputProcessor processor){
+        
     }
 
     public void render(SpriteBatch batch){

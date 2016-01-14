@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -240,6 +242,14 @@ public class World {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
             inventory.render(batch);
         }
+
+        Texture temp = new Texture("ui/HUD.png");
+        batch.begin();
+        batch.setProjectionMatrix(inventory.getRenderCam().combined);
+        batch.draw(temp, 0, Game.HEIGHT()-temp.getHeight()*3, temp.getWidth()*3, temp.getHeight()*3);
+        temp = new Texture("ui/ToolbarRotated.png");
+        batch.draw(temp, 0, Game.HEIGHT()-60-temp.getHeight()*2, temp.getWidth()*2, temp.getHeight()*2);
+        batch.end();
     }
 
 }
