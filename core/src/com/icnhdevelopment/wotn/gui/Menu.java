@@ -57,31 +57,6 @@ public class Menu {
         il.setImagealignment(Alignment.STRETCHED);
         il.setHoverImage(new Texture("ui/PlayBTNH.png"));
         mainContainer.buttons.add(il);
-        b = new Label(il, new Vector2(10, 10), new Vector2(20, 20), "Shrink :D") {
-            @Override
-            public void Click() {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (mainContainer.getSize().x > Game.WIDTH()/3) {
-                            mainContainer.getAbsoluteParent().resize(mainContainer.getSize().x-9, mainContainer.getSize().y);
-                        }
-                        if (mainContainer.getSize().y > Game.HEIGHT()/3) {
-                            mainContainer.getAbsoluteParent().resize(mainContainer.getSize().x, mainContainer.getSize().y-9);
-                        }
-                        if (mainContainer.getSize().x <= Game.WIDTH()/3 && mainContainer.getSize().y <= Game.HEIGHT()/3) {
-                            this.cancel();
-                        }
-                    }
-                }, 20);
-            }
-        };
-        b.setBackcolor(Color.ORANGE);
-        b.sethalignment(Alignment.CENTER);
-        b.setvalignment(Alignment.MIDDLE);
-        b.setUsefontsize(true);
-        b.createFont();
-        mainContainer.buttons.add(b);
     }
 
     public void update(CInputProcessor inputProcessor){
