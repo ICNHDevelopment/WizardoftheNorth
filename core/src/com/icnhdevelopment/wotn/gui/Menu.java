@@ -8,9 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
-import com.icnhdevelopment.wotn.handlers.XMLConverter;
 
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,6 +55,7 @@ public class Menu {
             }
         };
         il.setImagealignment(Alignment.STRETCHED);
+        il.setHoverImage(new Texture("ui/PlayBTNH.png"));
         mainContainer.buttons.add(il);
         b = new Label(il, new Vector2(10, 10), new Vector2(20, 20), "Shrink :D") {
             @Override

@@ -45,6 +45,7 @@ public class World {
     ArrayList<Rectangle> overWalls;
     ArrayList<AnimatedSprite> animatedSprites;
     ArrayList<Sprite> multiDSprites;
+    ArrayList<Sprite> items;
 
     Inventory inventory;
     boolean showInventory = false;
@@ -56,6 +57,7 @@ public class World {
         overWalls = new ArrayList<>();
         animatedSprites = new ArrayList<>();
         multiDSprites = new ArrayList<>();
+        items = new ArrayList<>();
 
         loadMap(filename);
         mapProperties = map.getProperties();
@@ -89,6 +91,7 @@ public class World {
         loadSpawners(map);
         loadAnimatedSprites(map);
         loadOverwallRecs(map);
+        loadItems(map);
     }
 
     void loadWalls(TiledMap m){
@@ -132,6 +135,22 @@ public class World {
             AnimatedSprite temp = new AnimatedSprite();
             temp.create(file, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
             animatedSprites.add(temp);
+        }
+    }
+
+    void loadItems(TiledMap m){
+        MapLayer layer = m.getLayers().get("items");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs) {
+            String name = (String) obj.getProperties().get("type");
+            float tx = (float) obj.getProperties().get("x");
+            float ty = (float) obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            String file = "Items/" + name + ".png";
+            Sprite temp = new Sprite();
+            temp.create(file, new Vector2(tx, ty), new Vector2(tw, th));
+            items.add(temp);
         }
     }
 
@@ -194,7 +213,7 @@ public class World {
             }
         }
         else {
-
+            inventory.update(input);
             if (input.isKeyDown(Input.Keys.ESCAPE)){
                 showInventory = false;
                 inventory.setVisible(false);
@@ -230,6 +249,9 @@ public class World {
         batch.begin();
         for (AnimatedSprite as : animatedSprites){
             as.render(batch);
+        }
+        for (Sprite s : items){
+            s.render(batch);
         }
         for (Sprite m : multiDSprites){
             m.render(batch);
