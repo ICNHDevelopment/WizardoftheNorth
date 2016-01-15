@@ -42,7 +42,7 @@ public class Hud extends Container {
         temp = new Texture("ui/hud/experience.png");
         experienceHud = new ImageLabel(this, Vector2.Zero, new Vector2(temp.getWidth()*3, temp.getHeight()*3), temp);
         experienceHud.setImagealignment(Alignment.STRETCHED);
-        expR = new Rectangle(0, 18, temp.getWidth()*3, 9);
+        expR = new Rectangle(3, 3, (temp.getWidth()-2)*3, 9);
         levelDisplay = new Rectangle(210*3, 5*3, 9*3, 4*3);
 
         vitT = new Texture("ui/hud/VitalityMeter.png");
@@ -57,15 +57,12 @@ public class Hud extends Container {
     }
 
     public void render(SpriteBatch batch){
-        batch.begin();
-        batch.draw(expT, expR.x, expR.y, expR.getWidth(), expR.getHeight());
-        batch.end();
-
         super.render(batch);
 
         batch.begin();
         batch.draw(vitT, vitR.x, vitR.y, ((float)character.getCurrentVitality()/(float)character.getVitality())*vitR.getWidth(), vitR.getHeight());
         batch.draw(wisT, wisR.x, wisR.y, ((float)character.getCurrentWisdom()/(float)character.getWisdom())*wisR.getWidth(), wisR.getHeight());
+        batch.draw(expT, expR.x, expR.y, expR.getWidth(), expR.getHeight());
         String level = character.getLevel() + "";
         float width = font.getBounds(level).width;
         float height = font.getBounds(level).height;
