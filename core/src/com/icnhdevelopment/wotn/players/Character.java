@@ -28,6 +28,7 @@ public class Character extends AnimatedSprite {
     //Skills
     int level;
 
+    int CurrentVitality;
     int BaseVitality;
     int IvVitality;
     public int getVitality(){
@@ -77,6 +78,7 @@ public class Character extends AnimatedSprite {
             level = 1;
             BaseVitality = 35;
             IvVitality = 10;
+            CurrentVitality = getVitality();
             BaseAgility = 80;
             IvAgility = 10;
             BaseWisdom = 50;

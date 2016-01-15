@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.gui.special.Hud;
 import com.icnhdevelopment.wotn.gui.special.Inventory;
 import com.icnhdevelopment.wotn.gui.special.Toolbar;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
@@ -50,6 +51,7 @@ public class World {
 
     Toolbar toolbar;
     Inventory inventory;
+    Hud hud;
     boolean showInventory = false;
     boolean changeToBattle = false;
 
@@ -89,6 +91,7 @@ public class World {
         inventory.setVisible(false);
         inventory.setToolbar(toolbar);
         inventory.setCharacter(mainCharacter);
+        hud = new Hud();
 
         battleTransition = new Texture("ui/hud/toBlack.png");
     }
@@ -291,11 +294,8 @@ public class World {
             mapRenderer.render(new int[]{1});
         }
 
-        Texture temp = new Texture("ui/hud/HUD.png");
-        batch.begin();
         batch.setProjectionMatrix(inventory.getRenderCam().combined);
-        batch.draw(temp, 0, Game.HEIGHT()-temp.getHeight()*3, temp.getWidth()*3, temp.getHeight()*3);
-        batch.end();
+        hud.render(batch);
 
         toolbar.render(batch);
 

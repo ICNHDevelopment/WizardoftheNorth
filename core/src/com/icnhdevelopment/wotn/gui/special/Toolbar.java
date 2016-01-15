@@ -44,8 +44,4 @@ public class Toolbar extends Inventory {
         }
     }
 
-    public void update(CInputProcessor processor){
-
-    }
-
 }
