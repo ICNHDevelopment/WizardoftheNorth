@@ -115,7 +115,7 @@ public class Inventory extends Container {
         defaultInventory.add(is);
     }
 
-    public void setToolbar(Toolbar){
+    public void setToolbar(Toolbar toolbar){
 
     }
 
