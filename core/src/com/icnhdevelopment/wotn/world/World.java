@@ -51,6 +51,10 @@ public class World {
     Toolbar toolbar;
     Inventory inventory;
     boolean showInventory = false;
+    boolean changeToBattle = false;
+
+    Texture battleTransition;
+    int battleStage = 0;
 
     public void create(String filename){
         enemies = new ArrayList<>();
@@ -85,6 +89,8 @@ public class World {
         inventory.setVisible(false);
         inventory.setToolbar(toolbar);
         inventory.setCharacter(mainCharacter);
+
+        battleTransition = new Texture("ui/hud/toBlack.png");
     }
 
     void loadMap (String filename){
@@ -190,7 +196,28 @@ public class World {
     }
 
     public void update(CInputProcessor input){
-        if (!showInventory) {
+        if (changeToBattle){
+            if (TICK%9==0&&battleStage<7){
+                battleStage++;
+            }
+            TICK++;
+            if (battleStage == 7){
+                if (input.isKeyDown(Input.Keys.ESCAPE)){
+                    changeToBattle = false;
+                }
+            }
+        }
+        else if (showInventory) {
+            inventory.update(input);
+            if (input.isKeyDown(Input.Keys.ESCAPE)){
+                showInventory = false;
+                inventory.setVisible(false);
+            }
+        }
+        else {
+            if (battleStage>-1&&TICK%9==0){
+                battleStage--;
+            }
             if (input.isKeyDown(Input.Keys.W)) {
                 mainCharacter.move(new Vector2(0, 1), walls);
             } else if (input.isKeyDown(Input.Keys.S)) {
@@ -217,12 +244,9 @@ public class World {
                 showInventory = true;
                 inventory.setVisible(true);
             }
-        }
-        else {
-            inventory.update(input);
-            if (input.isKeyDown(Input.Keys.ESCAPE)){
-                showInventory = false;
-                inventory.setVisible(false);
+            if (input.isKeyDown(Input.Keys.T)) {
+                changeToBattle = true;
+                battleStage = 0;
             }
         }
     }
@@ -278,6 +302,12 @@ public class World {
         if (showInventory) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
             inventory.render(batch);
+        }
+        if (battleStage>-1){
+            batch.begin();
+            TextureRegion tr = new TextureRegion(battleTransition, (int)((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
+            batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
+            batch.end();
         }
     }
 
