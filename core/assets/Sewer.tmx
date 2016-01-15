@@ -88,7 +88,7 @@
   </object>
  </objectgroup>
  <objectgroup name="items">
-  <object id="14" name="Key" type="keySewer" x="1329" y="722" width="30" height="30">
+  <object id="14" name="Key" type="keySewer" x="1337" y="728.5" width="15" height="15">
    <ellipse/>
   </object>
  </objectgroup>

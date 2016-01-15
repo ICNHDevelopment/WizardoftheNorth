@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.ImageLabel;
+import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
 
 /**
@@ -41,6 +42,10 @@ public class Toolbar extends Inventory {
             is.setImagealignment(Alignment.STRETCHED);
             defaultInventory.add(is);
         }
+    }
+
+    public void update(CInputProcessor processor){
+
     }
 
 }

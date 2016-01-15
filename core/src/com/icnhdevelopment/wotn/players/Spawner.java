@@ -36,7 +36,7 @@ public class Spawner {
                 if (children < maxChildren) {
                     delay = (10 + new Random().nextInt(20)) * 1000;
                     spawn = true;
-                    System.out.println("Spawned " + type.getClass().getSimpleName());
+                    System.out.println("Summoned " + type.getClass().getSimpleName());
                     spawner.cancel();
                     start();
                 }
