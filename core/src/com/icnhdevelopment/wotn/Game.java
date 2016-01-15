@@ -21,6 +21,7 @@ public class Game extends ApplicationAdapter {
 	public static World currentWorld;
 	public static Game game;
 	public static GameState GAME_STATE;
+	Texture mouseCursor;
 
 	static int WIDTH, HEIGHT;
 
@@ -41,12 +42,14 @@ public class Game extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		inputProcessor = new CInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
+		Gdx.input.setCursorCatched(true);
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init();
 		currentWorld = new World();
+		mouseCursor = new Texture("ui/cursor.png");
 		//Container l = XMLConverter.XML_Converter(new File("core/assets/ui/Menus/MNUMain")).get(0);
 	}
 
@@ -66,9 +69,9 @@ public class Game extends ApplicationAdapter {
 		}
 		inputProcessor.update();
 
-		//batch.begin();
-		//batch.draw(new Texture("Inventory.png"), WIDTH/2-192, (int)(HEIGHT-(HEIGHT*0.9)), 192*2, 288*2);
-		//batch.end();
+		batch.begin();
+		batch.draw(mouseCursor, inputProcessor.getMousePosition().x, inputProcessor.getMousePosition().y-20, 20, 20);
+		batch.end();
 
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}

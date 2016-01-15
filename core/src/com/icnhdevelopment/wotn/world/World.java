@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.special.Inventory;
+import com.icnhdevelopment.wotn.gui.special.Toolbar;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
@@ -47,6 +48,7 @@ public class World {
     ArrayList<Sprite> multiDSprites;
     ArrayList<Sprite> items;
 
+    Toolbar toolbar;
     Inventory inventory;
     boolean showInventory = false;
 
@@ -77,7 +79,8 @@ public class World {
         mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5);
         multiDSprites.add(mainCharacter);
 
-        inventory = new Inventory();
+        toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
+        inventory = new Inventory("ui/inventory/Inventory.png");
         inventory.setVisible(false);
     }
 
@@ -260,18 +263,19 @@ public class World {
         if (map.getLayers().get(1).getOpacity()<1) {
             mapRenderer.render(new int[]{1});
         }
+
+        Texture temp = new Texture("ui/hud/HUD.png");
+        batch.begin();
+        batch.setProjectionMatrix(inventory.getRenderCam().combined);
+        batch.draw(temp, 0, Game.HEIGHT()-temp.getHeight()*3, temp.getWidth()*3, temp.getHeight()*3);
+        temp = new Texture("ui/hud/ToolbarRotated.png");
+        batch.draw(temp, 0, Game.HEIGHT()-60-temp.getHeight()*2, temp.getWidth()*2, temp.getHeight()*2);
+        batch.end();
+
         if (showInventory) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
             inventory.render(batch);
         }
-
-        Texture temp = new Texture("ui/HUD.png");
-        batch.begin();
-        batch.setProjectionMatrix(inventory.getRenderCam().combined);
-        batch.draw(temp, 0, Game.HEIGHT()-temp.getHeight()*3, temp.getWidth()*3, temp.getHeight()*3);
-        temp = new Texture("ui/ToolbarRotated.png");
-        batch.draw(temp, 0, Game.HEIGHT()-60-temp.getHeight()*2, temp.getWidth()*2, temp.getHeight()*2);
-        batch.end();
     }
 
 }

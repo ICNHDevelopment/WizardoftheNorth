@@ -25,16 +25,19 @@ public class Inventory extends Container {
     Item mouseItem = null;
     Vector2 mousePosition;
 
-    public Inventory(){
+    Toolbar toolbar;
+
+    public Inventory(String file){
         super();
-        create();
+        create(file);
         defaultInventory = new ArrayList<>();
         loadInventorySlots();
     }
 
-    void create(){
-        textureSize = new Vector2(192*2, 288*2);
-        invenImage = new ImageLabel(this, new Vector2((Game.WIDTH()-(192*2))/2, (Game.HEIGHT()-(288*2))/2), textureSize, new Texture(Gdx.files.internal("ui/inventory/Inventory.png")));
+    void create(String file){
+        Texture tex = new Texture(Gdx.files.internal(file));
+        textureSize = new Vector2(tex.getWidth()*2, tex.getHeight()*2);
+        invenImage = new ImageLabel(this, new Vector2((Game.WIDTH()-textureSize.x)/2, (Game.HEIGHT()-textureSize.y)/2), textureSize, tex);
         invenImage.setImagealignment(Alignment.STRETCHED);
         this.children.add(invenImage);
     }
@@ -88,11 +91,11 @@ public class Inventory extends Container {
         startX = 282;
         for (int j = 0; j<4; j++){
             ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null);
-            if (j == 0){
+            if (j == 1){
                 is.type = SlotType.AMULET;
                 is.defaultImage = new Texture("Items/DefaultAm.png");
             }
-            else if (j==1){
+            else if (j==0){
                 is.type = SlotType.GAUNT;
                 is.defaultImage = new Texture("Items/DefaultGauntlets.png");
             }
@@ -110,6 +113,10 @@ public class Inventory extends Container {
         is.setHoverImage(new Texture("Items/highlight.png"));
         is.setImagealignment(Alignment.STRETCHED);
         defaultInventory.add(is);
+    }
+
+    public void setToolbar(){
+        
     }
 
     public void update(CInputProcessor processor){
