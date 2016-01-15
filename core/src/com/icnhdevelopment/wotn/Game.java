@@ -69,6 +69,7 @@ public class Game extends ApplicationAdapter {
 		}
 		inputProcessor.update();
 
+		batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
 		batch.begin();
 		batch.draw(mouseCursor, inputProcessor.getMousePosition().x, inputProcessor.getMousePosition().y-20, 20, 20);
 		batch.end();

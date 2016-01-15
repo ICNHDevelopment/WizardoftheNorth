@@ -304,9 +304,14 @@ public class World {
             inventory.render(batch);
         }
         if (battleStage>-1){
+            batch.setProjectionMatrix(inventory.getRenderCam().combined);
             batch.begin();
             TextureRegion tr = new TextureRegion(battleTransition, (int)((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
             batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
+            batch.end();
+            batch.setProjectionMatrix(camera.combined);
+            batch.begin();
+            mainCharacter.render(batch);
             batch.end();
         }
     }
