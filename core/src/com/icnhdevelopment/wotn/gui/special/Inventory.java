@@ -115,8 +115,8 @@ public class Inventory extends Container {
         defaultInventory.add(is);
     }
 
-    public void setToolbar(){
-        
+    public void setToolbar(Toolbar){
+
     }
 
     public void update(CInputProcessor processor){
