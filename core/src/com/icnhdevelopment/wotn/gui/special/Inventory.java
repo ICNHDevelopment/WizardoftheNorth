@@ -116,7 +116,10 @@ public class Inventory extends Container {
     }
 
     public void setToolbar(Toolbar toolbar){
-
+        this.toolbar = toolbar;
+        for (ItemSlot i : toolbar.defaultInventory){
+            this.defaultInventory.add(i);
+        }
     }
 
     public void update(CInputProcessor processor){

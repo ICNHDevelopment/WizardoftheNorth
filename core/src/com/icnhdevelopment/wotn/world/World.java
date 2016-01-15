@@ -82,6 +82,7 @@ public class World {
         toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
         inventory = new Inventory("ui/inventory/Inventory.png");
         inventory.setVisible(false);
+        inventory.setToolbar(toolbar);
     }
 
     void loadMap (String filename){
@@ -268,9 +269,9 @@ public class World {
         batch.begin();
         batch.setProjectionMatrix(inventory.getRenderCam().combined);
         batch.draw(temp, 0, Game.HEIGHT()-temp.getHeight()*3, temp.getWidth()*3, temp.getHeight()*3);
-        temp = new Texture("ui/hud/ToolbarRotated.png");
-        batch.draw(temp, 0, Game.HEIGHT()-60-temp.getHeight()*2, temp.getWidth()*2, temp.getHeight()*2);
         batch.end();
+
+        toolbar.render(batch);
 
         if (showInventory) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
