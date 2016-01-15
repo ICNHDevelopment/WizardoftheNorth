@@ -27,8 +27,10 @@ public class Character extends AnimatedSprite {
 
     //Skills
     int level;
+    public int getLevel(){ return level; }
 
     int CurrentVitality;
+    public int getCurrentVitality(){ return CurrentVitality; }
     int BaseVitality;
     int IvVitality;
     public int getVitality(){
@@ -57,6 +59,8 @@ public class Character extends AnimatedSprite {
         return (int)Math.floor(result);
     }
 
+    int CurrentWisdom;
+    public int getCurrentWisdom(){ return CurrentWisdom; }
     int BaseWisdom;
     int IvWisdom;
     public int getWisdom(){
@@ -83,6 +87,7 @@ public class Character extends AnimatedSprite {
             IvAgility = 10;
             BaseWisdom = 50;
             IvWisdom = 10;
+            CurrentWisdom = getWisdom();
             BaseStrength = 55;
             IvStrength = 10;
             BaseResistance = 30;

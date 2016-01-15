@@ -91,7 +91,7 @@ public class World {
         inventory.setVisible(false);
         inventory.setToolbar(toolbar);
         inventory.setCharacter(mainCharacter);
-        hud = new Hud();
+        hud = new Hud(mainCharacter);
 
         battleTransition = new Texture("ui/hud/toBlack.png");
     }
