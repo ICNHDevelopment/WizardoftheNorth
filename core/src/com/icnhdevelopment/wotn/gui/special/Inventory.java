@@ -128,7 +128,7 @@ public class Inventory extends Container {
     }
 
     void loadStatSlots(){
-        int startX = (int)invenImage.getAbsolutePosition().x + 265, startY=(int)invenImage.getAbsolutePosition().y+165;
+        int startX = (int)invenImage.getAbsolutePosition().x + 265 + 106, startY=(int)invenImage.getAbsolutePosition().y+146+14;
         for (int j = 0; j<5; j++){
             statSlots.add(new Rectangle(startX, textureSize.y-(startY+j*36), 106, 36));
         }
@@ -196,8 +196,10 @@ public class Inventory extends Container {
                     if (i==4){
                         whatToWrite = character.getWisdom() + "";
                     }
+
+                    float width = font.getBounds(whatToWrite).width;
                     batch.begin();
-                    font.draw(batch, whatToWrite, statSlots.get(i).x, statSlots.get(i).y);
+                    font.draw(batch, whatToWrite, statSlots.get(i).x-width, statSlots.get(i).y);
                     batch.end();
                 }
             }
