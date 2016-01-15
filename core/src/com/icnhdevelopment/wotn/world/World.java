@@ -267,8 +267,8 @@ public class World {
     }
 
     public void render(SpriteBatch batch){
-        camera.position.x = mainCharacter.getPosition().x;
-        camera.position.y = mainCharacter.getPosition().y;
+        camera.position.x = mainCharacter.getPosition().x + mainCharacter.getSize().x/2;
+        camera.position.y = mainCharacter.getPosition().y + mainCharacter.getSize().y/2;
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
