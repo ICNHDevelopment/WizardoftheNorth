@@ -25,7 +25,46 @@ public class Character extends AnimatedSprite {
 
     final int SPEED = 2;
 
-    public void create(String filename, int maxFrames, Vector2 position, int animSpeed){
+    //Skills
+    int level;
+
+    int BaseVitality;
+    int IvVitality;
+    public int getVitality(){
+        double result = level + 10 + ((((BaseVitality+IvVitality)*2)*level)/100);
+        return (int)Math.floor(result);
+    }
+
+    int BaseAgility;
+    int IvAgility;
+    public int getAgility(){
+        double result = 5 + (((BaseAgility+IvAgility)*2)*level)/100;
+        return (int)Math.floor(result);
+    }
+
+    int BaseResistance;
+    int IvResistance;
+    public int getResistance(){
+        double result = 5 + (((BaseResistance+IvResistance)*2)*level)/100;
+        return (int)Math.floor(result);
+    }
+
+    int BaseStrength;
+    int IvStrength;
+    public int getStrength(){
+        double result = 5 + (((BaseStrength+IvStrength)*2)*level)/100;
+        return (int)Math.floor(result);
+    }
+
+    int BaseWisdom;
+    int IvWisdom;
+    public int getWisdom(){
+        double result = 5 + (((BaseWisdom+IvWisdom)*2)*level)/100;
+        return (int)Math.floor(result);
+    }
+    //EndSkills
+
+    public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);
         regHeight = texture.getHeight()/2;
         width = (int)(regWidth);//*World.SCALE);
@@ -33,6 +72,20 @@ public class Character extends AnimatedSprite {
         frame = 0;
         direction = 0;
         footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
+        this.player = player;
+        if (player){
+            level = 1;
+            BaseVitality = 35;
+            IvVitality = 10;
+            BaseAgility = 80;
+            IvAgility = 10;
+            BaseWisdom = 50;
+            IvWisdom = 10;
+            BaseStrength = 55;
+            IvStrength = 10;
+            BaseResistance = 30;
+            IvResistance = 10;
+        }
     }
 
     public void move(Vector2 amount, ArrayList<Rectangle> walls){

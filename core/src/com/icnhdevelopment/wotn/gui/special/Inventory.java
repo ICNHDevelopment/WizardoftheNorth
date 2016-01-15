@@ -1,15 +1,20 @@
 package com.icnhdevelopment.wotn.gui.special;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.Container;
+import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.gui.ImageLabel;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.players.Character;
 
 import java.util.ArrayList;
 
@@ -19,6 +24,7 @@ import java.util.ArrayList;
 public class Inventory extends Container {
 
     ArrayList<ItemSlot> defaultInventory;
+    ArrayList<Rectangle> statSlots;
     ImageLabel invenImage;
     Vector2 textureSize;
 
@@ -27,11 +33,17 @@ public class Inventory extends Container {
 
     Toolbar toolbar;
 
+    Character character;
+
+    BitmapFont font;
+
     public Inventory(String file){
         super();
         create(file);
         defaultInventory = new ArrayList<>();
+        statSlots = new ArrayList<>();
         loadInventorySlots();
+        loadStatSlots();
     }
 
     void create(String file){
@@ -115,11 +127,26 @@ public class Inventory extends Container {
         defaultInventory.add(is);
     }
 
+    void loadStatSlots(){
+        int startX = (int)invenImage.getAbsolutePosition().x + 265, startY=(int)invenImage.getAbsolutePosition().y+165;
+        for (int j = 0; j<5; j++){
+            statSlots.add(new Rectangle(startX, textureSize.y-(startY+j*36), 106, 36));
+        }
+    }
+
     public void setToolbar(Toolbar toolbar){
         this.toolbar = toolbar;
         for (ItemSlot i : toolbar.defaultInventory){
             this.defaultInventory.add(i);
         }
+    }
+
+    public void setCharacter(Character c){
+        this.character = c;
+    }
+
+    public void createFont() {
+        font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
     }
 
     public void update(CInputProcessor processor){
@@ -151,9 +178,32 @@ public class Inventory extends Container {
         if (visible) {
             renderBackground(batch);
             renderChildren(batch);
-            if (mouseItem!=null){
+            if (character!=null){
+                for (int i = 0; i<statSlots.size(); i++){
+                    String whatToWrite = "Joe";
+                    if (i==0){
+                        whatToWrite = character.getVitality() + "";
+                    }
+                    if (i==1){
+                        whatToWrite = character.getAgility() + "";
+                    }
+                    if (i==2){
+                        whatToWrite = character.getResistance() + "";
+                    }
+                    if (i==3){
+                        whatToWrite = character.getStrength() + "";
+                    }
+                    if (i==4){
+                        whatToWrite = character.getWisdom() + "";
+                    }
+                    batch.begin();
+                    font.draw(batch, whatToWrite, statSlots.get(i).x, statSlots.get(i).y);
+                    batch.end();
+                }
+            }
+            if (mouseItem!=null) {
                 batch.begin();
-                batch.draw(mouseItem.image, mousePosition.x-mouseItem.image.getWidth()/2, mousePosition.y-mouseItem.image.getHeight()/2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
+                batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
                 batch.end();
             }
         }
