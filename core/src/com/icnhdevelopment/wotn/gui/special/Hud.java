@@ -60,9 +60,9 @@ public class Hud extends Container {
         super.render(batch);
 
         batch.begin();
-        batch.draw(vitT, vitR.x, vitR.y, ((float)character.getCurrentVitality()/(float)character.getVitality())*vitR.getWidth(), vitR.getHeight());
-        batch.draw(wisT, wisR.x, wisR.y, ((float)character.getCurrentWisdom()/(float)character.getWisdom())*wisR.getWidth(), wisR.getHeight());
-        batch.draw(expT, expR.x, expR.y, expR.getWidth(), expR.getHeight());
+        batch.draw(vitT, vitR.x, vitR.y, (character.getCurrentVitality()/(float)character.getVitality())*vitR.getWidth(), vitR.getHeight());
+        batch.draw(wisT, wisR.x, wisR.y, (character.getCurrentWisdom()/(float)character.getWisdom())*wisR.getWidth(), wisR.getHeight());
+        batch.draw(expT, expR.x, expR.y, (character.getCurrentExperience()/character.getRequiredExperience())*expR.getWidth(), expR.getHeight());
         String level = character.getLevel() + "";
         float width = font.getBounds(level).width;
         float height = font.getBounds(level).height;

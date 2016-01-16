@@ -14,6 +14,7 @@ import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.gui.ImageLabel;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.players.Character;
 
 import java.util.ArrayList;
@@ -60,15 +61,19 @@ public class Inventory extends Container {
         for (int i = 0; i<3; i++){
             for (int j = 0; j<4; j++){
                 Item it = new Item(new Texture("Items/Ale.png"));
-                if (j == 0){
-                    it = new Item(new Texture("Items/AmEmerald.png"));
-                    it.setType(SlotType.AMULET);
+                if (i==0) {
+                    if (j == 0) {
+                        it = new SpecialItem(new Texture("Items/AmEmerald.png"), SlotType.AMULET);
+                    }
+                    if (j == 1) {
+                        it = new SpecialItem(new Texture("Items/ChestIron.png"), SlotType.CHEST);
+                    }
                 }
-                if (i==2&&j==1){
-                    it = new Item(new Texture("Items/ChestIron.png"));
-                    it.setType(SlotType.CHEST);
+                boolean b = false;
+                if (j>1) {
+                    b = true;
                 }
-                ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), it.image);
+                ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), it.image, b);
                 is.setHoverImage(new Texture("Items/highlight.png"));
                 is.item = it;
                 is.setImagealignment(Alignment.STRETCHED);
@@ -79,7 +84,7 @@ public class Inventory extends Container {
         startX = 40;
         startY = 80;
         for (int j = 0; j<4; j++){
-            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null);
+            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null, false);
             if (j == 0){
                 is.type = SlotType.HEAD;
                 is.defaultImage = new Texture("Items/DefaultHelm.png");
@@ -102,7 +107,7 @@ public class Inventory extends Container {
         }
         startX = 282;
         for (int j = 0; j<4; j++){
-            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null);
+            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null, false);
             if (j == 1){
                 is.type = SlotType.AMULET;
                 is.defaultImage = new Texture("Items/DefaultAm.png");
@@ -119,7 +124,7 @@ public class Inventory extends Container {
             is.setImagealignment(Alignment.STRETCHED);
             defaultInventory.add(is);
         }
-        ItemSlot is = new ItemSlot(invenImage, new Vector2(160, textureSize.y-(286)), new Vector2(60, 60), null);
+        ItemSlot is = new ItemSlot(invenImage, new Vector2(160, textureSize.y-(286)), new Vector2(60, 60), null, false);
         is.type = SlotType.WEAPON;
         is.defaultImage = new Texture("Items/DefaultWeapon.png");
         is.setHoverImage(new Texture("Items/highlight.png"));
@@ -151,24 +156,25 @@ public class Inventory extends Container {
 
     public void update(CInputProcessor processor){
         for (ItemSlot is : defaultInventory){
-            if (processor.mouseHovered(is.getAbsolutePosition().x, is.getAbsolutePosition().y, is.getSize().x, is.getSize().y)){
-                is.setHovering(true);
-                if (processor.didMouseClick()){
-                    if (mouseItem!=null){
-                        if (mouseItem.getType().equals(is.type)||is.type.equals(SlotType.NORM)){
+            if (!is.isBlocked) {
+                if (processor.mouseHovered(is.getAbsolutePosition().x, is.getAbsolutePosition().y, is.getSize().x, is.getSize().y)) {
+                    is.setHovering(true);
+                    if (processor.didMouseClick()) {
+                        if (mouseItem != null) {
+                            if (mouseItem.getType().equals(is.type) || is.type.equals(SlotType.NORM)) {
+                                Item temp = is.item;
+                                is.item = mouseItem;
+                                mouseItem = temp;
+                            }
+                        } else {
                             Item temp = is.item;
                             is.item = mouseItem;
                             mouseItem = temp;
                         }
-                    }else{
-                        Item temp = is.item;
-                        is.item = mouseItem;
-                        mouseItem = temp;
                     }
+                } else {
+                    is.setHovering(false);
                 }
-            }
-            else{
-                is.setHovering(false);
             }
         }
         mousePosition = processor.getMousePosition();

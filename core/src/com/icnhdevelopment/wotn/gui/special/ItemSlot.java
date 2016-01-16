@@ -16,24 +16,35 @@ public class ItemSlot extends ImageLabel {
     SlotType type = SlotType.NORM;
     Texture defaultImage;
 
-    public ItemSlot(Container pa, Vector2 pos, Vector2 sz, Texture im){
+    boolean isBlocked;
+
+    public ItemSlot(Container pa, Vector2 pos, Vector2 sz, Texture im, boolean block){
         super(pa, pos, sz, im);
 
+        isBlocked = block;
+        if (isBlocked == true){
+            item = null;
+            defaultImage = new Texture("Items/Blocked.png");
+        }
     }
 
     public void render(SpriteBatch batch){
         if (visible) {
+            if (isBlocked == true){
+                item = null;
+                defaultImage = new Texture("Items/Blocked.png");
+            }
             batch.begin();
-            if (item==null){
-                if (type != SlotType.NORM){
-                    batch.draw(defaultImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x*2, imageSize.y*2);
+            if (isHovering()) {
+                batch.draw(hoverImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
+            }
+            if (item == null) {
+                if (type != SlotType.NORM || isBlocked) {
+                    batch.draw(defaultImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
                 }
             }
-            if (isHovering()){
-                batch.draw(hoverImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x*2, imageSize.y*2);
-            }
-            if (item!=null) {
-                batch.draw(item.image, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x*2, imageSize.y*2);
+            if (item != null) {
+                batch.draw(item.image, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
             }
             batch.end();
         }

@@ -36,7 +36,7 @@ public class Toolbar extends Inventory {
                 it = new Item(new Texture("Items/ChestIron.png"));
                 it.setType(SlotType.CHEST);
             }
-            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + ((j+1)*60))), new Vector2(60, 60), it.image);
+            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + ((j+1)*60))), new Vector2(60, 60), it.image, false);
             is.setHoverImage(new Texture("Items/highlight.png"));
             is.item = it;
             is.setImagealignment(Alignment.STRETCHED);

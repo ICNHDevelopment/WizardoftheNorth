@@ -29,8 +29,16 @@ public class Character extends AnimatedSprite {
     int level;
     public int getLevel(){ return level; }
 
-    int CurrentVitality;
-    public int getCurrentVitality(){ return CurrentVitality; }
+    float CurrentExperience;
+    public float getCurrentExperience(){ return CurrentExperience; }
+    float NextLevelExp;
+    float CurrLevelExp;
+    public float getRequiredExperience(){
+        return NextLevelExp-CurrLevelExp;
+    }
+
+    float CurrentVitality;
+    public float getCurrentVitality(){ return CurrentVitality; }
     int BaseVitality;
     int IvVitality;
     public int getVitality(){
@@ -59,8 +67,8 @@ public class Character extends AnimatedSprite {
         return (int)Math.floor(result);
     }
 
-    int CurrentWisdom;
-    public int getCurrentWisdom(){ return CurrentWisdom; }
+    float CurrentWisdom;
+    public float getCurrentWisdom(){ return CurrentWisdom; }
     int BaseWisdom;
     int IvWisdom;
     public int getWisdom(){
@@ -79,20 +87,38 @@ public class Character extends AnimatedSprite {
         footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
         this.player = player;
         if (player){
-            level = 1;
+            level = 10;
             BaseVitality = 35;
             IvVitality = 10;
-            CurrentVitality = getVitality();
-            BaseAgility = 80;
+            CurrentVitality = getVitality()/2.0f;
+            BaseAgility = 90;
             IvAgility = 10;
             BaseWisdom = 50;
             IvWisdom = 10;
-            CurrentWisdom = getWisdom();
+            CurrentWisdom = getWisdom()*2.0f/3.0f;
             BaseStrength = 55;
             IvStrength = 10;
             BaseResistance = 30;
             IvResistance = 10;
+            CurrentExperience = (CalculateLevelExp(3)-CalculateLevelExp(2))/2;
+            NextLevelExp = CalculateLevelExp(level+1);
+            CurrLevelExp = CalculateLevelExp(level);
         }
+    }
+
+    float CalculateLevelExp(int currentLevel){
+        float nCube = (float)Math.pow((double)currentLevel, 3.0);
+        float returnVal;
+        if (currentLevel<=15){
+            returnVal = ((((currentLevel+1)/3.0f)+24)/50.0f)*nCube;
+        }
+        else if (currentLevel<=36){
+            returnVal = (((currentLevel)+14)/50.0f)*nCube;
+        }
+        else {
+            returnVal = ((((currentLevel)/2.0f)+32)/50.0f)*nCube;
+        }
+        return (float)Math.floor(returnVal)*50;
     }
 
     public void move(Vector2 amount, ArrayList<Rectangle> walls){
