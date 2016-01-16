@@ -72,8 +72,8 @@ public class Container {
         shapeRenderer = new ShapeRenderer();
         buttons = new ArrayList<>();
         if (parent == null) {
-            renderCam = new OrthographicCamera(Game.WIDTH(), Game.HEIGHT());
-            renderCam.position.set(renderCam.viewportWidth / 2, renderCam.viewportHeight / 2, 0);
+            renderCam = new OrthographicCamera(size.x, size.y);
+            renderCam.position.set(Game.WIDTH() / 2, Game.HEIGHT() / 2, 0);
             renderCam.update();
         }
     }
