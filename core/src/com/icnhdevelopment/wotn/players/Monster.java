@@ -13,8 +13,7 @@ public class Monster extends Character {
 
     public static Monster getMonster(String type){
         if (type.equals("Slime")){
-            Slime s = new Slime();
-            return s;
+            return new Slime();
         }
         return null;
     }

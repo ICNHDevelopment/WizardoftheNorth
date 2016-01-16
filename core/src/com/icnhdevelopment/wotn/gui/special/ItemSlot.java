@@ -22,7 +22,7 @@ public class ItemSlot extends ImageLabel {
         super(pa, pos, sz, im);
 
         isBlocked = block;
-        if (isBlocked == true){
+        if (isBlocked){
             item = null;
             defaultImage = new Texture("Items/Blocked.png");
         }
@@ -30,7 +30,7 @@ public class ItemSlot extends ImageLabel {
 
     public void render(SpriteBatch batch){
         if (visible) {
-            if (isBlocked == true){
+            if (isBlocked){
                 item = null;
                 defaultImage = new Texture("Items/Blocked.png");
             }

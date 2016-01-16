@@ -7,5 +7,5 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public interface Button {
 
-    public void Click();
+    void Click();
 }
