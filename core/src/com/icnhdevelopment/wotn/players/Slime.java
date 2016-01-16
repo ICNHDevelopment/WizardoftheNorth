@@ -25,15 +25,16 @@ public class Slime extends Monster{
         if (World.TICK % speed == 0) {
             if (animUp) {
                 frame++;
-                this.position.y++;
+                this.position.y+=2;
                 if (frame>=maxFrames){
                     animUp = false;
                     frame--;
+                    this.position.y-=2;
                 }
             }
             else{
                 frame--;
-                this.position.y--;
+                this.position.y-=2;
             }
             if (frame <= 0) {
                 animating = false;

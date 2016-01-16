@@ -19,6 +19,7 @@ public class AnimatedSprite extends Sprite {
     float regWidth, regHeight;
     boolean animating = false;
     Timer animator;
+    boolean directionalMovement = true;
 
     public void create(String filename, int maxFrames, Vector2 position, Vector2 size, int animSpeed){
         super.create(filename, position, size);

@@ -1,6 +1,5 @@
 package com.icnhdevelopment.wotn.players;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
@@ -24,6 +23,7 @@ public class Character extends AnimatedSprite {
     boolean hasRandomMovement = false, isMovingRandomly = true;
 
     final int SPEED = 2;
+    final Random RAN = new Random();
 
     //Skills
     int level;
@@ -77,7 +77,7 @@ public class Character extends AnimatedSprite {
     }
     //EndSkills
 
-    public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player){
+    public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);
         regHeight = texture.getHeight()/2;
         width = (int)(regWidth);//*World.SCALE);
@@ -86,6 +86,7 @@ public class Character extends AnimatedSprite {
         direction = 0;
         footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
         this.player = player;
+        this.directionalMovement = direcMove;
         if (player){
             level = 10;
             BaseVitality = 35;
@@ -124,21 +125,30 @@ public class Character extends AnimatedSprite {
     public void move(Vector2 amount, ArrayList<Rectangle> walls){
         animate(true);
         Rectangle next = new Rectangle(position.x + amount.x*SPEED, position.y + amount.y*SPEED, width, height);
-        footBox = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
-        for (Rectangle r : walls){
-            if (r.overlaps(footBox)){
-                return;
+        Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
+        if (canMove(nextFoot, walls)) {
+            footBox = nextFoot;
+            position.x += amount.x * SPEED;
+            position.y += amount.y * SPEED;
+            if (directionalMovement) {
+                if (amount.y == 0) {
+                    if (amount.x > 0) {
+                        direction = 1;
+                    } else {
+                        direction = 0;
+                    }
+                }
             }
         }
-        position.x += amount.x*SPEED;
-        position.y += amount.y*SPEED;
-        if (amount.y == 0){
-            if (amount.x>0){
-                direction = 1;
-            }else{
-                direction = 0;
+    }
+
+    boolean canMove(Rectangle r, ArrayList<Rectangle> walls){
+        for (Rectangle a : walls){
+            if (a.overlaps(r)){
+                return false;
             }
         }
+        return true;
     }
 
     public void updateWalls(TiledMap map, ArrayList<Rectangle> overs){
@@ -182,14 +192,13 @@ public class Character extends AnimatedSprite {
 
     public void setRandomMovementTimer(ArrayList<Rectangle> w){
         final ArrayList<Rectangle> walls = w;
-        final Random r = new Random();
 
         final Thread movementThread = new Thread(){
             @Override
             public  void run(){
                 boolean running = true;
                 while (running) {
-                    long delay = (long) (1000 * (2 + r.nextDouble() * 1));
+                    long delay = (long) (1000 * (2 + RAN.nextDouble() * 2));
                     try {
                         Thread.sleep(delay);
                         moveRandomly(walls);
@@ -207,24 +216,47 @@ public class Character extends AnimatedSprite {
     void moveRandomly(ArrayList<Rectangle> w){
         if (isMovingRandomly){
             Random r = new Random();
-            int xDir = r.nextInt(3)-1, yDir = r.nextInt(3)-1;
-            while (xDir==0&&yDir==0){
-                xDir = r.nextInt(3)-1;
-                yDir = r.nextInt(3)-1;
-            }
-            animating = true;
-            while (animating) {
-                move(new Vector2(xDir, yDir), w);
-                try {
-                    Thread.sleep(speed*speed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            ArrayList<Vector2> direcs = getMoveDirections(w);
+            if (direcs.size()>0) {
+                Vector2 avail = direcs.get(r.nextInt(direcs.size()));
+                int xDir = (int)avail.x, yDir = (int)avail.y;
+                animating = true;
+                while (animating) {
+                    move(new Vector2(xDir, yDir), w);
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+                frame = 0;
             }
-            frame = 0;
         }else {
             //Pathfind to a target
         }
+    }
+
+    ArrayList<Vector2> getMoveDirections(ArrayList<Rectangle> w){
+        ArrayList<Vector2> dirs = new ArrayList<>();
+        int DistanceNeeded = SPEED*maxFrames;
+        for (int i = -1; i<=1; i++){
+            for (int j = -1; j<=1; j++){
+                Rectangle next = new Rectangle(position.x + i*DistanceNeeded, position.y + j*DistanceNeeded, width, height);
+                Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
+                if (canMove(nextFoot, w)&&!(i==0&&j==0)){
+                    int retI = i, retJ = j;
+                    if (i!=0&&j!=0){
+                        if (RAN.nextBoolean()){
+                            retI = 0;
+                        } else {
+                            retJ = 0;
+                        }
+                    }
+                    dirs.add(new Vector2(retI, retJ));
+                }
+            }
+        }
+        return dirs;
     }
 
     public void animate(boolean moving) {
