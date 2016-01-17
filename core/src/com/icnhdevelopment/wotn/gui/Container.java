@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.handlers.ColorCodes;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class Container {
     Vector2 size;
     Vector2 positionScale;
     Vector2 sizeScale;
+    private String name;
     protected boolean visible = true;
     protected boolean isHovered = false;
     Color backcolor = null;
@@ -258,4 +260,23 @@ public class Container {
         return renderCam;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Container getContainerByName(String name){
+        if (this.name.equals(name)) return this;
+        for (Container c : children){
+            Container b = c.getContainerByName(name);
+            if (b != null){
+                return b;
+            }
+        }
+        System.out.println(ColorCodes.RED + "Unable to find container with name \"" + name + "\"");
+        return null;
+    }
 }
