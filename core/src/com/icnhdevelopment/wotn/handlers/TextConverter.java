@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class TextConverter extends Container{
 
-
     public static void main(String[] args) {
         Container test = Array_To_Container(Text_To_Array("X:\\WizardoftheNorth\\core\\assets\\ui\\Menus\\MNUMain.txt"));
     }
@@ -33,14 +32,14 @@ public class TextConverter extends Container{
     public static Container Array_To_Container(ArrayList<String> a){
         Container contain = new Container();
         boolean hasChildren = false;
-        contain.name = a.get(0).substring(a.get(0).indexOf("[")+1,a.get(0).indexOf("]")+1).replace("]", "");
-        for (String line : a) if (line.contains(contain.name + ".Children")) hasChildren = true;
-        if (hasChildren) contain.children = new ArrayList<>(); //Make new ArrayList and set that to contain.children?
+        contain.setName(a.get(0).substring(a.get(0).indexOf("[")+1,a.get(0).indexOf("]")+1).replace("]", ""));
+        for (String line : a) if (line.contains(contain.getName() + ".Children")) hasChildren = true;
+        if (hasChildren) contain.setChildren(new ArrayList<>()); //Make new ArrayList and set that to contain.children?
         for (String line : a) {
-            if (line.contains(contain.name + ".Children.") && (line.length() - line.replace(".", "").length()) == 2) {
+            if (line.contains(contain.getName() + ".Children.") && (line.length() - line.replace(".", "").length()) == 2) {
                 String name = line.substring(line.indexOf(".Children.") + 10,line.indexOf(")") + 1).replace(")", "");
-                String type = valueOf(a, contain.name + ".Children." + name + ".Type");
-                String childFullName = contain.name + ".Children." + name;
+                String type = valueOf(a, contain.getName() + ".Children." + name + ".Type");
+                String childFullName = contain.getName() + ".Children." + name;
                 if (type.equals("Label")){
                     Label l = new Label(contain,
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
@@ -55,19 +54,19 @@ public class TextConverter extends Container{
                     l.setvalignment(reflectAlignment(valueOf(a, ".VAlignment")));
                     l.setBackcolor(reflectColor(valueOf(a, ".BackColor")));
                     l.setVisible(Boolean.valueOf(valueOf(a, ".SetVisible")));
-                    l.name = name;
-                    l.type = type;
+                    l.setName(name);
+                    l.setType(type);
                 }
                 else if (type.equals("ImageLabel")){
-                    Container i = new ImageLabel((contain,
+                    Container i = new ImageLabel(contain,
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y")))
                             );
                     i.setVisible(Boolean.valueOf(valueOf(a, ".SetVisible")));
                     i.setBackcolor(reflectColor(valueOf(a, ".BackColor")));
                     //i.setImagealignment(reflectAlignment(valueOf(a, ".ImageAlignment"))); //I couldn't access this method so...
-                    i.name = name;
-                    i.type = type;
+                    i.setName(name);
+                    i.setType(type);
                 }
                 //contain.children.get(contain.children.size() - 1).name = name;
                 //contain.children.get(contain.children.size() - 1).type = type;
@@ -102,8 +101,8 @@ public class TextConverter extends Container{
     }
 
     public static void set(Container c, ArrayList a){
-        c.position = new Vector2(Float.parseFloat(valueOf(a, c.name + ".Position.X")), Float.parseFloat(valueOf(a, c.name + ".Position.Y")));
-        c.size = new Vector2(Float.parseFloat(valueOf(a, c.name + ".Size.X")), Float.parseFloat(valueOf(a, c.name + ".Size.Y")));
+        c.setPosition(new Vector2(Float.parseFloat(valueOf(a, c.getName() + ".Position.X")), Float.parseFloat(valueOf(a, c.getName() + ".Position.Y"))));
+        c.setSize(new Vector2(Float.parseFloat(valueOf(a, c.getName() + ".Size.X")), Float.parseFloat(valueOf(a, c.getName() + ".Size.Y"))));
     }
 
     public static com.badlogic.gdx.graphics.Color reflectColor(String color){

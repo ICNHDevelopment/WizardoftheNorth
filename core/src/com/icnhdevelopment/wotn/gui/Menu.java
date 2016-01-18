@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
+import com.icnhdevelopment.wotn.handlers.TextConverter;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +24,7 @@ public class Menu {
     //Albert replace this code with the xml loading code
     //(all the important properties have get/set methods)
     public void init(){
+        /*
         mainContainer = new Container();
         Label l = new Label(mainContainer, new Vector2(0, Game.HEIGHT()-40), new Vector2(Game.WIDTH(), 40), "The Wizard of the North");
         l.setFontsize(40);
@@ -58,6 +60,8 @@ public class Menu {
         il.setImagealignment(Alignment.STRETCHED);
         il.setHoverImage(new Texture("ui/PlayBTNH.png"));
         mainContainer.buttons.add(il);
+        */
+        mainContainer = TextConverter.Array_To_Container(TextConverter.Text_To_Array("ui/Menus/MNUMain.txt"));
     }
 
     public void update(CInputProcessor inputProcessor){

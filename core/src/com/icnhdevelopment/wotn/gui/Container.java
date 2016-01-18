@@ -21,8 +21,8 @@ import java.util.ArrayList;
 public class Container {
 
     Container parent;
-    Vector2 position;
-    Vector2 size;
+    protected Vector2 position;
+    protected Vector2 size;
     Vector2 positionScale;
     Vector2 sizeScale;
     private String name;
@@ -67,11 +67,11 @@ public class Container {
 
     void init(Container pa, Vector2 pos, Vector2 sz) {
         parent = pa;
-        position = pos;
-        size = sz;
+        setPosition(pos);
+        setSize(sz);
         setSizeScale();
 
-        children = new ArrayList<>();
+        setChildren(new ArrayList<>());
         shapeRenderer = new ShapeRenderer();
         buttons = new ArrayList<>();
         if (parent == null) {
@@ -99,7 +99,7 @@ public class Container {
     public void reposition() {
         if (parent != null) {
             Vector2 paPos = parent.getSize();
-            position = new Vector2(paPos.x * positionScale.x, paPos.y * positionScale.y);
+            setPosition(new Vector2(paPos.x * positionScale.x, paPos.y * positionScale.y));
         }
         for (Container child : children) {
             child.reposition();
@@ -115,7 +115,7 @@ public class Container {
         Vector2 newT = size;
         if (parent != null) {
             Rectangle paRec = parent.getBounds();
-            size = new Vector2(paRec.width * sizeScale.x, paRec.height * sizeScale.y);
+            setSize(new Vector2(paRec.width * sizeScale.x, paRec.height * sizeScale.y));
             newT = size;
         }
         for (Container child : children) {
@@ -128,12 +128,12 @@ public class Container {
     }
 
     public void reposition(float x, float y) {
-        position = new Vector2(x, y);
+        setPosition(new Vector2(x, y));
     }
 
     public void resize(float x, float y) {
         Vector2 oldT = size;
-        size = new Vector2(x, y);
+        setSize(new Vector2(x, y));
         Vector2 newT = size;
         if (parent != null) {
             Vector2 paRec = parent.getSize();
@@ -217,7 +217,6 @@ public class Container {
     }
 
     /**
-     * UNIMPLEMENTED
      * Gets the absolute position of the element in the game window.
      * Should be used for human interaction.
      *
@@ -279,5 +278,25 @@ public class Container {
         }
         System.out.println(ColorCodes.RED + "Unable to find container with name \"" + name + "\"");
         return null;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setChildren(ArrayList<Container> children) {
+        this.children = children;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void setSize(Vector2 size) {
+        this.size = size;
     }
 }
