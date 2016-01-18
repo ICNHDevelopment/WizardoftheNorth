@@ -26,6 +26,7 @@
             (Main.Children.Label.BorderColor): {-16776961}
             (Main.Children.Label.BackColor): {65535}
             (Main.Children.Label.HAlignment): {CENTER}
+            (Main.Children.Label.VAlignment): {BOTTOM}
             (Main.Children.Label.UseFontSize): {false}
 		}
 		(Main.Children.ImageLabel):{

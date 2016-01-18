@@ -27,14 +27,6 @@ import java.lang.reflect.Field;
  */
 public class XMLConverter {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        XML_Converter(new File("core/assets/ui/Menus/MNUMain"));
-
-    }
-
     public static ArrayList<Container> XML_Converter(File file){
         ArrayList<Container> children = new ArrayList<Container>();
         try {

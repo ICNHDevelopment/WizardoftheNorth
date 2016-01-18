@@ -132,7 +132,7 @@ public class Label extends Container implements Button {
 
     void renderText(SpriteBatch batch) {
         if (font == null) {
-            System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label.renderText");
+            System.out.println(ColorCodes.RED + "Must call Label.createFont before rendering Label or any subclass" + ColorCodes.CYAN + " in Label " + getName());
         }
         float yOffset = fontHeight, xOffset = 0;
         if (color != bordercolor) {

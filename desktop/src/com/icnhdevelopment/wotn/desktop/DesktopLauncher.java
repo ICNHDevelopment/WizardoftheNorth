@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		config.title = "The Wizard of the North";
 		config.resizable = false;
 		config.width = 1280;
-		config.height = 800;
+		config.height = 720;
 		//config.fullscreen = true;
 		
 		new LwjglApplication(new Game(), config);

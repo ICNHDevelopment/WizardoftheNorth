@@ -3,25 +3,16 @@ package com.icnhdevelopment.wotn.handlers;
 /**
  * Created by Albert on 1/16/2016.
  */
-import com.badlogic.gdx.ai.steer.behaviors.Alignment;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Label;
 import com.icnhdevelopment.wotn.gui.ImageLabel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.stream.Stream;
 import java.util.ArrayList;
 
 public class TextConverter extends Container{
@@ -68,37 +59,40 @@ public class TextConverter extends Container{
                                 new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
                                 new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
                                 valueOf(a, childFullName + ".Text"));
-                        l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true)));
+                        //Do this a bunch of times
+                        Color col = new Color(valueOf(a, childFullName + ".BorderColor", true));
+                        if (col != null) l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true)));
+                        //for each field
                         l.setColor(new Color(valueOf(a, childFullName + ".Color", true)));
                         l.setFontsize(valueOf(a, childFullName + ".FontSize", true));
                         l.setFontType(valueOf(a, childFullName + ".FontType"));
                         l.sethalignment(com.icnhdevelopment.wotn.gui.Alignment.valueOf(valueOf(a, childFullName + ".HAlignment")));
                         l.setUsefontsize(Boolean.valueOf(valueOf(a, childFullName + ".UseFontSize")));
-                        l.setvalignment(com.icnhdevelopment.wotn.gui.Alignment.valueOf(valueOf(a, childFullName + ".VAlignment")));
+                        l.setvalignment(Alignment.valueOf(valueOf(a, childFullName + ".VAlignment")));
                         l.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true)));
-                        l.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
+                        //l.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
                         l.setName(name);
                         l.setType(type);
                         l.createFont();
                     }
                     catch(Exception e){
-                        //p(e);
+                        p(e);
                     }
                 }
                 else if (type.equals("ImageLabel")){
                     try{
-                        Container i = new ImageLabel(contain,
+                        ImageLabel i = new ImageLabel(contain,
                                 new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
                                 new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
                                 new Texture(valueOf(a, childFullName + ".TextureFile")));
-                        i.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
+                        //i.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
                         i.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true)));
-                        //i.setImagealignment(reflectAlignment(valueOf(a, ".ImageAlignment"))); //I couldn't access this method so...
+                        i.setImagealignment(Alignment.valueOf(valueOf(a, childFullName + ".ImageAlignment"))); //I couldn't access this method so...
                         i.setName(name);
                         i.setType(type);
                     }
                     catch(Exception e){
-                        //p(e);
+                        p(e);
                     }
                 }
             }
