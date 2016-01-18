@@ -10,6 +10,7 @@ import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.handlers.TextConverter;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,7 +62,7 @@ public class Menu {
         il.setHoverImage(new Texture("ui/PlayBTNH.png"));
         mainContainer.buttons.add(il);
         */
-        mainContainer = TextConverter.Array_To_Container(TextConverter.Text_To_Array("ui/Menus/MNUMain.txt"));
+        mainContainer = TextConverter.Array_To_Container(TextConverter.Text_To_Array(Gdx.files.internal("ui/Menus/MNUMain.txt")));
     }
 
     public void update(CInputProcessor inputProcessor){

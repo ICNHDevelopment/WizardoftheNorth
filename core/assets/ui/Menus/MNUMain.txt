@@ -5,44 +5,44 @@
 	    (Main.Position.Y):{0}
 	}
 	(Main.Size):{
-    	    (Main.Size.X):{1280}
-    	    (Main.Size.Y):{720}
+    	(Main.Size.X):{1280}
+    	(Main.Size.Y):{720}
     }
 	(Main.Children):{
 		(Main.Children.Label):{
-			(Main.Children.Label.Name): {Name1}
+		    (Main.Children.Label.Name): {Name1}
 			(Main.Children.Label.Type): {Label}
-                			(Main.Children.Label.Position):{
-                                (Main.Children.Label.Position.X):{0}
-                                (Main.Children.Label.Position.Y):{676}
-                      }
-                			(Main.Children.Label.Size):{
-                                (Main.Children.Label.Size.X):{1280}
-                                (Main.Children.Label.Size.Y):{40}
-                      }
-                			(Main.Children.Label.Text): {The Wizard of the North}
-                			(Main.Children.Label.FontSize): {40}
-                			(Main.Children.Label.Color): {WHITE}
-               			  (Main.Children.Label.BorderColor): {RED}
-                			(Main.Children.Label.BackColor): {BLUE}
-                			(Main.Children.Label.HAlignment): {CENTER}
-                			(Main.Children.Label.UseFontSize): {false}
+            (Main.Children.Label.Position):{
+                (Main.Children.Label.Position.X):{0}
+                (Main.Children.Label.Position.Y):{676}
+            }
+            (Main.Children.Label.Size):{
+                (Main.Children.Label.Size.X):{1280}
+                (Main.Children.Label.Size.Y):{40}
+            }
+            (Main.Children.Label.Text): {The Wizard of the North}
+            (Main.Children.Label.FontSize): {40}
+            (Main.Children.Label.Color): {WHITE}
+            (Main.Children.Label.BorderColor): {RED}
+            (Main.Children.Label.BackColor): {BLUE}
+            (Main.Children.Label.HAlignment): {CENTER}
+            (Main.Children.Label.UseFontSize): {false}
 		}
 		(Main.Children.ImageLabel):{
 			(Main.Children.ImageLabel.Name): {Name2}
 			(Main.Children.ImageLabel.Type): {ImageLabel}
-                			(Main.Children.ImageLabel.Position):{
-                                (Main.Children.ImageLabel.Position.X):{30}
-                                (Main.Children.ImageLabel.Position.Y):{30}
+            (Main.Children.ImageLabel.Position):{
+                (Main.Children.ImageLabel.Position.X):{30}
+                (Main.Children.ImageLabel.Position.Y):{30}
+            }
+            (Main.Children.ImageLabel.Size):{
+                (Main.Children.ImageLabel.Size.X):{224}
+                (Main.Children.ImageLabel.Size.Y):{98}
                        }
-                       (Main.Children.ImageLabel.Size):{
-                                (Main.Children.ImageLabel.Size.X):{224}
-                                (Main.Children.ImageLabel.Size.Y):{98}
-                       }
-                			(Main.Children.ImageLabel.TextureFile): {ui/PlayBTN.png}
-                			(Main.Children.ImageLabel.BackColor): {ORANGE}
-                			(Main.Children.ImageLabel.ImageAlignment): {STRETCHED}
+            (Main.Children.ImageLabel.TextureFile): {ui/PlayBTN.png}
+            (Main.Children.ImageLabel.BackColor): {ORANGE}
+            (Main.Children.ImageLabel.ImageAlignment): {STRETCHED}
 		}
-
+    }
 		
 	
