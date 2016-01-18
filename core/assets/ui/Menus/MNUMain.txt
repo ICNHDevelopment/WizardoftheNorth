@@ -22,9 +22,9 @@
             }
             (Main.Children.Label.Text): {The Wizard of the North}
             (Main.Children.Label.FontSize): {40}
-            (Main.Children.Label.Color): {WHITE}
-            (Main.Children.Label.BorderColor): {RED}
-            (Main.Children.Label.BackColor): {BLUE}
+            (Main.Children.Label.Color): {-1}
+            (Main.Children.Label.BorderColor): {-16776961}
+            (Main.Children.Label.BackColor): {65535}
             (Main.Children.Label.HAlignment): {CENTER}
             (Main.Children.Label.UseFontSize): {false}
 		}
@@ -40,7 +40,7 @@
                 (Main.Children.ImageLabel.Size.Y):{98}
                        }
             (Main.Children.ImageLabel.TextureFile): {ui/PlayBTN.png}
-            (Main.Children.ImageLabel.BackColor): {ORANGE}
+            (Main.Children.ImageLabel.BackColor): {-3800833}
             (Main.Children.ImageLabel.ImageAlignment): {STRETCHED}
 		}
     }
