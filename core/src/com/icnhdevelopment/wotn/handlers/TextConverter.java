@@ -79,7 +79,7 @@ public class TextConverter extends Container{
                         l.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
                         l.setName(name);
                         l.setType(type);
-                        //l.createFont();
+                        l.createFont();
                     }
                     catch(Exception e){
                         //p(e);
