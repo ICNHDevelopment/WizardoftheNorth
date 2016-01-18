@@ -26,6 +26,7 @@ public class Container {
     Vector2 positionScale;
     Vector2 sizeScale;
     private String name;
+    private String type;
     protected boolean visible = true;
     protected boolean isHovered = false;
     Color backcolor = null;
