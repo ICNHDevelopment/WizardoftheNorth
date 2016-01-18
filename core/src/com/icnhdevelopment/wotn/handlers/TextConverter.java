@@ -18,14 +18,22 @@ import java.util.ArrayList;
 public class TextConverter extends Container{
 
     public static void main(String[] args) {
-        Container test = Array_To_Container(Text_To_Array("X:\\WizardoftheNorth\\core\\assets\\ui\\Menus\\MNUMain.txt"));
+        Container test = Array_To_Container(Text_To_Array(new File("X:\\WizardoftheNorth\\core\\assets\\ui\\Menus\\MNUMain.txt")));
     }
 
-    public static ArrayList<String> Text_To_Array(String path) {
+    public static ArrayList<String> Text_To_Array(File file) {
         ArrayList<String> text = new ArrayList();
-        Path p = Paths.get(path);
-        try (Stream<String> lines = Files.lines(p)) { lines.forEach(s -> text.add(s));}
-        catch (IOException ex) {}
+        BufferedReader br = null;
+        try {
+            String sCurrentLine;
+            br = new BufferedReader(new FileReader(file));
+            while ((sCurrentLine = br.readLine()) != null) text.add(sCurrentLine);
+        }
+        catch (IOException e) { e.printStackTrace(); }
+        finally {
+            try { if (br != null)br.close(); }
+            catch (IOException ex) { ex.printStackTrace(); }
+        }
         return text;
     }
 
@@ -60,8 +68,8 @@ public class TextConverter extends Container{
                 else if (type.equals("ImageLabel")){
                     Container i = new ImageLabel(contain,
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
-                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y")))
-                            );
+                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
+                            new Texture(Gdx.files.internal(valueOf(a, childFullName + ".TextureFile"))));
                     i.setVisible(Boolean.valueOf(valueOf(a, ".SetVisible")));
                     i.setBackcolor(reflectColor(valueOf(a, ".BackColor")));
                     //i.setImagealignment(reflectAlignment(valueOf(a, ".ImageAlignment"))); //I couldn't access this method so...
