@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by kyle on 6/5/15.
  */
-public class ImageLabel extends Container implements Button {
+public class ImageLabel extends Container{
 
     Texture image;
     protected Texture hoverImage;
@@ -126,11 +126,6 @@ public class ImageLabel extends Container implements Button {
 
             renderChildren(batch);
         }
-    }
-
-    @Override
-    public void Click() {
-
     }
 
     public void setHoverImage(Texture hoverImage) {

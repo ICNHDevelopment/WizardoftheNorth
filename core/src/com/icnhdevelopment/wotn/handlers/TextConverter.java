@@ -23,20 +23,6 @@ public class TextConverter extends Container{
 
     public static ArrayList<String> Text_To_Array(FileHandle file) {
         ArrayList<String> text = new ArrayList(Arrays.asList(file.readString().split("\n")));
-        /*
-        System.out.println(file.readString());
-        BufferedReader br = null;
-        try {
-            String sCurrentLine;
-            //br = new BufferedReader(new FileReader(file));
-            while ((sCurrentLine = br.readLine()) != null) text.add(sCurrentLine);
-        }
-        catch (IOException e) { e.printStackTrace(); }
-        finally {
-            try { if (br != null)br.close(); }
-            catch (IOException ex) { ex.printStackTrace(); }
-        }
-        */
         return text;
     }
 
@@ -64,11 +50,7 @@ public class TextConverter extends Container{
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
                             valueOf(a, childFullName + ".Text"));
-
-                    //Do we need try-catch for these two statements?
-                    Color col = new Color(valueOf(a, childFullName + ".BorderColor", true));
-                    if (col != null) l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true)));
-                    
+                    try { l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true))); } catch(Exception e){}
                     try{ l.setColor(new Color(valueOf(a, childFullName + ".Color", true))); } catch(Exception e){}
                     try{ l.setFontsize(valueOf(a, childFullName + ".FontSize", true)); } catch(Exception e){}
                     try{ l.setFontType(valueOf(a, childFullName + ".FontType")); } catch(Exception e){}
@@ -86,15 +68,22 @@ public class TextConverter extends Container{
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
                             new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
                             new Texture(valueOf(a, childFullName + ".TextureFile")));
-                    try{ i.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible"))); } catch(Exception e){}
                     try{ i.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true))); } catch(Exception e){}
                     try{ i.setImagealignment(Alignment.valueOf(valueOf(a, childFullName + ".ImageAlignment"))); } catch(Exception e){}
+                    try{ i.setHoverImage(new Texture(valueOf(a, childFullName + ".HoverImage"))); } catch(Exception e){}
+                    try{
+                        boolean isButton = Boolean.valueOf(valueOf(a, childFullName + ".Button"));
+                        if (isButton){
+                            contain.buttons.add(i);
+                            try{ i.setFunc(ButtonFuction.valueOf(valueOf(a, childFullName + ".ButtonFunc")));}catch(Exception e){}
+                            try{ i.setDesc(valueOf(a, childFullName + ".ButtonDesc"));}catch(Exception e){}
+                        }
+                    }catch(Exception e){}
                     try{ i.setName(name); } catch(Exception e){}
                     try{ i.setType(type); } catch(Exception e){}
                 }
             }
         }
-        set(contain, a);
         return contain;
     }
 
@@ -112,7 +101,7 @@ public class TextConverter extends Container{
         return null;
     }
 
-    public static int valueOf(ArrayList<String> a, String variable, Boolean I_WANT_THIS_TO_BE_AN_INTERGER){
+    public static int valueOf(ArrayList<String> a, String variable, Boolean I_WANT_THIS_TO_BE_AN_INTERGER) throws Exception{
         if(I_WANT_THIS_TO_BE_AN_INTERGER){
             for (String line : a){
                 if (line.contains("{") && line.contains("}") && variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace(")", ""))){
@@ -123,7 +112,7 @@ public class TextConverter extends Container{
                 }
             }
         }
-        return 0;
+        throw new Exception();
     }
 
     public static void p(Object o){

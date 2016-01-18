@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.handlers.ButtonFuction;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.ColorCodes;
+import com.icnhdevelopment.wotn.handlers.GameState;
 
 import java.util.ArrayList;
 
@@ -18,7 +20,7 @@ import java.util.ArrayList;
  * This is the most basic form of an interface element
  * and can't be visually drawn on the screen.
  */
-public class Container {
+public class Container implements Button {
 
     Container parent;
     protected Vector2 position;
@@ -36,6 +38,10 @@ public class Container {
 
     ShapeRenderer shapeRenderer;
     OrthographicCamera renderCam;
+
+    //BUTTON FUNCTIONS
+    private ButtonFuction func;
+    private String desc;
 
     public static Container getContainer(String typeName){
         if (typeName.equals("Label")) return new Label();
@@ -298,5 +304,33 @@ public class Container {
 
     public void setSize(Vector2 size) {
         this.size = size;
+    }
+
+    @Override
+    public void Click() {
+        if (func != null){
+            if (func.equals(ButtonFuction.CHANGESTATE)){
+                if (desc.toLowerCase().equals("world")){
+                    Game.currentWorld.create("Sewer.tmx");
+                    Game.GAME_STATE = GameState.WORLD;
+                }
+            }
+        }
+    }
+
+    public ButtonFuction getFunc() {
+        return func;
+    }
+
+    public void setFunc(ButtonFuction func) {
+        this.func = func;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

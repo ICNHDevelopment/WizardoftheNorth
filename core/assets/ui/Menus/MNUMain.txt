@@ -14,7 +14,7 @@
 			(Main.Children.Label.Type): {Label}
             (Main.Children.Label.Position):{
                 (Main.Children.Label.Position.X):{0}
-                (Main.Children.Label.Position.Y):{676}
+                (Main.Children.Label.Position.Y):{680}
             }
             (Main.Children.Label.Size):{
                 (Main.Children.Label.Size.X):{1280}
@@ -26,7 +26,6 @@
             (Main.Children.Label.BorderColor): {-16776961}
             (Main.Children.Label.BackColor): {65535}
             (Main.Children.Label.HAlignment): {CENTER}
-            (Main.Children.Label.VAlignment): {BOTTOM}
             (Main.Children.Label.UseFontSize): {false}
 		}
 		(Main.Children.ImageLabel):{
@@ -37,12 +36,15 @@
                 (Main.Children.ImageLabel.Position.Y):{30}
             }
             (Main.Children.ImageLabel.Size):{
-                (Main.Children.ImageLabel.Size.X):{224}
-                (Main.Children.ImageLabel.Size.Y):{98}
-                       }
+                (Main.Children.ImageLabel.Size.X):{448}
+                (Main.Children.ImageLabel.Size.Y):{196}
+            }
             (Main.Children.ImageLabel.TextureFile): {ui/PlayBTN.png}
-            (Main.Children.ImageLabel.BackColor): {-3800833}
+            (Main.Children.ImageLabel.HoverImage): {ui/PlayBTNH.png}
             (Main.Children.ImageLabel.ImageAlignment): {STRETCHED}
+            (Main.Children.ImageLabel.Button): {true}
+            (Main.Children.ImageLabel.ButtonFunc): {CHANGESTATE}
+            (Main.Children.ImageLabel.ButtonDesc): {world}
 		}
     }
 		

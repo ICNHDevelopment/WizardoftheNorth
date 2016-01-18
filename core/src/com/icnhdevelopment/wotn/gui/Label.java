@@ -9,7 +9,7 @@ import com.icnhdevelopment.wotn.handlers.ColorCodes;
 /**
  * Created by kyle on 5/31/15.
  */
-public class Label extends Container implements Button {
+public class Label extends Container{
 
     String text;
     int fontsize = 12;
@@ -25,8 +25,6 @@ public class Label extends Container implements Button {
     BitmapFont font;
     int fontX = 0, fontY = 0;
     float fontWidth, fontHeight;
-
-
     boolean usefontsize;
 
     public void setText(String text) {
@@ -155,8 +153,4 @@ public class Label extends Container implements Button {
         }
     }
 
-    @Override
-    public void Click() {
-
-    }
 }
