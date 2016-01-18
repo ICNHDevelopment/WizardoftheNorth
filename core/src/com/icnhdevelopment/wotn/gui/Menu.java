@@ -23,6 +23,7 @@ public class Menu {
     //Albert replace this code with the xml loading code
     //(all the important properties have get/set methods)
     public void init(){
+        //mainContainer = Array_To_Container(Text_To_Array("core\\assets\\ui\\Menus\\MNUMain.txt")); //When you're ready
         mainContainer = new Container();
         Label l = new Label(mainContainer, new Vector2(0, Game.HEIGHT()-40), new Vector2(Game.WIDTH(), 40), "The Wizard of the North");
         l.setFontsize(40);
