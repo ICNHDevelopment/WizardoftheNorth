@@ -43,9 +43,15 @@ public class TextConverter extends Container{
     public static Container Array_To_Container(ArrayList<String> a){
         Container contain = new Container();
         boolean hasChildren = false;
-        contain.setName(a.get(0).substring(a.get(0).indexOf("[")+1,a.get(0).indexOf("]")+1).replace("]", ""));
+        
+        //try{ contain.setName(a.get(0).substring(a.get(0).indexOf("[")+1,a.get(0).indexOf("]")+1).replace("]", "")); } catch(Exception e){}
+        try{ contain.setName(valueOf(a, "Container.getName()")); } catch(Exception e){}
+        try{ contain.setPosition(new Vector2(Float.parseFloat(valueOf(a, contain.getName() + ".Position.X")), Float.parseFloat(valueOf(a, contain.getName() + ".Position.Y")))); } catch(Exception e){}
+        try{ contain.setSize(new Vector2(Float.parseFloat(valueOf(a, contain.getName() + ".Size.X")), Float.parseFloat(valueOf(a, contain.getName() + ".Size.Y")))); } catch(Exception e){}
+
         for (String line : a) if (line.contains(contain.getName() + ".Children")) hasChildren = true;
-        if (hasChildren) contain.setChildren(new ArrayList<>()); //Make new ArrayList and set that to contain.children?
+        if (hasChildren) contain.setChildren(new ArrayList<>());
+
         for (String line : a) {
             if (line.contains(contain.getName() + ".Children.") && (line.length() - line.replace(".", "").length()) == 2) {
                 //String name = line.substring(line.indexOf(".Children.") + 10,line.indexOf(")") + 1).replace(")", "");
@@ -54,46 +60,37 @@ public class TextConverter extends Container{
                 String type = valueOf(a, contain.getName() + ".Children." + name + ".Type");
                 String childFullName = contain.getName() + ".Children." + name;
                 if (type.equals("Label")){
-                    try{
-                        Label l = new Label(contain,
-                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
-                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
-                                valueOf(a, childFullName + ".Text"));
-                        //Do this a bunch of times
-                        Color col = new Color(valueOf(a, childFullName + ".BorderColor", true));
-                        if (col != null) l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true)));
-                        //for each field
-                        l.setColor(new Color(valueOf(a, childFullName + ".Color", true)));
-                        l.setFontsize(valueOf(a, childFullName + ".FontSize", true));
-                        l.setFontType(valueOf(a, childFullName + ".FontType"));
-                        l.sethalignment(com.icnhdevelopment.wotn.gui.Alignment.valueOf(valueOf(a, childFullName + ".HAlignment")));
-                        l.setUsefontsize(Boolean.valueOf(valueOf(a, childFullName + ".UseFontSize")));
-                        l.setvalignment(Alignment.valueOf(valueOf(a, childFullName + ".VAlignment")));
-                        l.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true)));
-                        //l.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
-                        l.setName(name);
-                        l.setType(type);
-                        l.createFont();
-                    }
-                    catch(Exception e){
-                        p(e);
-                    }
+                    Label l = new Label(contain,
+                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
+                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
+                            valueOf(a, childFullName + ".Text"));
+
+                    //Do we need try-catch for these two statements?
+                    Color col = new Color(valueOf(a, childFullName + ".BorderColor", true));
+                    if (col != null) l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true)));
+                    
+                    try{ l.setColor(new Color(valueOf(a, childFullName + ".Color", true))); } catch(Exception e){}
+                    try{ l.setFontsize(valueOf(a, childFullName + ".FontSize", true)); } catch(Exception e){}
+                    try{ l.setFontType(valueOf(a, childFullName + ".FontType")); } catch(Exception e){}
+                    try{ l.sethalignment(com.icnhdevelopment.wotn.gui.Alignment.valueOf(valueOf(a, childFullName + ".HAlignment"))); } catch(Exception e){}
+                    try{ l.setUsefontsize(Boolean.valueOf(valueOf(a, childFullName + ".UseFontSize"))); } catch(Exception e){}
+                    try{ l.setvalignment(Alignment.valueOf(valueOf(a, childFullName + ".VAlignment"))); } catch(Exception e){}
+                    try{ l.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true))); } catch(Exception e){}
+                    //try{ l.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible"))); } catch(Exception e){}
+                    try{ l.setName(name); } catch(Exception e){}
+                    try{ l.setType(type); } catch(Exception e){}
+                    try{ l.createFont(); } catch(Exception e){}
                 }
                 else if (type.equals("ImageLabel")){
-                    try{
-                        ImageLabel i = new ImageLabel(contain,
-                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
-                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
-                                new Texture(valueOf(a, childFullName + ".TextureFile")));
-                        //i.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
-                        i.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true)));
-                        i.setImagealignment(Alignment.valueOf(valueOf(a, childFullName + ".ImageAlignment"))); //I couldn't access this method so...
-                        i.setName(name);
-                        i.setType(type);
-                    }
-                    catch(Exception e){
-                        p(e);
-                    }
+                    ImageLabel i = new ImageLabel(contain,
+                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
+                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
+                            new Texture(valueOf(a, childFullName + ".TextureFile")));
+                    try{ i.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible"))); } catch(Exception e){}
+                    try{ i.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true))); } catch(Exception e){}
+                    try{ i.setImagealignment(Alignment.valueOf(valueOf(a, childFullName + ".ImageAlignment"))); } catch(Exception e){}
+                    try{ i.setName(name); } catch(Exception e){}
+                    try{ i.setType(type); } catch(Exception e){}
                 }
             }
         }
@@ -107,6 +104,9 @@ public class TextConverter extends Container{
                 //Why is there an error for line.indexOf() if you don't put +Something?
                 //Find way so that you don't need replace(")", "")
                 return line.substring(line.indexOf("{") + 1,line.indexOf("}") + 1).replace("}", "");
+            }
+            else if (line.contains("[") && line.contains("]") && variable.equals("Container.getName()")){
+                return line.substring(line.indexOf("[") + 1,line.indexOf("]") + 1).replace("]", "");
             }
         }
         return null;
@@ -124,11 +124,6 @@ public class TextConverter extends Container{
             }
         }
         return 0;
-    }
-
-    public static void set(Container c, ArrayList a){
-        c.setPosition(new Vector2(Float.parseFloat(valueOf(a, c.getName() + ".Position.X")), Float.parseFloat(valueOf(a, c.getName() + ".Position.Y"))));
-        c.setSize(new Vector2(Float.parseFloat(valueOf(a, c.getName() + ".Size.X")), Float.parseFloat(valueOf(a, c.getName() + ".Size.Y"))));
     }
 
     public static void p(Object o){
