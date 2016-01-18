@@ -3,9 +3,12 @@ package com.icnhdevelopment.wotn.handlers;
 /**
  * Created by Albert on 1/16/2016.
  */
+import com.badlogic.gdx.ai.steer.behaviors.Alignment;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Label;
 import com.icnhdevelopment.wotn.gui.ImageLabel;
@@ -54,40 +57,50 @@ public class TextConverter extends Container{
         if (hasChildren) contain.setChildren(new ArrayList<>()); //Make new ArrayList and set that to contain.children?
         for (String line : a) {
             if (line.contains(contain.getName() + ".Children.") && (line.length() - line.replace(".", "").length()) == 2) {
+                //String name = line.substring(line.indexOf(".Children.") + 10,line.indexOf(")") + 1).replace(")", "");
                 String name = line.substring(line.indexOf(".Children.") + 10,line.indexOf(")") + 1).replace(")", "");
+                //p(name);
                 String type = valueOf(a, contain.getName() + ".Children." + name + ".Type");
                 String childFullName = contain.getName() + ".Children." + name;
                 if (type.equals("Label")){
-                    Label l = new Label(contain,
-                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
-                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
-                            valueOf(a, childFullName + ".Text"));
-                    l.setBordercolor(reflectColor(valueOf(a, ".BorderColor")));
-                    l.setColor(reflectColor(valueOf(a, ".Color")));
-                    l.setFontsize(valueOf(a, childFullName + ".FontSize", true));
-                    l.setFontType(valueOf(a, ".FontType"));
-                    l.sethalignment(reflectAlignment(valueOf(a, ".HAlignment")));
-                    l.setUsefontsize(Boolean.valueOf(valueOf(a, ".UseFontSize")));
-                    l.setvalignment(reflectAlignment(valueOf(a, ".VAlignment")));
-                    l.setBackcolor(reflectColor(valueOf(a, ".BackColor")));
-                    l.setVisible(Boolean.valueOf(valueOf(a, ".SetVisible")));
-                    l.setName(name);
-                    l.setType(type);
-                    l.createFont();
+                    try{
+                        Label l = new Label(contain,
+                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
+                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
+                                valueOf(a, childFullName + ".Text"));
+                        l.setBordercolor(new Color(valueOf(a, childFullName + ".BorderColor", true)));
+                        l.setColor(new Color(valueOf(a, childFullName + ".Color", true)));
+                        l.setFontsize(valueOf(a, childFullName + ".FontSize", true));
+                        l.setFontType(valueOf(a, childFullName + ".FontType"));
+                        l.sethalignment(com.icnhdevelopment.wotn.gui.Alignment.valueOf(valueOf(a, childFullName + ".HAlignment")));
+                        l.setUsefontsize(Boolean.valueOf(valueOf(a, childFullName + ".UseFontSize")));
+                        l.setvalignment(com.icnhdevelopment.wotn.gui.Alignment.valueOf(valueOf(a, childFullName + ".VAlignment")));
+                        l.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true)));
+                        l.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
+                        l.setName(name);
+                        l.setType(type);
+                        //l.createFont();
+                    }
+                    catch(Exception e){
+                        //p(e);
+                    }
                 }
                 else if (type.equals("ImageLabel")){
-                    Container i = new ImageLabel(contain,
-                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
-                            new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
-                            new Texture(valueOf(a, childFullName + ".TextureFile")));
-                    i.setVisible(Boolean.valueOf(valueOf(a, ".SetVisible")));
-                    i.setBackcolor(reflectColor(valueOf(a, ".BackColor")));
-                    //i.setImagealignment(reflectAlignment(valueOf(a, ".ImageAlignment"))); //I couldn't access this method so...
-                    i.setName(name);
-                    i.setType(type);
+                    try{
+                        Container i = new ImageLabel(contain,
+                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Position.X")), Float.parseFloat(valueOf(a, childFullName + ".Position.Y"))),
+                                new Vector2(Float.parseFloat(valueOf(a, childFullName + ".Size.X")), Float.parseFloat(valueOf(a, childFullName + ".Size.Y"))),
+                                new Texture(valueOf(a, childFullName + ".TextureFile")));
+                        i.setVisible(Boolean.valueOf(valueOf(a, childFullName + ".SetVisible")));
+                        i.setBackcolor(new Color(valueOf(a, childFullName + ".BackColor", true)));
+                        //i.setImagealignment(reflectAlignment(valueOf(a, ".ImageAlignment"))); //I couldn't access this method so...
+                        i.setName(name);
+                        i.setType(type);
+                    }
+                    catch(Exception e){
+                        //p(e);
+                    }
                 }
-                //contain.children.get(contain.children.size() - 1).name = name;
-                //contain.children.get(contain.children.size() - 1).type = type;
             }
         }
         set(contain, a);
@@ -96,7 +109,7 @@ public class TextConverter extends Container{
 
     public static String valueOf(ArrayList<String> a, String variable){
         for (String line : a){
-            if (variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace(")", "")) && line.contains("}")){
+            if (line.contains("{") && line.contains("}") && variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace(")", ""))){
                 //Why is there an error for line.indexOf() if you don't put +Something?
                 //Find way so that you don't need replace(")", "")
                 return line.substring(line.indexOf("{") + 1,line.indexOf("}") + 1).replace("}", "");
@@ -108,15 +121,15 @@ public class TextConverter extends Container{
     public static int valueOf(ArrayList<String> a, String variable, Boolean I_WANT_THIS_TO_BE_AN_INTERGER){
         if(I_WANT_THIS_TO_BE_AN_INTERGER){
             for (String line : a){
-                System.out.println(line);
-                if (variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace("}", "")) && line.contains("}")){
+                if (line.contains("{") && line.contains("}") && variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace(")", ""))){
                     //Why is there an error for line.indexOf() if you don't put +Something?
                     //Find way so that you don't need replace(")", "")
-                    return Integer.parseInt(line.substring(line.indexOf("{") + 1,line.indexOf("}") + 1).replace("}", ""));
+                    Integer i = Integer.parseInt(line.substring(line.indexOf("{") + 1,line.indexOf("}") + 1).replace("}", ""));
+                    return i.intValue();
                 }
             }
         }
-        return -1;
+        return 0;
     }
 
     public static void set(Container c, ArrayList a){
@@ -124,23 +137,7 @@ public class TextConverter extends Container{
         c.setSize(new Vector2(Float.parseFloat(valueOf(a, c.getName() + ".Size.X")), Float.parseFloat(valueOf(a, c.getName() + ".Size.Y"))));
     }
 
-    public static com.badlogic.gdx.graphics.Color reflectColor(String color){
-        try {
-            return (com.badlogic.gdx.graphics.Color) Class.forName("com.badlogic.gdx.graphics.Color").getClass().getField(color).get(null);
-        }
-        catch (Exception e) {
-            return com.badlogic.gdx.graphics.Color.WHITE;
-            //return null; // Not defined
-        }
+    public static void p(Object o){
+        System.out.println(o);
     }
-
-    public static com.icnhdevelopment.wotn.gui.Alignment reflectAlignment(String alignment){
-        try {
-            return (com.icnhdevelopment.wotn.gui.Alignment) Class.forName("com.icnhdevelopment.wotn.gui.Alignment").getClass().getField(alignment).get(null);
-        }
-        catch (Exception e) {
-            return null; // Not defined
-        }
-    }
-
 }
