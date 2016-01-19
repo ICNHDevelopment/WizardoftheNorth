@@ -5,9 +5,15 @@
 	    (Main.Position.Y):{0}
 	}
 	(Inventory.Size):{
-    	(Inventory.Size.X):{1280}
-    	(Inventory.Size.Y):{720}
-    }
+    		(Inventory.Size.X):{1280}
+    		(Inventory.Size.Y):{720}
+    	}
 	(Inventory.Children):{
-
+		(Inventory.Children.Slots):{
+			(Inventory.Children.Slots.1):{}
+			(Inventory.Children.Slots.1):{}
+			(Inventory.Children.Slots.1):{}
+			(Inventory.Children.Slots.1):{}
+			(Inventory.Children.Slots.1):{}
+		}
 	}
