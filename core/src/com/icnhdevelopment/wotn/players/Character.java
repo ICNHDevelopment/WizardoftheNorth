@@ -88,7 +88,7 @@ public class Character extends AnimatedSprite {
         this.player = player;
         this.directionalMovement = direcMove;
         if (player){
-            level = 10;
+            level = 1;
             BaseVitality = 35;
             IvVitality = 10;
             CurrentVitality = getVitality()/2.0f;

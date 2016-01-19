@@ -9,24 +9,23 @@
     	(Main.Size.Y):{720}
     }
 	(Main.Children):{
-		(Main.Children.Label):{
-		    (Main.Children.Label.Name): {Name1}
-			(Main.Children.Label.Type): {Label}
-            (Main.Children.Label.Position):{
-                (Main.Children.Label.Position.X):{0}
-                (Main.Children.Label.Position.Y):{680}
+		(Main.Children.lblTitle):{
+			(Main.Children.lblTitle.Type): {Label}
+            (Main.Children.lblTitle.Position):{
+                (Main.Children.lblTitle.Position.X):{0}
+                (Main.Children.lblTitle.Position.Y):{680}
             }
-            (Main.Children.Label.Size):{
-                (Main.Children.Label.Size.X):{1280}
-                (Main.Children.Label.Size.Y):{40}
+            (Main.Children.lblTitle.Size):{
+                (Main.Children.lblTitle.Size.X):{1280}
+                (Main.Children.lblTitle.Size.Y):{40}
             }
-            (Main.Children.Label.Text): {The Wizard of the North}
-            (Main.Children.Label.FontSize): {40}
-            (Main.Children.Label.Color): {-1}
-            (Main.Children.Label.BorderColor): {-16776961}
-            (Main.Children.Label.BackColor): {65535}
-            (Main.Children.Label.HAlignment): {CENTER}
-            (Main.Children.Label.UseFontSize): {false}
+            (Main.Children.lblTitle.Text): {The Wizard of the North}
+            (Main.Children.lblTitle.FontSize): {40}
+            (Main.Children.lblTitle.Color): {-1}
+            (Main.Children.lblTitle.BorderColor): {-16776961}
+            (Main.Children.lblTitle.BackColor): {65535}
+            (Main.Children.lblTitle.HAlignment): {CENTER}
+            (Main.Children.lblTitle.UseFontSize): {false}
 		}
 		(Main.Children.ImageLabel):{
 			(Main.Children.ImageLabel.Name): {Name2}

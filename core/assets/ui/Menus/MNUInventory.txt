@@ -1,0 +1,13 @@
+[Inventory]
+	(Inventory.Type):{Container}
+	(Inventory.Position):{
+	    (Main.Position.X):{0}
+	    (Main.Position.Y):{0}
+	}
+	(Inventory.Size):{
+    	(Inventory.Size.X):{1280}
+    	(Inventory.Size.Y):{720}
+    }
+	(Inventory.Children):{
+
+	}

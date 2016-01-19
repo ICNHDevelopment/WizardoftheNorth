@@ -47,10 +47,9 @@ public class Game extends ApplicationAdapter {
 		HEIGHT = Gdx.graphics.getHeight();
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
-		currentMenu.init();
+		currentMenu.init("ui/Menus/MNUMain.txt");
 		currentWorld = new World();
 		mouseCursor = new Texture("ui/cursor.png");
-		//Container l = XMLConverter.XML_Converter(new File("core/assets/ui/Menus/MNUMain")).get(0);
 	}
 
 	@Override
