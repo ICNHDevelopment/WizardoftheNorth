@@ -40,9 +40,7 @@ public class TextConverter extends Container{
 
         for (String line : a) {
             if (line.contains(contain.getName() + ".Children.") && (line.length() - line.replace(".", "").length()) == 2) {
-                //String name = line.substring(line.indexOf(".Children.") + 10,line.indexOf(")") + 1).replace(")", "");
                 String name = line.substring(line.indexOf(".Children.") + 10,line.indexOf(")") + 1).replace(")", "");
-                //p(name);
                 String type = valueOf(a, contain.getName() + ".Children." + name + ".Type");
                 String childFullName = contain.getName() + ".Children." + name;
                 if (type.equals("Label")){
@@ -90,8 +88,6 @@ public class TextConverter extends Container{
     public static String valueOf(ArrayList<String> a, String variable){
         for (String line : a){
             if (line.contains("{") && line.contains("}") && variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace(")", ""))){
-                //Why is there an error for line.indexOf() if you don't put +Something?
-                //Find way so that you don't need replace(")", "")
                 return line.substring(line.indexOf("{") + 1,line.indexOf("}") + 1).replace("}", "");
             }
             else if (line.contains("[") && line.contains("]") && variable.equals("Container.getName()")){
@@ -105,8 +101,6 @@ public class TextConverter extends Container{
         if(I_WANT_THIS_TO_BE_AN_INTERGER){
             for (String line : a){
                 if (line.contains("{") && line.contains("}") && variable.equals(line.substring(line.indexOf("(") + 1,line.indexOf(")") + 1).replace(")", ""))){
-                    //Why is there an error for line.indexOf() if you don't put +Something?
-                    //Find way so that you don't need replace(")", "")
                     Integer i = Integer.parseInt(line.substring(line.indexOf("{") + 1,line.indexOf("}") + 1).replace("}", ""));
                     return i.intValue();
                 }
