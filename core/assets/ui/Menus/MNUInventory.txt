@@ -11,9 +11,12 @@
 	(Inventory.Children):{
 		(Inventory.Children.Slots):{
 			(Inventory.Children.Slots.1):{}
-			(Inventory.Children.Slots.1):{}
-			(Inventory.Children.Slots.1):{}
-			(Inventory.Children.Slots.1):{}
-			(Inventory.Children.Slots.1):{}
+			(Inventory.Children.Slots.2):{}
+			(Inventory.Children.Slots.3):{}
+			(Inventory.Children.Slots.4):{}
+			(Inventory.Children.Slots.5):{}
+			(Inventory.Children.Slots.6):{}
+			(Inventory.Children.Slots.7):{}
+			(Inventory.Children.Slots.8):{}
 		}
 	}
