@@ -10,70 +10,67 @@
     	}
     	(Inventory.TextureFile):{ui/inventory/Inventory.png}
 	(Inventory.Children):{
-		(Inventory.Children.Slots):{
-			(Inventory.Children.Slots.Helmet):{
-				(Inventory.Children.Slots.Helmet.Position):{
-					(Inventory.Children.Slots.Helmet.Position.X):{40}
-					(Inventory.Children.Slots.Helmet.Position.Y):{-20}
-				}
-				(Inventory.Children.Slots.Helmet.DefaultImage):{Items/DefaultHelm.png}
+		(Inventory.Children.Slot_Helmet):{
+			(Inventory.Children.Slot_Helmet.Position):{
+				(Inventory.Children.Slot_Helmet.Position.X):{40}
+				(Inventory.Children.Slot_Helmet.Position.Y):{-20}
 			}
-			(Inventory.Children.Slots.Chest):{
-				(Inventory.Children.Slots.Chest.Position):{
-					(Inventory.Children.Slots.Chest.Position.X):{40}
-					(Inventory.Children.Slots.Chest.Position.Y):{44}
-				}
-				(Inventory.Children.Slots.Chest.DefaultImage):{Items/DefaultChest.png}
-
+			(Inventory.Children.Slot_Helmet.DefaultImage):{Items/DefaultHelm.png}
+		}
+		(Inventory.Children.Slot_Chest):{
+			(Inventory.Children.Slot_Chest.Position):{
+				(Inventory.Children.Slot_Chest.Position.X):{40}
+				(Inventory.Children.Slot_Chest.Position.Y):{44}
 			}
-			(Inventory.Children.Slots.Leg):{
-				(Inventory.Children.Slots.Leg.Position):{
-					(Inventory.Children.Slots.Leg.Position.X):{40}
-					(Inventory.Children.Slots.Leg.Position.Y):{108}
-				}
-				(Inventory.Children.Slots.Leg.DefaultImage):{Items/DefaultLegs.png}
+			(Inventory.Children.Slot_Chest.DefaultImage):{Items/DefaultChest.png}
+		}
+		(Inventory.Children.Slot_Leg):{
+			(Inventory.Children.Slot_Leg.Position):{
+				(Inventory.Children.Slot_Leg.Position.X):{40}
+				(Inventory.Children.Slot_Leg.Position.Y):{108}
 			}
-			(Inventory.Children.Slots.Boots):{
-				(Inventory.Children.Slots.Boots.Position):{
-					(Inventory.Children.Slots.Boots.Position.X):{40}
-					(Inventory.Children.Slots.Boots.Position.Y):{172}
-				}
-				(Inventory.Children.Slots.Boots.DefaultImage):{Items/DefaultBoots.png}
+			(Inventory.Children.Slot_Leg.DefaultImage):{Items/DefaultLegs.png}
+		}
+		(Inventory.Children.Slot_Boots):{
+			(Inventory.Children.Slot_Boots.Position):{
+				(Inventory.Children.Slot_Boots.Position.X):{40}
+				(Inventory.Children.Slot_Boots.Position.Y):{172}
 			}
-			(Inventory.Children.Slots.Gauntlets):{
-				(Inventory.Children.Slots.Gauntlets.Position):{
-					(Inventory.Children.Slots.Gauntlets.Position.X):{282}
-					(Inventory.Children.Slots.Gauntlets.Position.Y):{-20}
-				}
-				(Inventory.Children.Slots.Gauntlets.DefaultImage):{Items/DefaultGauntlets.png}
+			(Inventory.Children.Slot_Boots.DefaultImage):{Items/DefaultBoots.png}
+		}
+		(Inventory.Children.Slot_Gauntlets):{
+			(Inventory.Children.Slot_Gauntlets.Position):{
+				(Inventory.Children.Slot_Gauntlets.Position.X):{282}
+				(Inventory.Children.Slot_Gauntlets.Position.Y):{-20}
 			}
-			(Inventory.Children.Slots.Amulet):{
-				(Inventory.Children.Slots.Amulet.Position):{
-					(Inventory.Children.Slots.Amulet.Position.X):{282}
-					(Inventory.Children.Slots.Amulet.Position.Y):{44}
-				}
-				(Inventory.Children.Slots.Amulet.DefaultImage):{Items/DefaultAm.png}
+			(Inventory.Children.Slot_Gauntlets.DefaultImage):{Items/DefaultGauntlets.png}
+		}
+		(Inventory.Children.Slot_Amulet):{
+			(Inventory.Children.Slot_Amulet.Position):{
+				(Inventory.Children.Slot_Amulet.Position.X):{282}
+				(Inventory.Children.Slot_Amulet.Position.Y):{44}
 			}
-			(Inventory.Children.Slots.Ring1):{
-				(Inventory.Children.Slots.Ring1.Position):{
-					(Inventory.Children.Slots.Ring1.Position.X):{282}
-					(Inventory.Children.Slots.Ring1.Position.Y):{108}
-				}
-				(Inventory.Children.Slots.Ring1.DefaultImage):{Items/DefaultRing.png}
+			(Inventory.Children.Slot_Amulet.DefaultImage):{Items/DefaultAm.png}
+		}
+		(Inventory.Children.Slot_Ring1):{
+			(Inventory.Children.Slot_Ring1.Position):{
+				(Inventory.Children.Slot_Ring1.Position.X):{282}
+				(Inventory.Children.Slot_Ring1.Position.Y):{108}
 			}
-			(Inventory.Children.Slots.Ring2):{
-				(Inventory.Children.Slots.Ring2.Position):{
-					(Inventory.Children.Slots.Ring2.Position.X):{282}
-					(Inventory.Children.Slots.Ring2.Position.Y):{172}
-				}
-				(Inventory.Children.Slots.Ring2.DefaultImage):{Items/DefaultRing.png}
+			(Inventory.Children.Slot_Ring1.DefaultImage):{Items/DefaultRing.png}
+		}
+		(Inventory.Children.Slot_Ring2):{
+			(Inventory.Children.Slot_Ring2.Position):{
+				(Inventory.Children.Slot_Ring2.Position.X):{282}
+				(Inventory.Children.Slot_Ring2.Position.Y):{172}
 			}
-			(Inventory.Children.Slots.Weapon):{
-				(Inventory.Children.Slots.Weapon.Position):{
-					(Inventory.Children.Slots.Weapon.Position.X):{160}
-					(Inventory.Children.Slots.Weapon.Position.Y):{-226}
-				}
-				(Inventory.Children.Slots.Weapon.DefaultImage):{Items/DefaultWeapon.png}
+			(Inventory.Children.Slot_Ring2.DefaultImage):{Items/DefaultRing.png}
+		}
+		(Inventory.Children.Slot_Weapon):{
+			(Inventory.Children.Slot_Weapon.Position):{
+				(Inventory.Children.Slot_Weapon.Position.X):{160}
+				(Inventory.Children.Slot_Weapon.Position.Y):{-226}
 			}
+			(Inventory.Children.Slot_Weapon.DefaultImage):{Items/DefaultWeapon.png}
 		}
 	}
