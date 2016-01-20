@@ -13,8 +13,8 @@ import com.icnhdevelopment.wotn.items.Item;
 public class ItemSlot extends ImageLabel {
 
     Item item;
-    SlotType type = SlotType.NORM;
-    Texture defaultImage;
+    protected SlotType slotType = SlotType.NORM;
+    protected Texture defaultImage;
 
     boolean isBlocked;
 
@@ -24,7 +24,7 @@ public class ItemSlot extends ImageLabel {
         isBlocked = block;
         if (isBlocked){
             item = null;
-            defaultImage = new Texture("Items/Blocked.png");
+            setDefaultImage(new Texture("Items/Blocked.png"));
         }
     }
 
@@ -32,15 +32,15 @@ public class ItemSlot extends ImageLabel {
         if (visible) {
             if (isBlocked){
                 item = null;
-                defaultImage = new Texture("Items/Blocked.png");
+                setDefaultImage(new Texture("Items/Blocked.png"));
             }
             batch.begin();
             if (isHovering()) {
                 batch.draw(hoverImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
             }
             if (item == null) {
-                if (type != SlotType.NORM || isBlocked) {
-                    batch.draw(defaultImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
+                if (getSlotType() != SlotType.NORM || isBlocked) {
+                    batch.draw(getDefaultImage(), getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
                 }
             }
             if (item != null) {
@@ -48,5 +48,21 @@ public class ItemSlot extends ImageLabel {
             }
             batch.end();
         }
+    }
+
+    public SlotType getSlotType() {
+        return slotType;
+    }
+
+    public void setSlotType(SlotType slotType) {
+        this.slotType = slotType;
+    }
+
+    public Texture getDefaultImage() {
+        return defaultImage;
+    }
+
+    public void setDefaultImage(Texture defaultImage) {
+        this.defaultImage = defaultImage;
     }
 }

@@ -101,7 +101,7 @@ public class Character extends AnimatedSprite {
             IvStrength = 10;
             BaseResistance = 30;
             IvResistance = 10;
-            CurrentExperience = (CalculateLevelExp(3)-CalculateLevelExp(2))/2;
+            CurrentExperience = 0;
             NextLevelExp = CalculateLevelExp(level+1);
             CurrLevelExp = CalculateLevelExp(level);
         }
@@ -119,7 +119,7 @@ public class Character extends AnimatedSprite {
         else {
             returnVal = ((((currentLevel)/2.0f)+32)/50.0f)*nCube;
         }
-        return (float)Math.floor(returnVal)*50;
+        return (float)Math.floor(returnVal);
     }
 
     public void move(Vector2 amount, ArrayList<Rectangle> walls){

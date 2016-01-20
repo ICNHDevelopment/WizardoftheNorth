@@ -86,20 +86,20 @@ public class Inventory extends Container {
         for (int j = 0; j<4; j++){
             ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null, false);
             if (j == 0){
-                is.type = SlotType.HEAD;
-                is.defaultImage = new Texture("Items/DefaultHelm.png");
+                is.setSlotType(SlotType.HEAD);
+                is.setDefaultImage(new Texture("Items/DefaultHelm.png"));
             }
             else if (j==1){
-                is.type = SlotType.CHEST;
-                is.defaultImage = new Texture("Items/DefaultChest.png");
+                is.setSlotType(SlotType.CHEST);
+                is.setDefaultImage(new Texture("Items/DefaultChest.png"));
             }
             else if (j==2){
-                is.type = SlotType.LEGS;
-                is.defaultImage = new Texture("Items/DefaultLegs.png");
+                is.setSlotType(SlotType.LEGS);
+                is.setDefaultImage(new Texture("Items/DefaultLegs.png"));
             }
             else if (j==3){
-                is.type = SlotType.FEET;
-                is.defaultImage = new Texture("Items/DefaultBoots.png");
+                is.setSlotType(SlotType.FEET);
+                is.setDefaultImage(new Texture("Items/DefaultBoots.png"));
             }
             is.setHoverImage(new Texture("Items/highlight.png"));
             is.setImagealignment(Alignment.STRETCHED);
@@ -109,24 +109,24 @@ public class Inventory extends Container {
         for (int j = 0; j<4; j++){
             ItemSlot is = new ItemSlot(invenImage, new Vector2(startX, textureSize.y-(startY + (j*64))), new Vector2(60, 60), null, false);
             if (j == 1){
-                is.type = SlotType.AMULET;
-                is.defaultImage = new Texture("Items/DefaultAm.png");
+                is.setSlotType(SlotType.AMULET);
+                is.setDefaultImage(new Texture("Items/DefaultAm.png"));
             }
             else if (j==0){
-                is.type = SlotType.GAUNT;
-                is.defaultImage = new Texture("Items/DefaultGauntlets.png");
+                is.setSlotType(SlotType.GAUNT);
+                is.setDefaultImage(new Texture("Items/DefaultGauntlets.png"));
             }
             else if (j==2||j==3){
-                is.type = SlotType.RING;
-                is.defaultImage = new Texture("Items/DefaultRing.png");
+                is.setSlotType(SlotType.RING);
+                is.setDefaultImage(new Texture("Items/DefaultRing.png"));
             }
             is.setHoverImage(new Texture("Items/highlight.png"));
             is.setImagealignment(Alignment.STRETCHED);
             defaultInventory.add(is);
         }
         ItemSlot is = new ItemSlot(invenImage, new Vector2(160, textureSize.y-(286)), new Vector2(60, 60), null, false);
-        is.type = SlotType.WEAPON;
-        is.defaultImage = new Texture("Items/DefaultWeapon.png");
+        is.setSlotType(SlotType.WEAPON);
+        is.setDefaultImage(new Texture("Items/DefaultWeapon.png"));
         is.setHoverImage(new Texture("Items/highlight.png"));
         is.setImagealignment(Alignment.STRETCHED);
         defaultInventory.add(is);
@@ -161,7 +161,7 @@ public class Inventory extends Container {
                     is.setHovering(true);
                     if (processor.didMouseClick()) {
                         if (mouseItem != null) {
-                            if (mouseItem.getType().equals(is.type) || is.type.equals(SlotType.NORM)) {
+                            if (mouseItem.getType().equals(is.getSlotType()) || is.getSlotType().equals(SlotType.NORM)) {
                                 Item temp = is.item;
                                 is.item = mouseItem;
                                 mouseItem = temp;
