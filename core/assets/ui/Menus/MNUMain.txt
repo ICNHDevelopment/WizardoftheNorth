@@ -39,7 +39,7 @@
             (Main.Children.Play.ImageAlignment): {STRETCHED}
             (Main.Children.Play.Button): {true}
             (Main.Children.Play.ButtonFunc): {CHANGESTATE}
-            (Main.Children.Play.ButtonDesc): {world}
+            (Main.Children.Play.ButtonDesc): {opening}
 		}
     }
 		

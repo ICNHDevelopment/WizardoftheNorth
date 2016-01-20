@@ -2,6 +2,7 @@ package com.icnhdevelopment.wotn;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.icnhdevelopment.wotn.gui.*;
@@ -19,9 +20,11 @@ public class Game extends ApplicationAdapter {
 	CInputProcessor inputProcessor;
 	static Menu currentMenu;
 	public static World currentWorld;
+	public static OpeningSequence os;
 	public static Game game;
 	public static GameState GAME_STATE;
 	Texture mouseCursor;
+	Sound menuSound;
 
 	static int WIDTH, HEIGHT;
 
@@ -50,6 +53,9 @@ public class Game extends ApplicationAdapter {
 		currentMenu.init("ui/Menus/MNUMain.txt");
 		currentWorld = new World();
 		mouseCursor = new Texture("ui/cursor.png");
+		os = new OpeningSequence();
+		menuSound = Gdx.audio.newSound(Gdx.files.internal("audio/titleMusic.wav"));
+		menuSound.loop();
 	}
 
 	@Override
@@ -58,11 +64,17 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		if (!GAME_STATE.equals(GameState.MENU)){
+			menuSound.stop();
+		}
 		if (GAME_STATE.equals(GameState.MENU)){
 			currentMenu.update(inputProcessor);
 			batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
 			currentMenu.render(batch);
-		}else if (GAME_STATE.equals(GameState.WORLD)){
+		} else if (GAME_STATE.equals(GameState.OPENING)){
+			os.update();
+			os.render(batch);
+		} else if (GAME_STATE.equals(GameState.WORLD)){
 			currentWorld.update(inputProcessor);
 			currentWorld.render(batch);
 		}

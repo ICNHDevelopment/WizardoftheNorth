@@ -310,9 +310,9 @@ public class Container implements Button {
     public void Click() {
         if (func != null){
             if (func.equals(ButtonFuction.CHANGESTATE)){
-                if (desc.toLowerCase().equals("world")){
-                    Game.currentWorld.create("Sewer.tmx");
-                    Game.GAME_STATE = GameState.WORLD;
+                if (desc.toLowerCase().equals("opening")){
+                    Game.GAME_STATE = GameState.OPENING;
+                    Game.os.start();
                 }
             }
         }
