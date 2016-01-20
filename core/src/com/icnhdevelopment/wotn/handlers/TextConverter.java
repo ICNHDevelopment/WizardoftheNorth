@@ -80,6 +80,9 @@ public class TextConverter extends Container{
                     try{ i.setName(name); } catch(Exception e){}
                     try{ i.setType(type); } catch(Exception e){}
                 }
+                else if(type.equals("Slot")){
+                    ItemSlot i = new ItemSlot();
+                }
             }
         }
         return contain;
