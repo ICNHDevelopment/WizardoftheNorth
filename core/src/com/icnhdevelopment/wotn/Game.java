@@ -72,7 +72,7 @@ public class Game extends ApplicationAdapter {
 			batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
 			currentMenu.render(batch);
 		} else if (GAME_STATE.equals(GameState.OPENING)){
-			os.update();
+			os.update(inputProcessor);
 			os.render(batch);
 		} else if (GAME_STATE.equals(GameState.WORLD)){
 			currentWorld.update(inputProcessor);

@@ -3,6 +3,7 @@ package com.icnhdevelopment.wotn.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -56,7 +57,10 @@ public class World {
     boolean changeToBattle = false;
 
     Texture battleTransition;
-    int battleStage = 0;
+    int battleStage = -1;
+
+    String state = "fadein";
+    float alpha = 1f;
 
     public void create(String filename){
         enemies = new ArrayList<>();
@@ -199,57 +203,62 @@ public class World {
     }
 
     public void update(CInputProcessor input){
-        if (changeToBattle){
-            if (TICK%9==0&&battleStage<7){
-                battleStage++;
+        if (state.equals("fadein")){
+            alpha -= .02f;
+            if (alpha<=0){
+                state="";
             }
-            TICK++;
-            if (battleStage == 7){
-                if (input.isKeyDown(Input.Keys.ESCAPE)){
-                    changeToBattle = false;
+        }else {
+            if (changeToBattle) {
+                if (TICK % 9 == 0 && battleStage < 7) {
+                    battleStage++;
                 }
-            }
-        }
-        else if (showInventory) {
-            inventory.update(input);
-            if (input.isKeyDown(Input.Keys.ESCAPE)){
-                showInventory = false;
-                inventory.setVisible(false);
-            }
-        }
-        else {
-            if (battleStage>-1&&TICK%9==0){
-                battleStage--;
-            }
-            if (input.isKeyDown(Input.Keys.W)) {
-                mainCharacter.move(new Vector2(0, 1), walls);
-            } else if (input.isKeyDown(Input.Keys.S)) {
-                mainCharacter.move(new Vector2(0, -1), walls);
-            } else if (input.isKeyDown(Input.Keys.A)) {
-                mainCharacter.move(new Vector2(-1, 0), walls);
-            } else if (input.isKeyDown(Input.Keys.D)) {
-                mainCharacter.move(new Vector2(1, 0), walls);
+                TICK++;
+                if (battleStage == 7) {
+                    if (input.isKeyDown(Input.Keys.ESCAPE)) {
+                        changeToBattle = false;
+                    }
+                }
+            } else if (showInventory) {
+                inventory.update(input);
+                if (input.isKeyDown(Input.Keys.ESCAPE)) {
+                    showInventory = false;
+                    inventory.setVisible(false);
+                }
             } else {
-                mainCharacter.animate(false);
-            }
-            mainCharacter.updateWalls(map, overWalls);
-
-            for (Spawner s : spawners) {
-                if (s.spawn) {
-                    s.spawn();
-                    s.spawn = false;
+                if (battleStage > -1 && TICK % 9 == 0) {
+                    battleStage--;
                 }
-            }
-            sortMultiDSprites();
+                if (input.isKeyDown(Input.Keys.W)) {
+                    mainCharacter.move(new Vector2(0, 1), walls);
+                } else if (input.isKeyDown(Input.Keys.S)) {
+                    mainCharacter.move(new Vector2(0, -1), walls);
+                } else if (input.isKeyDown(Input.Keys.A)) {
+                    mainCharacter.move(new Vector2(-1, 0), walls);
+                } else if (input.isKeyDown(Input.Keys.D)) {
+                    mainCharacter.move(new Vector2(1, 0), walls);
+                } else {
+                    mainCharacter.animate(false);
+                }
+                mainCharacter.updateWalls(map, overWalls);
 
-            TICK++;
-            if (input.isKeyDown(Input.Keys.E)) {
-                showInventory = true;
-                inventory.setVisible(true);
-            }
-            if (input.isKeyDown(Input.Keys.T)) {
-                changeToBattle = true;
-                battleStage = 0;
+                for (Spawner s : spawners) {
+                    if (s.spawn) {
+                        s.spawn();
+                        s.spawn = false;
+                    }
+                }
+                sortMultiDSprites();
+
+                TICK++;
+                if (input.isKeyDown(Input.Keys.E)) {
+                    showInventory = true;
+                    inventory.setVisible(true);
+                }
+                if (input.isKeyDown(Input.Keys.T)) {
+                    changeToBattle = true;
+                    battleStage = 0;
+                }
             }
         }
     }
@@ -312,6 +321,17 @@ public class World {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
             mainCharacter.render(batch);
+            batch.end();
+        }
+        if (state.equals("fadein")){
+            batch.setProjectionMatrix(inventory.getRenderCam().combined);
+            batch.begin();
+            Texture black = new Texture("ui/hud/ExperienceMeter.png");
+            Color c = batch.getColor();
+            Color b = Color.BLACK;
+            batch.setColor(b.r, b.g, b.b, alpha);
+            batch.draw(black, 0, 0, Game.WIDTH(), Game.HEIGHT());
+            batch.setColor(c);
             batch.end();
         }
     }

@@ -1,12 +1,15 @@
 package com.icnhdevelopment.wotn;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.icnhdevelopment.wotn.gui.Fonts;
+import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class OpeningSequence {
 
     long startTime;
     float alpha = 0f;
+    long holdStart = 0l;
 
     String state = "fadein";
 
@@ -59,7 +63,17 @@ public class OpeningSequence {
         font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
     }
 
-    public void update(){
+    public void update(CInputProcessor inputProcessor){
+        if (inputProcessor.isKeyDown(Input.Keys.SPACE)){
+            if (holdStart==0){
+                holdStart = System.currentTimeMillis();
+            } else if (System.currentTimeMillis()-holdStart>2000){
+                currentLymric.sound.stop();
+                goToWorld();
+            }
+        } else {
+            holdStart = 0;
+        }
         if (state.equals("fadein")){
             alpha+=.01f;
             font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
@@ -86,20 +100,36 @@ public class OpeningSequence {
                     currentLymric = lymrics.get(currLym);
                     state = "fadein";
                 }else{
-                    Game.currentWorld.create("Sewer.tmx");
-                    Game.GAME_STATE = GameState.WORLD;
+                    goToWorld();
                 }
             }
         }
+    }
+
+    void goToWorld(){
+        alpha = 0;
+        font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+        Game.currentWorld.create("Sewer.tmx");
+        Game.GAME_STATE = GameState.WORLD;
     }
 
     public void render(SpriteBatch batch){
         batch.begin();
         for (int i = 0; i<currentLymric.text.length-1; i++) {
             int bottom = (Game.HEIGHT()-(currentLymric.text.length-1)*(fontSize+2))/2;
-            int y = bottom+((currentLymric.text.length-1)-(i+1))*(fontSize+2);
+            int y = bottom+((currentLymric.text.length-1)-i)*(fontSize+2);
             float x = (Game.WIDTH() - currentLymric.getLongestLineLength(font))/2;
             font.draw(batch, currentLymric.text[i], x, y);
+        }
+        if (holdStart>0){
+            font.draw(batch, "Skip", 2, (4+fontSize));
+            Rectangle skipBar = new Rectangle(2, (6+fontSize), font.getBounds("Skip").width, 8);
+            Texture bar = new Texture("ui/hud/ExperienceMeter.png");
+            Color c = batch.getColor();
+            Color b = Color.GRAY;
+            batch.setColor(b.r, b.g, b.b, 1);
+            batch.draw(bar, skipBar.x, skipBar.y, Math.min((System.currentTimeMillis()-holdStart)/2000.0f*skipBar.width, skipBar.width), skipBar.height);
+            batch.setColor(c);
         }
         batch.end();
     }
