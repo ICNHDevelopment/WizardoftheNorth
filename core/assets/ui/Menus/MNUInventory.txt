@@ -8,6 +8,7 @@
     		(Inventory.Size.X):{1280}
     		(Inventory.Size.Y):{720}
     	}
+    	(Inventory.TextureFile):{ui/inventory/Inventory.png}
 	(Inventory.Children):{
 		(Inventory.Children.Slots):{
 			(Inventory.Children.Slots.Helmet):{
