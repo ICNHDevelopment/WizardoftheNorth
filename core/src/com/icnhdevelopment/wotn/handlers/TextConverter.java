@@ -73,7 +73,7 @@ public class TextConverter extends Container{
                         boolean isButton = Boolean.valueOf(valueOf(a, childFullName + ".Button"));
                         if (isButton){
                             contain.buttons.add(i);
-                            try{ i.setFunc(ButtonFuction.valueOf(valueOf(a, childFullName + ".ButtonFunc")));}catch(Exception e){}
+                            try{ i.setFunc(ButtonFuction.valueOf(valueOf(a, childFullName + ".ButtonFunc")));} catch(Exception e){}
                             try{ i.setDesc(valueOf(a, childFullName + ".ButtonDesc"));}catch(Exception e){}
                         }
                     }catch(Exception e){}
@@ -81,7 +81,15 @@ public class TextConverter extends Container{
                     try{ i.setType(type); } catch(Exception e){}
                 }
                 else if(type.equals("Slot")){
-                    ItemSlot i = new ItemSlot();
+                    Texture t = new Texture(valueOf(a, childFullName + ".TextureFile")); 
+                    ImageLabel m = new ImageLabel(contain, new Vector2((Game.WIDTH()-t.getWidth()*2)/2, (Game.HEIGHT()-t.getHeight()*2)/2), new Vector2(t.getWidth()*2, t.getHeight()*2), new Texture(valueOf(a, childFullName + ".TextureFile")));
+                    //Can I replace t with new Texture(valueOf(a, childFullName + ".TextureFile"))?
+                    ItemSlot i = new ItemSlot(m, new Vector2(valueOf(a, childFullName + "Position.X"), valueOf(a, childFullName + "Position.Y")), new Vector2(60, 60), null, false);
+                    try{ i.setSlotType(valueOf(a, childFullName + ".SlotType")); } catch(Exception e){}
+                    try{ i.setDefaultImage(new Texture(valueOf(a, childFullName + "DefaultImage"))) } catch(Exception e){}
+                    i.setImagealignment(Alignment.STRETCHED);
+                    i.setHoverImage(new Texture("Items/highlight.png"));
+                    defaultInventory.add(i);
                 }
             }
         }
