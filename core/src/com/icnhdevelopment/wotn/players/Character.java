@@ -91,12 +91,12 @@ public class Character extends AnimatedSprite {
             level = 1;
             BaseVitality = 35;
             IvVitality = 10;
-            CurrentVitality = getVitality()/2.0f;
+            CurrentVitality = getVitality();
             BaseAgility = 90;
             IvAgility = 10;
             BaseWisdom = 50;
             IvWisdom = 10;
-            CurrentWisdom = getWisdom()*2.0f/3.0f;
+            CurrentWisdom = getWisdom();
             BaseStrength = 55;
             IvStrength = 10;
             BaseResistance = 30;

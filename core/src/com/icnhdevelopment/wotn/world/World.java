@@ -3,6 +3,7 @@ package com.icnhdevelopment.wotn.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,6 +40,7 @@ public class World {
     public static double SCALE = 2;
     Character mainCharacter;
     public static int TileWidth, TileHeight;
+    Sound backMusic;
 
     public static int TICK = 0;
 
@@ -63,6 +65,7 @@ public class World {
     float alpha = 1f;
 
     public void create(String filename){
+        Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
         enemies = new ArrayList<>();
         spawners = new ArrayList<>();
         walls = new ArrayList<>();
@@ -219,10 +222,9 @@ public class World {
                         changeToBattle = false;
                     }
                 }
-            } else if (showInventory) {
+            } else if (inventory.isVisible()) {
                 inventory.update(input);
                 if (input.isKeyDown(Input.Keys.ESCAPE)) {
-                    showInventory = false;
                     inventory.setVisible(false);
                 }
             } else {
@@ -252,7 +254,6 @@ public class World {
 
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
-                    showInventory = true;
                     inventory.setVisible(true);
                 }
                 if (input.isKeyDown(Input.Keys.T)) {
@@ -308,7 +309,7 @@ public class World {
 
         toolbar.render(batch);
 
-        if (showInventory) {
+        if (inventory.isVisible()) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
             inventory.render(batch);
         }

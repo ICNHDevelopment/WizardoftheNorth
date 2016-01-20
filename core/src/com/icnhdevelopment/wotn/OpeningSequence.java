@@ -50,6 +50,7 @@ public class OpeningSequence {
     String state = "fadein";
 
     public void start(){
+        Game.soundHandler.PlaySound(Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic.wav")), .5f);
         lymrics = new ArrayList<>();
         for (int i = 1; i<=NUMofLYMRICS; i++){
             Lymric l = new Lymric();
@@ -67,7 +68,7 @@ public class OpeningSequence {
         if (inputProcessor.isKeyDown(Input.Keys.SPACE)){
             if (holdStart==0){
                 holdStart = System.currentTimeMillis();
-            } else if (System.currentTimeMillis()-holdStart>2000){
+            } else if (System.currentTimeMillis()-holdStart>1500){
                 currentLymric.sound.stop();
                 goToWorld();
             }
@@ -128,7 +129,7 @@ public class OpeningSequence {
             Color c = batch.getColor();
             Color b = Color.GRAY;
             batch.setColor(b.r, b.g, b.b, 1);
-            batch.draw(bar, skipBar.x, skipBar.y, Math.min((System.currentTimeMillis()-holdStart)/2000.0f*skipBar.width, skipBar.width), skipBar.height);
+            batch.draw(bar, skipBar.x, skipBar.y, Math.min((System.currentTimeMillis()-holdStart)/1500.0f*skipBar.width, skipBar.width), skipBar.height);
             batch.setColor(c);
         }
         batch.end();

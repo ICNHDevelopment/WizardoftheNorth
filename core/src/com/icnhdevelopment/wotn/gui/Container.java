@@ -240,6 +240,8 @@ public class Container implements Button {
         this.visible = visible;
     }
 
+    public boolean isVisible() { return this.visible; }
+
     public Vector2 getSize() {
         return size;
     }
