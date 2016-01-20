@@ -1,0 +1,46 @@
+[Main]
+	(Main.Type):{Container}
+	(Main.Position):{
+	    (Main.Position.X):{0}
+	    (Main.Position.Y):{0}
+	}
+	(Main.Size):{
+    	(Main.Size.X):{1280}
+    	(Main.Size.Y):{720}
+    }
+	(Main.Children):{
+		(Main.Children.Title):{
+			(Main.Children.Title.Name): {Title}
+			(Main.Children.Title.Type): {ImageLabel}
+            (Main.Children.Title.Position):{
+                (Main.Children.Title.Position.X):{411}
+                (Main.Children.Title.Position.Y):{282}
+            }
+            (Main.Children.Title.Size):{
+                (Main.Children.Title.Size.X):{459}
+                (Main.Children.Title.Size.Y):{438}
+            }
+            (Main.Children.Title.TextureFile): {ui/title.png}
+            (Main.Children.Title.ImageAlignment): {STRETCHED}
+		}
+		(Main.Children.Play):{
+			(Main.Children.Play.Name): {Play}
+			(Main.Children.Play.Type): {ImageLabel}
+            (Main.Children.Play.Position):{
+                (Main.Children.Play.Position.X):{582}
+                (Main.Children.Play.Position.Y):{198}
+            }
+            (Main.Children.Play.Size):{
+                (Main.Children.Play.Size.X):{114}
+                (Main.Children.Play.Size.Y):{63}
+            }
+            (Main.Children.Play.TextureFile): {ui/PlayBTN.png}
+            (Main.Children.Play.HoverImage): {ui/PlayBTNH.png}
+            (Main.Children.Play.ImageAlignment): {STRETCHED}
+            (Main.Children.Play.Button): {true}
+            (Main.Children.Play.ButtonFunc): {CHANGESTATE}
+            (Main.Children.Play.ButtonDesc): {opening}
+		}
+    }
+		
+	

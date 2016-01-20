@@ -13,6 +13,7 @@ public class DesktopLauncher {
 		config.resizable = false;
 		config.width = 1280;
 		config.height = 720;
+		//config.fullscreen = true;
 		
 		new LwjglApplication(new Game(), config);
 	}

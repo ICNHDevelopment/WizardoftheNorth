@@ -8,31 +8,52 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by kyle on 6/5/15.
  */
-public class ImageLabel extends Container implements Button {
+public class ImageLabel extends Container{
 
     Texture image;
-    Alignment imageAlignment = Alignment.SINGLE;
-    Vector2 imagePosition, imageSize;
+    protected Texture hoverImage;
+    String texturefile;
+    protected Alignment imagealignment = Alignment.SINGLE;
+    protected Vector2 imagePosition, imageSize;
+
+    public ImageLabel(Container pa, Vector2 pos, Vector2 sz) {
+        super(pa, pos, sz);
+
+        this.image = new Texture(texturefile);
+        imageSize = new Vector2(image.getWidth(), image.getHeight());
+    }
 
     public ImageLabel(Container pa, Vector2 pos, Vector2 sz, Texture im) {
         super(pa, pos, sz);
 
         this.image = im;
-        imageSize = new Vector2(im.getWidth(), im.getHeight());
+        if (im!=null) {
+            imageSize = new Vector2(im.getWidth(), im.getHeight());
+        }
+    }
+
+    public ImageLabel(){
+        super();
     }
 
     /**
      * Set the alignment of the image within its bounds.
      * @param a Use SINGLE, CENTER, TILED, or STRETCHED; The other Alignments are for text.
      */
-    public void setImageAlignment(Alignment a) {
-        this.imageAlignment = a;
+    public void setImagealignment(Alignment a) {
+        this.imagealignment = a;
 
         setImagePositioning();
     }
 
     void setImagePositioning() {
-        switch (imageAlignment) {
+        if (image!=null){
+            imageSize = new Vector2(image.getWidth(), image.getHeight());
+        }
+        else if (hoverImage!=null){
+            imageSize = new Vector2(hoverImage.getWidth(), hoverImage.getHeight());
+        }
+        switch (imagealignment) {
             case CENTER:
             {
                 imagePosition = new Vector2(0-(imageSize.x-size.x)/2, 0-(imageSize.y-size.y)/2);
@@ -48,15 +69,17 @@ public class ImageLabel extends Container implements Button {
     public void resize(){
         super.resize();
 
-        setImageAlignment(imageAlignment);
+        setImagealignment(imagealignment);
     }
 
     void renderImage(SpriteBatch batch) {
         batch.begin();
-        if (imageAlignment.equals(Alignment.STRETCHED)) {
+        Texture drawIm = this.image;
+        if (isHovering()) drawIm = this.hoverImage;
+        if (imagealignment.equals(Alignment.STRETCHED)) {
             imageSize = size;
         }
-        if (imageAlignment.equals(Alignment.TILED)) {
+        if (imagealignment.equals(Alignment.TILED)) {
             /*
             My Dearest Albert,
                 Here you can see a bunch of math. It was a fucking pain in the ass
@@ -76,13 +99,13 @@ public class ImageLabel extends Container implements Button {
                     TextureRegion reg;
                     float texX = 0, texY = 0, texW = imageSize.x, texH = imageSize.y;
                     if (posX + imageSize.x > size.x) {
-                        texW = (float) (size.x - (maxWidth-1)*imageSize.x);
+                        texW = (size.x - (maxWidth-1)*imageSize.x);
                     }
                     if (posY + imageSize.y > size.y) {
-                        texH = (float) (size.y - (maxHeight-1)*imageSize.y);
+                        texH = (size.y - (maxHeight-1)*imageSize.y);
                     }
                     texY = imageSize.y-texH;
-                    reg = new TextureRegion(image, (int)texX, (int)texY, (int)texW, (int)texH);
+                    reg = new TextureRegion(drawIm, (int)texX, (int)texY, (int)texW, (int)texH);
                     float x = getAbsolutePosition().x+(float)posX;
                     float y = getAbsolutePosition().y+(float)posY;
                     batch.draw(reg, x, y, texW, texH);
@@ -90,7 +113,7 @@ public class ImageLabel extends Container implements Button {
             }
         }
         else {
-            batch.draw(image, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x, imageSize.y);
+            batch.draw(drawIm, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x, imageSize.y);
         }
         batch.end();
     }
@@ -105,8 +128,16 @@ public class ImageLabel extends Container implements Button {
         }
     }
 
-    @Override
-    public void Click() {
-
+    public void setHoverImage(Texture hoverImage) {
+        this.hoverImage = hoverImage;
     }
+
+    public boolean isHovering() {
+        return isHovered;
+    }
+
+    public void setHovering(boolean hovering) {
+        isHovered = hovering;
+    }
+
 }

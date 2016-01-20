@@ -1,6 +1,5 @@
 package com.icnhdevelopment.wotn.handlers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
@@ -47,7 +46,7 @@ public class CInputProcessor implements InputProcessor {
     }
 
     public boolean mouseHovered(float x, float y, float width, float height) {
-        return (new Rectangle(x, y, width, height).contains(new Rectangle(mousePosition.x, mousePosition.y, 1, 1)));
+        return (new Rectangle(x, y, width, height).contains(new Rectangle(getMousePosition().x, getMousePosition().y, 1, 1)));
     }
 
     @Override
@@ -88,5 +87,9 @@ public class CInputProcessor implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public Vector2 getMousePosition() {
+        return mousePosition;
     }
 }

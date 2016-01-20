@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="98">
+ <tileset firstgid="1" name="Sewer" tilewidth="32" tileheight="32" tilecount="400">
+  <image source="Sewer.png" trans="ff00ff" width="640" height="640"/>
+ </tileset>
+ <layer name="mainLayer" width="50" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzlV+2R0zAQ3TCTK+H4cx0E7uggdxc6sBOuAuyYDohtSoAeKAKaoRekmffGG42kk5w4H/DjjSwnXr+3u9pdz0RkBry5Yszk39ZxbfpmmTg33/9Jx2u6zs01R0coTufmOVbHa78RK4OFwTuD9wb3CfuHE+tIgdWxNHg0eDJ4TthPqcPyKUa8wz7XGtQGW1zvDDqDBvfW2G8MyjPr0Pnj5onl2xtUsFGC+w7ct7jfYO8+f4wcpIYF3rXw8OXK/HDzpFT+LwGtoYPGCv9xn9fXY3OQOpbQsfTw5dqB1wZo4fcC+wK/W741wDjxf6UM+dUCPVCq/zR4JldHi/fRl7Xi2anrjwafjow76PfZfsnUQV/TJy3u9dh3Ej8/bxXG1Lw+w/cxHcyXneLOs7pFfLoD3xXT4Tv/ob2PA3XUKhYbcN4B5Ugdvhq38NhYwWepfSimw8bA5hJrzgbc17LfEx4kfabUPVKvro2Vsm9j/8XgZwQhDowra0Uv+/WFebWO2AjZ/W7ww1l9Oqz/Kvjs20gdHyS9trxk6kjhwR7M/j82HlPB8vtl8NtZY3m1OSAeKXxCPT5m0z7Hnsh+3wZ0cJYpPPGgD46hI9TjY2fuHn5eyzAD1AEd7P9uPD7LcE6pL1XH3PMe8tH9vYjYXEGnrnvs1+4Zo33mlo7HVxVT6kvRMQ/o4KzH3ODcFMq3hQwzGGdHt4e49WoNu+75YK3LyauQDmt/K0N/qWWYKx8Dq7bRSriHMK8arFPVK9bFXoZeT99x9mLeMc8r3C/Vylm08ujYKTtT1itfP/Otema9gyb3nluzOG8zZ6eMR8yu+44bg1vZn2Ndzu554jdHNWE8cvu97jeF7Pca5qjvGy312yZnphiLG9nvN5ozdXCGYz1uJF7Dp8IfD1wdPNPMFZ7tWGxP4Wcf95gOnlnOI7kz/6XoSJnXr0HHJczbh+oInYFT5P+hOizmiVovWQfnsmvXkZp3l4Ac3rcn5vYXsYFneQ==
+  </data>
+ </layer>
+ <layer name="overwalls" width="50" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztxbEJACAMAEGdR3fQ/acyRSorsQvcwfOtAQAAAMC7flXZjEa+sh2tPAAA8O8A/sIBRw==
+  </data>
+ </layer>
+ <objectgroup name="walls" visible="0">
+  <object id="36" x="699.091" y="931.212" width="68.7879" height="60"/>
+  <object id="38" x="697.22" y="991.369" width="6.77163" height="135.196"/>
+  <object id="39" x="702.904" y="1066.23" width="163.459" height="60.4398"/>
+  <object id="40" x="864.187" y="989.605" width="6.77163" height="135.196"/>
+  <object id="41" x="799.783" y="931.009" width="68.7879" height="60"/>
+  <object id="42" x="761.343" y="864.166" width="6.83585" height="67.7889"/>
+  <object id="44" x="799.795" y="863.596" width="6.83585" height="67.7889"/>
+  <object id="45" x="314.018" y="674.511" width="201.809" height="60.3417"/>
+  <object id="47" x="311.518" y="734.496" width="8.21663" height="139.683"/>
+  <object id="48" x="314.733" y="872.035" width="331.881" height="61.4461"/>
+  <object id="49" x="512.09" y="716.812" width="8.59419" height="114.61"/>
+  <object id="50" x="514.727" y="801.839" width="317.485" height="29.5835"/>
+  <object id="51" x="640.245" y="864.251" width="127.891" height="8.70184"/>
+  <object id="52" x="799.647" y="863.669" width="128.55" height="8.70184"/>
+  <object id="53" x="921.351" y="868.988" width="6.83585" height="124.077"/>
+  <object id="54" x="920.088" y="991.878" width="203.504" height="8.70184"/>
+  <object id="55" x="864.164" y="735.225" width="81.7201" height="5.87748"/>
+  <object id="56" x="960.377" y="767.872" width="127.617" height="191.441"/>
+  <object id="60" x="1082.84" y="416.788" width="4.86552" height="353.713"/>
+  <object id="61" x="384.817" y="415.502" width="698.242" height="8.42408"/>
+  <object id="62" x="384.709" y="422.896" width="4.86552" height="189.207"/>
+  <object id="63" x="58.1294" y="608.329" width="326.795" height="6.6802"/>
+  <object id="64" x="58.6031" y="353.427" width="4.86552" height="260.272"/>
+  <object id="65" x="60.4546" y="287.741" width="34.9852" height="127.885"/>
+  <object id="76" x="1120.8" y="415.929" width="165.695" height="127.527"/>
+  <object id="77" x="762.588" y="543.542" width="171.168" height="119.007"/>
+  <object id="78" x="347.144" y="272.654" width="196.214" height="111.027"/>
+  <object id="80" x="928.457" y="283.513" width="356.301" height="99.7753"/>
+  <object id="81" x="1119.84" y="927.949" width="6.83585" height="70.9776"/>
+  <object id="82" x="127.943" y="287.767" width="223.852" height="127.885"/>
+  <object id="83" x="541.417" y="231.874" width="389.773" height="55.5502"/>
+  <object id="84" x="927.417" y="655.521" width="5.79382" height="79.8094"/>
+  <object id="85" x="1119.85" y="927.921" width="78.2735" height="8.70184"/>
+  <object id="86" x="1193.02" y="542.406" width="15.6145" height="393.892"/>
+  <object id="87" x="1280.29" y="377.392" width="6.83585" height="48.3045"/>
+  <object id="92" x="863.929" y="736.255" width="4.86552" height="94.7504"/>
+  <object id="93" x="863.92" y="822.272" width="103.367" height="8.70184"/>
+  <object id="94" x="762.996" y="654.068" width="4.86552" height="113.827"/>
+  <object id="95" x="731.694" y="759.244" width="33.9008" height="8.70184"/>
+  <object id="96" x="731.549" y="763.989" width="4.86552" height="64.0311"/>
+ </objectgroup>
+ <objectgroup name="overwallRecs" visible="0">
+  <object id="97" x="735.837" y="736.623" width="96.3875" height="65.2157"/>
+ </objectgroup>
+ <objectgroup name="spawners" visible="0">
+  <object id="33" type="Slime" x="784.811" y="1044.94"/>
+ </objectgroup>
+ <objectgroup name="doors" visible="0">
+  <object id="66" type="LEVEL_NAME_HERE" x="95.2784" y="287.741" width="33.1875" height="15.6949"/>
+ </objectgroup>
+ <objectgroup name="objectF" visible="0">
+  <object id="15" name="Torch" type="7" x="543.5" y="804" width="11" height="30">
+   <ellipse/>
+  </object>
+  <object id="17" name="Torch" type="7" x="705" y="802" width="11" height="30">
+   <ellipse/>
+  </object>
+  <object id="18" name="Torch" type="7" x="912.085" y="802" width="11" height="30">
+   <ellipse/>
+  </object>
+  <object id="19" name="Torch" type="7" x="732" y="959.5" width="11" height="30">
+   <ellipse/>
+  </object>
+  <object id="20" name="Torch" type="7" x="832.5" y="959.5" width="11" height="30">
+   <ellipse/>
+  </object>
+  <object id="21" name="Torch" type="7" x="1027" y="931" width="11" height="30">
+   <ellipse/>
+  </object>
+  <object id="22" name="Torch" type="7" x="416.5" y="705" width="11" height="30">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="items">
+  <object id="14" name="Key" type="keySewer" x="1337" y="728.5" width="15" height="15">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.handlers.ButtonFuction;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.handlers.ColorCodes;
+import com.icnhdevelopment.wotn.handlers.GameState;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -18,21 +20,34 @@ import java.util.ArrayList;
  * This is the most basic form of an interface element
  * and can't be visually drawn on the screen.
  */
-public class Container {
+public class Container implements Button {
 
     Container parent;
-    Vector2 position;
-    Vector2 size;
+    protected Vector2 position;
+    protected Vector2 size;
     Vector2 positionScale;
     Vector2 sizeScale;
-    boolean visible = true;
-    Color backColor = null;
+    private String name;
+    private String type;
+    protected boolean visible = true;
+    protected boolean isHovered = false;
+    Color backcolor = null;
 
-    ArrayList<Container> children;
+    protected ArrayList<Container> children;
     public ArrayList<Button> buttons;
 
     ShapeRenderer shapeRenderer;
     OrthographicCamera renderCam;
+
+    //BUTTON FUNCTIONS
+    private ButtonFuction func;
+    private String desc;
+
+    public static Container getContainer(String typeName){
+        if (typeName.equals("Label")) return new Label();
+        else if (typeName.equals("ImageLabel")) return new ImageLabel();
+        return null;
+    }
 
     /**
      * When creating interfaces, use this constructor to create a parent Container the size of the screen.
@@ -58,16 +73,16 @@ public class Container {
 
     void init(Container pa, Vector2 pos, Vector2 sz) {
         parent = pa;
-        position = pos;
-        size = sz;
+        setPosition(pos);
+        setSize(sz);
         setSizeScale();
 
-        children = new ArrayList<>();
+        setChildren(new ArrayList<>());
         shapeRenderer = new ShapeRenderer();
         buttons = new ArrayList<>();
         if (parent == null) {
-            renderCam = new OrthographicCamera(Game.WIDTH(), Game.HEIGHT());
-            renderCam.position.set(renderCam.viewportWidth / 2, renderCam.viewportHeight / 2, 0);
+            renderCam = new OrthographicCamera(size.x, size.y);
+            renderCam.position.set(Game.WIDTH() / 2, Game.HEIGHT() / 2, 0);
             renderCam.update();
         }
     }
@@ -90,13 +105,13 @@ public class Container {
     public void reposition() {
         if (parent != null) {
             Vector2 paPos = parent.getSize();
-            position = new Vector2(paPos.x * positionScale.x, paPos.y * positionScale.y);
+            setPosition(new Vector2(paPos.x * positionScale.x, paPos.y * positionScale.y));
         }
         for (Container child : children) {
             child.reposition();
             if (child instanceof ImageLabel) {
                 ImageLabel c = (ImageLabel) child;
-                c.setImageAlignment(c.imageAlignment);
+                c.setImagealignment(c.imagealignment);
             }
         }
     }
@@ -106,7 +121,7 @@ public class Container {
         Vector2 newT = size;
         if (parent != null) {
             Rectangle paRec = parent.getBounds();
-            size = new Vector2(paRec.width * sizeScale.x, paRec.height * sizeScale.y);
+            setSize(new Vector2(paRec.width * sizeScale.x, paRec.height * sizeScale.y));
             newT = size;
         }
         for (Container child : children) {
@@ -119,12 +134,12 @@ public class Container {
     }
 
     public void reposition(float x, float y) {
-        position = new Vector2(x, y);
+        setPosition(new Vector2(x, y));
     }
 
     public void resize(float x, float y) {
         Vector2 oldT = size;
-        size = new Vector2(x, y);
+        setSize(new Vector2(x, y));
         Vector2 newT = size;
         if (parent != null) {
             Vector2 paRec = parent.getSize();
@@ -157,18 +172,21 @@ public class Container {
             Vector2 butPos = but.getAbsolutePosition();
             Vector2 butSize = but.getSize();
             if (processor.mouseHovered(butPos.x, butPos.y, butSize.x, butSize.y)) {
+                ((Container) button).isHovered = true;
                 if (processor.didMouseClick()) {
                     button.Click();
                 }
+            }else{
+                ((Container) button).isHovered = false;
             }
         }
     }
 
     public void renderBackground(SpriteBatch batch) {
-        if (backColor != null) {
+        if (backcolor != null) {
             batch.begin();
             shapeRenderer.begin(ShapeType.Filled);
-            shapeRenderer.setColor(backColor.r, backColor.g, backColor.b, 1);
+            shapeRenderer.setColor(backcolor.r, backcolor.g, backcolor.b, 1);
             Vector2 temp = getAbsolutePosition();
             shapeRenderer.rect(temp.x, temp.y, size.x, size.y);
             shapeRenderer.end();
@@ -176,7 +194,7 @@ public class Container {
         }
     }
 
-    void renderChildren(SpriteBatch batch) {
+    protected void renderChildren(SpriteBatch batch) {
         for (Container child : children) {
             child.render(batch);
         }
@@ -205,7 +223,6 @@ public class Container {
     }
 
     /**
-     * UNIMPLEMENTED
      * Gets the absolute position of the element in the game window.
      * Should be used for human interaction.
      *
@@ -223,6 +240,8 @@ public class Container {
         this.visible = visible;
     }
 
+    public boolean isVisible() { return this.visible; }
+
     public Vector2 getSize() {
         return size;
     }
@@ -231,8 +250,8 @@ public class Container {
         return new Rectangle(position.x, position.y, size.x, size.y);
     }
 
-    public void setBackColor(Color c) {
-        backColor = c;
+    public void setBackcolor(Color c) {
+        backcolor = c;
     }
 
     public Container getParent() {
@@ -249,4 +268,71 @@ public class Container {
         return renderCam;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Container getContainerByName(String name){
+        if (this.name.equals(name)) return this;
+        for (Container c : children){
+            Container b = c.getContainerByName(name);
+            if (b != null){
+                return b;
+            }
+        }
+        System.out.println(ColorCodes.RED + "Unable to find container with name \"" + name + "\"");
+        return null;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setChildren(ArrayList<Container> children) {
+        this.children = children;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void setSize(Vector2 size) {
+        this.size = size;
+    }
+
+    @Override
+    public void Click() {
+        if (func != null){
+            if (func.equals(ButtonFuction.CHANGESTATE)){
+                if (desc.toLowerCase().equals("opening")){
+                    Game.GAME_STATE = GameState.OPENING;
+                    Game.os.start();
+                }
+            }
+        }
+    }
+
+    public ButtonFuction getFunc() {
+        return func;
+    }
+
+    public void setFunc(ButtonFuction func) {
+        this.func = func;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 }
