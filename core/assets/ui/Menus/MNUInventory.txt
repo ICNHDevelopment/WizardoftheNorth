@@ -11,94 +11,68 @@
 	(Inventory.Children):{
 		(Inventory.Children.Slots):{
 			(Inventory.Children.Slots.Helmet):{
-				(Inventory.Children.Slots.Helmet.Size):{
-					(Inventory.Children.Slots.Helmet.Size.X):{60}
-					(Inventory.Children.Slots.Helmet.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Helmet.Position):{
 					(Inventory.Children.Slots.Helmet.Position.X):{40}
 					(Inventory.Children.Slots.Helmet.Position.Y):{-20}
-				}	
+				}
+				(Inventory.Children.Slots.Helmet.DefaultImage):{Items/DefaultHelm.png}
 			}
 			(Inventory.Children.Slots.Chest):{
-				(Inventory.Children.Slots.Chest.Size):{
-					(Inventory.Children.Slots.Chest.Size.X):{60}
-					(Inventory.Children.Slots.Chest.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Chest.Position):{
 					(Inventory.Children.Slots.Chest.Position.X):{40}
 					(Inventory.Children.Slots.Chest.Position.Y):{44}
 				}
+				(Inventory.Children.Slots.Chest.DefaultImage):{Items/DefaultChest.png}
+
 			}
 			(Inventory.Children.Slots.Leg):{
-				(Inventory.Children.Slots.Leg.Size):{
-					(Inventory.Children.Slots.Leg.Size.X):{60}
-					(Inventory.Children.Slots.Leg.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Leg.Position):{
 					(Inventory.Children.Slots.Leg.Position.X):{40}
 					(Inventory.Children.Slots.Leg.Position.Y):{108}
 				}
+				(Inventory.Children.Slots.Leg.DefaultImage):{Items/DefaultLegs.png}
 			}
 			(Inventory.Children.Slots.Boots):{
-				(Inventory.Children.Slots.Boots.Size):{
-					(Inventory.Children.Slots.Boots.Size.X):{60}
-					(Inventory.Children.Slots.Boots.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Boots.Position):{
 					(Inventory.Children.Slots.Boots.Position.X):{40}
 					(Inventory.Children.Slots.Boots.Position.Y):{172}
 				}
+				(Inventory.Children.Slots.Boots.DefaultImage):{Items/DefaultBoots.png}
 			}
 			(Inventory.Children.Slots.Gauntlets):{
-				(Inventory.Children.Slots.Gauntlets.Size):{
-					(Inventory.Children.Slots.Gauntlets.Size.X):{60}
-					(Inventory.Children.Slots.Gauntlets.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Gauntlets.Position):{
 					(Inventory.Children.Slots.Gauntlets.Position.X):{282}
 					(Inventory.Children.Slots.Gauntlets.Position.Y):{-20}
 				}
+				(Inventory.Children.Slots.Gauntlets.DefaultImage):{Items/DefaultGauntlets.png}
 			}
 			(Inventory.Children.Slots.Amulet):{
-				(Inventory.Children.Slots.Amulet.Size):{
-					(Inventory.Children.Slots.Amulet.Size.X):{60}
-					(Inventory.Children.Slots.Amulet.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Amulet.Position):{
 					(Inventory.Children.Slots.Amulet.Position.X):{282}
 					(Inventory.Children.Slots.Amulet.Position.Y):{44}
 				}
+				(Inventory.Children.Slots.Amulet.DefaultImage):{Items/DefaultAm.png}
 			}
 			(Inventory.Children.Slots.Ring1):{
-				(Inventory.Children.Slots.Ring1.Size):{
-					(Inventory.Children.Slots.Ring1.Size.X):{60}
-					(Inventory.Children.Slots.Ring1.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Ring1.Position):{
 					(Inventory.Children.Slots.Ring1.Position.X):{282}
 					(Inventory.Children.Slots.Ring1.Position.Y):{108}
 				}
+				(Inventory.Children.Slots.Ring1.DefaultImage):{Items/DefaultRing.png}
 			}
 			(Inventory.Children.Slots.Ring2):{
-				(Inventory.Children.Slots.Ring2.Size):{
-					(Inventory.Children.Slots.Ring2.Size.X):{60}
-					(Inventory.Children.Slots.Ring2.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Ring2.Position):{
 					(Inventory.Children.Slots.Ring2.Position.X):{282}
 					(Inventory.Children.Slots.Ring2.Position.Y):{172}
 				}
+				(Inventory.Children.Slots.Ring2.DefaultImage):{Items/DefaultRing.png}
 			}
 			(Inventory.Children.Slots.Weapon):{
-				(Inventory.Children.Slots.Weapon.Size):{
-					(Inventory.Children.Slots.Weapon.Size.X):{60}
-					(Inventory.Children.Slots.Weapon.Size.Y):{60}
-				}
 				(Inventory.Children.Slots.Weapon.Position):{
 					(Inventory.Children.Slots.Weapon.Position.X):{160}
 					(Inventory.Children.Slots.Weapon.Position.Y):{-226}
 				}
+				(Inventory.Children.Slots.Weapon.DefaultImage):{Items/DefaultWeapon.png}
 			}
 		}
 	}
