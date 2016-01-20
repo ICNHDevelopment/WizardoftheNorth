@@ -50,16 +50,6 @@
 					(Inventory.Children.Slots.Boots.Position.Y):{172}
 				}
 			}
-			(Inventory.Children.Slots.Amulet):{
-				(Inventory.Children.Slots.Amulet.Size):{
-					(Inventory.Children.Slots.Amulet.Size.X):{60}
-					(Inventory.Children.Slots.Amulet.Size.Y):{60}
-				}
-				(Inventory.Children.Slots.Amulet.Position):{
-					(Inventory.Children.Slots.Amulet.Position.X):{282}
-					(Inventory.Children.Slots.Amulet.Position.Y):{-20}
-				}
-			}
 			(Inventory.Children.Slots.Gauntlets):{
 				(Inventory.Children.Slots.Gauntlets.Size):{
 					(Inventory.Children.Slots.Gauntlets.Size.X):{60}
@@ -67,17 +57,37 @@
 				}
 				(Inventory.Children.Slots.Gauntlets.Position):{
 					(Inventory.Children.Slots.Gauntlets.Position.X):{282}
-					(Inventory.Children.Slots.Gauntlets.Position.Y):{44}
+					(Inventory.Children.Slots.Gauntlets.Position.Y):{-20}
 				}
 			}
-			(Inventory.Children.Slots.Ring):{
-				(Inventory.Children.Slots.Ring.Size):{
-					(Inventory.Children.Slots.Ring.Size.X):{60}
-					(Inventory.Children.Slots.Ring.Size.Y):{60}
+			(Inventory.Children.Slots.Amulet):{
+				(Inventory.Children.Slots.Amulet.Size):{
+					(Inventory.Children.Slots.Amulet.Size.X):{60}
+					(Inventory.Children.Slots.Amulet.Size.Y):{60}
 				}
-				(Inventory.Children.Slots.Ring.Position):{
-					(Inventory.Children.Slots.Ring.Position.X):{282}
-					(Inventory.Children.Slots.Ring.Position.Y):{108}
+				(Inventory.Children.Slots.Amulet.Position):{
+					(Inventory.Children.Slots.Amulet.Position.X):{282}
+					(Inventory.Children.Slots.Amulet.Position.Y):{44}
+				}
+			}
+			(Inventory.Children.Slots.Ring1):{
+				(Inventory.Children.Slots.Ring1.Size):{
+					(Inventory.Children.Slots.Ring1.Size.X):{60}
+					(Inventory.Children.Slots.Ring1.Size.Y):{60}
+				}
+				(Inventory.Children.Slots.Ring1.Position):{
+					(Inventory.Children.Slots.Ring1.Position.X):{282}
+					(Inventory.Children.Slots.Ring1.Position.Y):{108}
+				}
+			}
+			(Inventory.Children.Slots.Ring2):{
+				(Inventory.Children.Slots.Ring2.Size):{
+					(Inventory.Children.Slots.Ring2.Size.X):{60}
+					(Inventory.Children.Slots.Ring2.Size.Y):{60}
+				}
+				(Inventory.Children.Slots.Ring2.Position):{
+					(Inventory.Children.Slots.Ring2.Position.X):{282}
+					(Inventory.Children.Slots.Ring2.Position.Y):{172}
 				}
 			}
 			(Inventory.Children.Slots.Weapon):{
