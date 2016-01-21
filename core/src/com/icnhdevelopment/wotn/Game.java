@@ -37,11 +37,12 @@ public class Game extends ApplicationAdapter {
 		System.out.println(ColorCodes.GREEN + "Initializing The Wizard of the North..." + ColorCodes.RESET);
 		game = this;
 		batch = new SpriteBatch();
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
 		inputProcessor = new CInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
 		Gdx.input.setCursorCatched(true);
-		WIDTH = Gdx.graphics.getWidth();
-		HEIGHT = Gdx.graphics.getHeight();
+		Gdx.input.setCursorPosition(Game.WIDTH()/2, Game.HEIGHT()/10*9);
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init("ui/Menus/MNUMain.txt");
