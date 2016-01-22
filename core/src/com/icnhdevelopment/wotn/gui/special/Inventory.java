@@ -77,7 +77,7 @@ public class Inventory extends Container {
                 }
                 ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), it.image, b);
                 is.setHoverImage(new Texture("Items/highlight.png"));
-                is.item = it;
+               // is.item = it;
                 is.setImagealignment(Alignment.STRETCHED);
                 defaultInventory.add(is);
             }

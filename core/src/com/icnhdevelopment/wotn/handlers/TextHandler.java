@@ -45,6 +45,7 @@ public class TextHandler {
  				count += count += t.get(i).length() + 1;
  			}
  		}
+		return null;
  	}
  	
  	public void scrollText(ArrayList<String> t, int scrollSpeed){
