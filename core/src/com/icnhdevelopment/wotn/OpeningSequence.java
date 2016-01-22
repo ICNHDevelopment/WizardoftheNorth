@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class OpeningSequence {
 
-    final int NUMofLYMRICS = 3;
+    final int NUMofLYMRICS = 5;
 
     class Lymric{
         Sound sound;
