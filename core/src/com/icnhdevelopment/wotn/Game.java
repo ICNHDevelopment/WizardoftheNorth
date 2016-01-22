@@ -84,7 +84,6 @@ public class Game extends ApplicationAdapter {
 	}
 
 	public void moveMouse() {
-		//Doesnt work :'( QQ
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int width = gd.getDisplayMode().getWidth();
 		int height = gd.getDisplayMode().getHeight();
