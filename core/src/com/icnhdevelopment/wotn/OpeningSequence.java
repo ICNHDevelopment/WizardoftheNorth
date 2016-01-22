@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -48,6 +49,12 @@ public class OpeningSequence {
     long holdStart = 0l;
 
     String state = "fadein";
+    String stage = "lymric";
+
+    Sound starwars;
+    String[] starwarsText;
+    BitmapFont starWarsFont;
+    float textY = 0;
 
     public void start(){
         Game.soundHandler.PlaySound(Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic.wav")), .5f);
@@ -62,6 +69,10 @@ public class OpeningSequence {
         currentLymric = lymrics.get(currLym);
         font = Fonts.loadFont(Fonts.PRINCE_VALIANT, fontSize, Color.WHITE, Color.BLACK);
         font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+
+        starwars = Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic2.wav"));
+        starwarsText = Gdx.files.internal("audio/lymrics/starwars.txt").readString().split("\n");
+        starWarsFont = Fonts.loadFont(Fonts.STAR_WARS, 42, Color.YELLOW, Color.BLACK);
     }
 
     public void update(CInputProcessor inputProcessor){
@@ -75,34 +86,44 @@ public class OpeningSequence {
         } else {
             holdStart = 0;
         }
-        if (state.equals("fadein")){
-            alpha+=.01f;
-            font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
-            if (alpha>=1){
-                font.setColor(Color.WHITE);
-                state = "playsound";
-                startTime = System.currentTimeMillis();
-                currentLymric.sound.play();
-            }
-        }
-        if (state.equals("playsound")){
-            if ((System.currentTimeMillis()-startTime)>currentLymric.time*1000){
-                state = "fadeout";
-            }
-        }
-        if (state.equals("fadeout")){
-            alpha-=.01f;
-            font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
-            if (alpha<=0){
-                if (currLym<lymrics.size()-1){
-                    alpha = 0;
-                    font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
-                    currLym++;
-                    currentLymric = lymrics.get(currLym);
-                    state = "fadein";
-                }else{
-                    goToWorld();
+        if (stage.equals("lymric")) {
+            if (state.equals("fadein")) {
+                alpha += .01f;
+                font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+                if (alpha >= 1) {
+                    font.setColor(Color.WHITE);
+                    state = "playsound";
+                    startTime = System.currentTimeMillis();
+                    currentLymric.sound.play();
                 }
+            }
+            if (state.equals("playsound")) {
+                if ((System.currentTimeMillis() - startTime) > currentLymric.time * 1000) {
+                    state = "fadeout";
+                }
+            }
+            if (state.equals("fadeout")) {
+                alpha -= .01f;
+                font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+                if (alpha <= 0) {
+                    if (currLym < lymrics.size() - 1) {
+                        alpha = 0;
+                        font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+                        currLym++;
+                        currentLymric = lymrics.get(currLym);
+                        state = "fadein";
+                    } else {
+                        stage = "starwars";
+                        alpha = 0;
+                        font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
+                        Game.soundHandler.PlaySound(starwars);
+                    }
+                }
+            }
+        } else if (stage.equals("starwars")){
+            textY+=.5;
+            if (textY>Game.HEIGHT()+44*starwarsText.length){
+                goToWorld();
             }
         }
     }
@@ -115,24 +136,35 @@ public class OpeningSequence {
     }
 
     public void render(SpriteBatch batch){
-        batch.begin();
-        for (int i = 0; i<currentLymric.text.length-1; i++) {
-            int bottom = (Game.HEIGHT()-(currentLymric.text.length-1)*(fontSize+2))/2;
-            int y = bottom+((currentLymric.text.length-1)-i)*(fontSize+2);
-            float x = (Game.WIDTH() - currentLymric.getLongestLineLength(font))/2;
-            font.draw(batch, currentLymric.text[i], x, y);
+        if (stage.equals("lymric")) {
+            batch.begin();
+            for (int i = 0; i < currentLymric.text.length - 1; i++) {
+                int bottom = (Game.HEIGHT() - (currentLymric.text.length - 1) * (fontSize + 2)) / 2;
+                int y = bottom + ((currentLymric.text.length - 1) - i) * (fontSize + 2);
+                float x = (Game.WIDTH() - currentLymric.getLongestLineLength(font)) / 2;
+                font.draw(batch, currentLymric.text[i], x, y);
+            }
+            if (holdStart > 0) {
+                font.draw(batch, "Skip", 2, (4 + fontSize));
+                Rectangle skipBar = new Rectangle(2, (6 + fontSize), font.getBounds("Skip").width, 8);
+                Texture bar = new Texture("ui/hud/ExperienceMeter.png");
+                Color c = batch.getColor();
+                Color b = Color.GRAY;
+                batch.setColor(b.r, b.g, b.b, 1);
+                batch.draw(bar, skipBar.x, skipBar.y, Math.min((System.currentTimeMillis() - holdStart) / 1500.0f * skipBar.width, skipBar.width), skipBar.height);
+                batch.setColor(c);
+            }
+            batch.end();
+        } else {
+            batch.begin();
+            for (int i = 0; i<starwarsText.length; i++){
+                float top = textY;
+                float y = top - (44)*i;
+                float x = (Game.WIDTH() - starWarsFont.getBounds("drinking with your friend, Name.").width) / 2;
+                starWarsFont.draw(batch, starwarsText[i], x, y);
+            }
+            batch.end();
         }
-        if (holdStart>0){
-            font.draw(batch, "Skip", 2, (4+fontSize));
-            Rectangle skipBar = new Rectangle(2, (6+fontSize), font.getBounds("Skip").width, 8);
-            Texture bar = new Texture("ui/hud/ExperienceMeter.png");
-            Color c = batch.getColor();
-            Color b = Color.GRAY;
-            batch.setColor(b.r, b.g, b.b, 1);
-            batch.draw(bar, skipBar.x, skipBar.y, Math.min((System.currentTimeMillis()-holdStart)/1500.0f*skipBar.width, skipBar.width), skipBar.height);
-            batch.setColor(c);
-        }
-        batch.end();
     }
 
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
  */
 public class Fonts {
 
-    public static String OPEN_SANS = "OpenSans", PRINCE_VALIANT = "PrinceValiant";
+    public static String OPEN_SANS = "OpenSans", PRINCE_VALIANT = "PrinceValiant", STAR_WARS = "Starjedi";
 
     public static BitmapFont loadFont(String name) {
         return loadFont(name, 12);
