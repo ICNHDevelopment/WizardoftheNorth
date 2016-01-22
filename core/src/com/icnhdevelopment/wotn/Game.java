@@ -4,9 +4,11 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.icnhdevelopment.wotn.gui.*;
+import com.icnhdevelopment.wotn.gui.Menu;
 import com.icnhdevelopment.wotn.handlers.*;
 import com.icnhdevelopment.wotn.world.World;
+
+import java.awt.*;
 
 public class Game extends ApplicationAdapter {
 
@@ -39,10 +41,11 @@ public class Game extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
+		moveMouse();
 		inputProcessor = new CInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
 		Gdx.input.setCursorCatched(true);
-		Gdx.input.setCursorPosition(Game.WIDTH()/2, Game.HEIGHT()/10*9);
+		//Gdx.input.setCursorPosition(WIDTH/2, HEIGHT/5*4);
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init("ui/Menus/MNUMain.txt");
@@ -78,5 +81,19 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 
 		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+
+	public void moveMouse() {
+		//Doesnt work :'( QQ
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		try {
+			Robot r = new Robot();
+			r.mouseMove(width/2, height/2);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+		return;
 	}
 }

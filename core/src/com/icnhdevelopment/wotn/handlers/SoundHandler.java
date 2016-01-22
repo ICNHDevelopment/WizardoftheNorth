@@ -30,7 +30,7 @@ public class SoundHandler {
     }
 
     public long PlaySoundLooping(Sound sound, float volume){
-        long l = PlaySound(sound);
+        long l = PlaySoundLooping(sound);
         currentSound.setVolume(l, volume);
         return l;
     }

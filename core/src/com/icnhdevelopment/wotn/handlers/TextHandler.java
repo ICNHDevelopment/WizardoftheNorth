@@ -1,5 +1,8 @@
 package com.icnhdevelopment.wotn.handlers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by Albert on 1/21/2016.
  */
@@ -11,9 +14,9 @@ public class TextHandler {
 	final int maxNumOfLines = 0; //Change This Later
  	
  	public void scrollText(String text){
- 		ArrayList<String> t = text.split();
- 		ArrayList<String> lines = new ArrayList<String>();
- 		String temp;
+ 		ArrayList<String> t = new ArrayList(Arrays.asList(text.split(" "))); //Added temporary parameter because errors
+ 		ArrayList<String> lines = new ArrayList<>();
+ 		String temp="";
  		int count = 0;
  		
  		//Might change this into a for-each loop later
@@ -40,7 +43,7 @@ public class TextHandler {
  		currentText = text;
  	}
  	
- 	public void setScrollSpeed(String speed){
+ 	public void setScrollSpeed(int speed){
  		scrollSpeed = speed;
  	}
 }

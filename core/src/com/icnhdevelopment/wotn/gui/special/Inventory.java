@@ -8,10 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
-import com.icnhdevelopment.wotn.gui.Alignment;
-import com.icnhdevelopment.wotn.gui.Container;
-import com.icnhdevelopment.wotn.gui.Fonts;
-import com.icnhdevelopment.wotn.gui.ImageLabel;
+import com.icnhdevelopment.wotn.gui.*;
+import com.icnhdevelopment.wotn.handlers.ButtonFuction;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.items.SpecialItem;
@@ -53,6 +51,10 @@ public class Inventory extends Container {
         invenImage = new ImageLabel(this, new Vector2((Game.WIDTH()-textureSize.x)/2, (Game.HEIGHT()-textureSize.y)/2), textureSize, tex);
         invenImage.setImagealignment(Alignment.STRETCHED);
         this.children.add(invenImage);
+        Container button = new Container(invenImage, new Vector2(354, 544), new Vector2(26, 28));
+        button.setFunc(ButtonFuction.VISIBILITY);
+        button.setDesc(this);
+        buttons.add(button);
     }
 
     void loadInventorySlots(){

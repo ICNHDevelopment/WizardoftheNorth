@@ -224,6 +224,7 @@ public class World {
                 }
             } else if (inventory.isVisible()) {
                 inventory.update(input);
+                inventory.updateChildren(input);
                 if (input.isKeyDown(Input.Keys.ESCAPE)) {
                     inventory.setVisible(false);
                 }
