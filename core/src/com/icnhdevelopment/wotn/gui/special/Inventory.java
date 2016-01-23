@@ -162,7 +162,7 @@ public class Inventory extends Container {
                                 } else if (i<21){
                                     character.swapItemFromGear(mouseItem, i);
                                 } else {
-
+                                    character.swapItemFromToolbar(mouseItem, i);
                                 }
                                 mouseItem = temp;
                             }
@@ -170,8 +170,10 @@ public class Inventory extends Container {
                             Item temp = is.getItem();
                             if (i<12) {
                                 character.swapItemFromInventory(mouseItem, i);
-                            } else {
+                            } else if (i<21){
                                 character.swapItemFromGear(mouseItem, i);
+                            } else {
+                                character.swapItemFromToolbar(mouseItem, i);
                             }
                             mouseItem = temp;
                         }
@@ -217,11 +219,11 @@ public class Inventory extends Container {
                         font.draw(batch, whatToWrite, statSlots.get(i).x - width, statSlots.get(i).y);
                         batch.end();
                     }
-                }
-                if (mouseItem != null) {
-                    batch.begin();
-                    batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
-                    batch.end();
+                    if (mouseItem != null) {
+                        batch.begin();
+                        batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
+                        batch.end();
+                    }
                 }
             }
         }

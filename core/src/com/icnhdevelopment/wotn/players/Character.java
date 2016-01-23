@@ -371,7 +371,7 @@ public class Character extends AnimatedSprite {
     public Rectangle getHitBox() { return new Rectangle(footBox.x, footBox.y, footBox.width, footBox.height); }
 
     public Item[] getInventory() {
-        return WizardHelper.concat(inventory, gear);
+        return WizardHelper.concat(WizardHelper.concat(inventory, gear), toolbar);
     }
 
     public Item[] getToolbar(){

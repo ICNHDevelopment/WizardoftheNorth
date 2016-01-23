@@ -122,7 +122,7 @@ public class OpeningSequence {
                 }
             }
         } else if (stage.equals("starwars")){
-            textY+=.5;
+            textY+=.45;
             if (textY>Game.HEIGHT()+44*starwarsText.length){
                 goToWorld();
             }
