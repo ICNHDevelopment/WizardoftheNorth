@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Sprite {
 
-    Texture texture;
-    Vector2 position;
-    int width, height;
+    protected Texture texture;
+    protected Vector2 position;
+    protected int width, height;
 
     public void create(String filename, Vector2 position, Vector2 size){
         texture = new Texture(filename);

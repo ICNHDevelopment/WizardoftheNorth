@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.world.CollideObject;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.*;
@@ -122,11 +123,11 @@ public class Character extends AnimatedSprite {
         return (float)Math.floor(returnVal);
     }
 
-    public void move(Vector2 amount, ArrayList<Rectangle> walls){
+    public void move(Vector2 amount, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols){
         animate(true);
         Rectangle next = new Rectangle(position.x + amount.x*SPEED, position.y + amount.y*SPEED, width, height);
         Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
-        if (canMove(nextFoot, walls)) {
+        if (canMove(nextFoot, walls, cols)) {
             footBox = nextFoot;
             position.x += amount.x * SPEED;
             position.y += amount.y * SPEED;
@@ -142,9 +143,14 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    boolean canMove(Rectangle r, ArrayList<Rectangle> walls){
+    boolean canMove(Rectangle r, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols){
         for (Rectangle a : walls){
             if (a.overlaps(r)){
+                return false;
+            }
+        }
+        for (CollideObject c : cols){
+            if (r.overlaps(c.getHitbox())){
                 return false;
             }
         }
@@ -190,7 +196,7 @@ public class Character extends AnimatedSprite {
         }, new Date(), 1);
     }
 
-    public void setRandomMovementTimer(ArrayList<Rectangle> w){
+    public void setRandomMovementTimer(ArrayList<Rectangle> w, ArrayList<CollideObject> cols){
         final ArrayList<Rectangle> walls = w;
 
         final Thread movementThread = new Thread(){
@@ -201,7 +207,7 @@ public class Character extends AnimatedSprite {
                     long delay = (long) (1000 * (2 + RAN.nextDouble() * 2));
                     try {
                         Thread.sleep(delay);
-                        moveRandomly(walls);
+                        moveRandomly(walls, cols);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         running = false;
@@ -213,16 +219,16 @@ public class Character extends AnimatedSprite {
         movementThread.start();
     }
 
-    void moveRandomly(ArrayList<Rectangle> w){
+    void moveRandomly(ArrayList<Rectangle> w, ArrayList<CollideObject> cols){
         if (isMovingRandomly){
             Random r = new Random();
-            ArrayList<Vector2> direcs = getMoveDirections(w);
+            ArrayList<Vector2> direcs = getMoveDirections(w, cols);
             if (direcs.size()>0) {
                 Vector2 avail = direcs.get(r.nextInt(direcs.size()));
                 int xDir = (int)avail.x, yDir = (int)avail.y;
                 animating = true;
                 while (animating) {
-                    move(new Vector2(xDir, yDir), w);
+                    move(new Vector2(xDir, yDir), w, cols);
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
@@ -236,14 +242,14 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    ArrayList<Vector2> getMoveDirections(ArrayList<Rectangle> w){
+    ArrayList<Vector2> getMoveDirections(ArrayList<Rectangle> w, ArrayList<CollideObject> cols){
         ArrayList<Vector2> dirs = new ArrayList<>();
         int DistanceNeeded = SPEED*maxFrames;
         for (int i = -1; i<=1; i++){
             for (int j = -1; j<=1; j++){
                 Rectangle next = new Rectangle(position.x + i*DistanceNeeded, position.y + j*DistanceNeeded, width, height);
                 Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
-                if (canMove(nextFoot, w)&&!(i==0&&j==0)){
+                if (canMove(nextFoot, w, cols)&&!(i==0&&j==0)){
                     int retI = i, retJ = j;
                     if (i!=0&&j!=0){
                         if (RAN.nextBoolean()){

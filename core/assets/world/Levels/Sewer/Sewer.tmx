@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="100">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="102">
  <tileset firstgid="1" name="Sewer" tilewidth="32" tileheight="32" tilecount="400">
   <image source="Sewer.png" trans="ff00ff" width="640" height="640"/>
  </tileset>
  <layer name="mainLayer" width="50" height="40">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="overwalls" width="50" height="40">
@@ -13,7 +13,7 @@
    eJztxbEJACAMAEGdR3fQ/acyRSorsQvcwfOtAQAAAMC7flXZjEa+sh2tPAAA8O8A/sIBRw==
   </data>
  </layer>
- <objectgroup name="walls" visible="0">
+ <objectgroup name="walls">
   <object id="36" x="699.091" y="931.212" width="68.7879" height="60"/>
   <object id="38" x="674.281" y="991.369" width="29.711" height="135.196"/>
   <object id="39" x="702.904" y="1066.23" width="163.459" height="60.4398"/>
@@ -51,20 +51,25 @@
   <object id="87" x="1280.29" y="377.392" width="6.83585" height="48.3045"/>
   <object id="92" x="863.929" y="736.255" width="26.287" height="94.7504"/>
   <object id="93" x="863.92" y="822.272" width="103.367" height="8.70184"/>
-  <object id="94" x="731" y="654.068" width="36.8613" height="81.5987"/>
-  <object id="96" x="713.68" y="732" width="22.7344" height="96.0201"/>
+  <object id="94" x="739.115" y="654.068" width="28.7463" height="113.827"/>
+  <object id="95" x="731.694" y="739.614" width="33.9008" height="28.3319"/>
+  <object id="96" x="713.68" y="763.989" width="22.7344" height="64.0311"/>
+ </objectgroup>
+ <objectgroup name="collideObjs">
+  <object id="98" name="Web" type="Web:true:WEAPON" x="640" y="800" width="32" height="64"/>
+  <object id="100" name="Web" type="Web:true:WEAPON" x="768" y="864" width="32" height="64"/>
+  <object id="101" name="Web" type="Web:true:WEAPON" x="832" y="768" width="32" height="64"/>
  </objectgroup>
  <objectgroup name="overwallRecs">
   <object id="97" x="735.837" y="736.623" width="96.3875" height="65.2157"/>
  </objectgroup>
- <objectgroup name="spawners" visible="0">
+ <objectgroup name="spawners">
   <object id="33" type="Slime" x="784.811" y="1044.94"/>
-  <object id="99" type="Slime" x="847" y="684"/>
  </objectgroup>
- <objectgroup name="doors" visible="0">
+ <objectgroup name="doors">
   <object id="66" type="LEVEL_NAME_HERE" x="95.2784" y="287.741" width="33.1875" height="15.6949"/>
  </objectgroup>
- <objectgroup name="objectF" visible="0">
+ <objectgroup name="objectF">
   <object id="15" name="Torch" type="7" x="543.5" y="804" width="11" height="30">
    <ellipse/>
   </object>
@@ -87,7 +92,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="items" visible="0">
+ <objectgroup name="items">
   <object id="14" name="Key" type="keySewer" x="1337" y="728.5" width="15" height="15">
    <ellipse/>
   </object>

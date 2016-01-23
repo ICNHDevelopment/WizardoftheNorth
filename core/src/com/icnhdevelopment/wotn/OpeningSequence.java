@@ -131,7 +131,7 @@ public class OpeningSequence {
     void goToWorld(){
         alpha = 0;
         font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
-        Game.currentWorld.create("Sewer.tmx");
+        Game.currentWorld.create("world/Levels/Sewer/Sewer.tmx");
         Game.GAME_STATE = GameState.WORLD;
     }
 

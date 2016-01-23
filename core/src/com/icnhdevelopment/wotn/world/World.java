@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.special.Hud;
 import com.icnhdevelopment.wotn.gui.special.Inventory;
+import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.gui.special.Toolbar;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.players.*;
@@ -40,6 +41,7 @@ public class World {
     public static double SCALE = 2;
     Character mainCharacter;
     public static int TileWidth, TileHeight;
+    String fileLocation;
     Sound backMusic;
 
     public static int TICK = 0;
@@ -47,6 +49,8 @@ public class World {
     ArrayList<Monster> enemies;
     ArrayList<Spawner> spawners;
     ArrayList<Rectangle> walls;
+    ArrayList<CollideObject> collideObjects;
+    ArrayList<InventoryObject> inventoryObjects;
     ArrayList<Rectangle> overWalls;
     ArrayList<AnimatedSprite> animatedSprites;
     ArrayList<Sprite> multiDSprites;
@@ -66,9 +70,12 @@ public class World {
 
     public void create(String filename){
         Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
+        fileLocation = filename.substring(0, filename.lastIndexOf("/")+1);
         enemies = new ArrayList<>();
         spawners = new ArrayList<>();
         walls = new ArrayList<>();
+        collideObjects = new ArrayList<>();
+        inventoryObjects = new ArrayList<>();
         overWalls = new ArrayList<>();
         animatedSprites = new ArrayList<>();
         multiDSprites = new ArrayList<>();
@@ -109,11 +116,12 @@ public class World {
     }
 
     void initMap(TiledMap m){
-        loadWalls(map);
-        loadSpawners(map);
-        loadAnimatedSprites(map);
-        loadOverwallRecs(map);
-        loadItems(map);
+        loadWalls(m);
+        loadCollideObjects(m);
+        loadSpawners(m);
+        loadAnimatedSprites(m);
+        loadOverwallRecs(m);
+        loadItems(m);
     }
 
     void loadWalls(TiledMap m){
@@ -160,6 +168,44 @@ public class World {
         }
     }
 
+    void loadCollideObjects(TiledMap m){
+        MapLayer layer = m.getLayers().get("collideObjs");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs) {
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String name = data[0];
+            boolean brk = Boolean.valueOf(data[1]);
+            SlotType slt = SlotType.valueOf(data[2]);
+            float tx = (float) obj.getProperties().get("x");
+            float ty = (float) obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            String file = "world/images/" + name + ".png";
+            CollideObject co = new CollideObject();
+            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt);
+            collideObjects.add(co);
+        }
+    }
+
+    void loadInventoryObjects(TiledMap m){
+        MapLayer layer = m.getLayers().get("inventories");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs) {
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String name = data[0];
+            boolean brk = Boolean.valueOf(data[1]);
+            SlotType slt = SlotType.valueOf(data[2]);
+            float tx = (float) obj.getProperties().get("x");
+            float ty = (float) obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            String file = "world/images/" + name + ".png";
+            CollideObject co = new CollideObject();
+            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt);
+            collideObjects.add(co);
+        }
+    }
+
     void loadItems(TiledMap m){
         MapLayer layer = m.getLayers().get("items");
         MapObjects objs = layer.getObjects();
@@ -192,7 +238,7 @@ public class World {
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
-        m.setRandomMovementTimer(walls);
+        m.setRandomMovementTimer(walls, collideObjects);
     }
 
     void smoothRecs(ArrayList<Rectangle> recs){
@@ -233,13 +279,13 @@ public class World {
                     battleStage--;
                 }
                 if (input.isKeyDown(Input.Keys.W)) {
-                    mainCharacter.move(new Vector2(0, 1), walls);
+                    mainCharacter.move(new Vector2(0, 1), walls, collideObjects);
                 } else if (input.isKeyDown(Input.Keys.S)) {
-                    mainCharacter.move(new Vector2(0, -1), walls);
+                    mainCharacter.move(new Vector2(0, -1), walls, collideObjects);
                 } else if (input.isKeyDown(Input.Keys.A)) {
-                    mainCharacter.move(new Vector2(-1, 0), walls);
+                    mainCharacter.move(new Vector2(-1, 0), walls, collideObjects);
                 } else if (input.isKeyDown(Input.Keys.D)) {
-                    mainCharacter.move(new Vector2(1, 0), walls);
+                    mainCharacter.move(new Vector2(1, 0), walls, collideObjects);
                 } else {
                     mainCharacter.animate(false);
                 }
@@ -291,6 +337,9 @@ public class World {
             mapRenderer.render(new int[]{1});
         }
         batch.begin();
+        for (CollideObject c : collideObjects){
+            c.render(batch);
+        }
         for (AnimatedSprite as : animatedSprites){
             as.render(batch);
         }
