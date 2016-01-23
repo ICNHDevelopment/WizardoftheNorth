@@ -6,8 +6,14 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.gui.special.Inventory;
+import com.icnhdevelopment.wotn.gui.special.SlotType;
+import com.icnhdevelopment.wotn.handlers.WizardHelper;
+import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.world.CollideObject;
+import com.icnhdevelopment.wotn.world.InventoryObject;
 import com.icnhdevelopment.wotn.world.World;
+import com.sun.tools.javac.util.ArrayUtils;
 
 import java.util.*;
 
@@ -25,6 +31,12 @@ public class Character extends AnimatedSprite {
 
     final int SPEED = 2;
     final Random RAN = new Random();
+
+    protected Item[] inventory;
+    protected Item[] gear;
+    protected Item[] toolbar;
+
+    CollideObject interactObject;
 
     //Skills
     int level;
@@ -80,6 +92,9 @@ public class Character extends AnimatedSprite {
 
     public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);
+        inventory = new Item[12];
+        gear = new Item[9];
+        toolbar = new Item[4];
         regHeight = texture.getHeight()/2;
         width = (int)(regWidth);//*World.SCALE);
         height = (int)(regHeight);//* World.SCALE);
@@ -150,7 +165,7 @@ public class Character extends AnimatedSprite {
             }
         }
         for (CollideObject c : cols){
-            if (r.overlaps(c.getHitbox())){
+            if (c.isVisible() && r.overlaps(c.getHitbox())){
                 return false;
             }
         }
@@ -175,6 +190,29 @@ public class Character extends AnimatedSprite {
                     transitionLayer(map.getLayers().get("overwalls"), .005f);
                 else
                     map.getLayers().get("overwalls").setOpacity(1f);
+            }
+        }
+    }
+
+    public void updateInteractObjects(ArrayList<CollideObject> cos){
+        CollideObject closest = null;
+        float lowestDistance = Float.MAX_VALUE;
+        for (CollideObject c : cos) {
+            float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitbox());
+            if (dis < lowestDistance) {
+                if (closest!=null){
+                    c.setInteractable(false);
+                }
+                lowestDistance = dis;
+                closest = c;
+            }
+        }
+        interactObject = closest;
+        if (interactObject!=null){
+            if (lowestDistance<32) {
+                interactObject.setInteractable(true);
+            } else {
+                interactObject.setInteractable(false);
             }
         }
     }
@@ -288,7 +326,55 @@ public class Character extends AnimatedSprite {
         batch.draw(tr, position.x, position.y, width, height);
     }
 
+    public void interact(){
+        if (interactObject!=null) {
+            if (interactObject instanceof InventoryObject) {
+                InventoryObject invenObject = (InventoryObject) interactObject;
+                if (!invenObject.isOpened()) {
+                    addToInventory(new Item(Item.ITEMS.get("DaggerStone")));
+                    invenObject.setOpened(true);
+                }
+            } else {
+                if (interactObject.isBreakable()){
+                    SlotType bi = interactObject.getBreakItem();
+                    if (bi.equals(SlotType.NORM)||(bi.equals(SlotType.WEAPON)&&gear[8]!=null)){
+                        interactObject.setVisible(false);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void addToInventory(Item item){
+        for (int i = 0; i<inventory.length; i++){
+            if (inventory[i] == null){
+                inventory[i] = item;
+                return;
+            }
+        }
+    }
+
+    public void swapItemFromInventory(Item mouse, int itemSlot){
+        inventory[itemSlot] = mouse;
+    }
+
+    public void swapItemFromGear(Item mouse, int itemSlot){
+        gear[itemSlot-12] = mouse;
+    }
+
+    public void swapItemFromToolbar(Item mouse, int itemSlot){
+        toolbar[itemSlot-21] = mouse;
+    }
+
     public boolean isPlayer() { return player; }
 
     public Rectangle getHitBox() { return new Rectangle(footBox.x, footBox.y, footBox.width, footBox.height); }
+
+    public Item[] getInventory() {
+        return WizardHelper.concat(inventory, gear);
+    }
+
+    public Item[] getToolbar(){
+        return toolbar;
+    }
 }

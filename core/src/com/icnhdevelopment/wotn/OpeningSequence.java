@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
+import com.icnhdevelopment.wotn.items.Item;
 
 import java.util.ArrayList;
 

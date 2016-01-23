@@ -1,0 +1,12 @@
+NAME:SLOTTYPE:SPECIAL;
+
+Ale:NORM:false;
+AmEmerald:AMULET:true;
+BootsIron:FEET:true;
+ChestIron:CHEST:true;
+DaggerStone:WEAPON:true;
+HelmIron:HEAD:true;
+LegsIron:LEGS:true;
+RingGold:RING:true;
+RingSilver:RING:true;
+SwordStone:WEAPON:true;

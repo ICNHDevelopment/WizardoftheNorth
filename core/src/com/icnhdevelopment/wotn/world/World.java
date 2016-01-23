@@ -24,6 +24,7 @@ import com.icnhdevelopment.wotn.gui.special.Inventory;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.gui.special.Toolbar;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
@@ -42,7 +43,6 @@ public class World {
     Character mainCharacter;
     public static int TileWidth, TileHeight;
     String fileLocation;
-    Sound backMusic;
 
     public static int TICK = 0;
 
@@ -100,6 +100,8 @@ public class World {
         multiDSprites.add(mainCharacter);
 
         toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
+        toolbar.setVisible(true);
+        toolbar.setCharacter(mainCharacter);
         inventory = new Inventory("ui/inventory/Inventory.png");
         inventory.createFont();
         inventory.setVisible(false);
@@ -118,6 +120,7 @@ public class World {
     void initMap(TiledMap m){
         loadWalls(m);
         loadCollideObjects(m);
+        loadInventoryObjects(m);
         loadSpawners(m);
         loadAnimatedSprites(m);
         loadOverwallRecs(m);
@@ -193,16 +196,18 @@ public class World {
         for (MapObject obj : objs) {
             String[] data = ((String)obj.getProperties().get("type")).split(":");
             String name = data[0];
-            boolean brk = Boolean.valueOf(data[1]);
-            SlotType slt = SlotType.valueOf(data[2]);
+            String flnm = data[1];
+            boolean brk = Boolean.valueOf(data[2]);
+            SlotType slt = SlotType.valueOf(data[3]);
             float tx = (float) obj.getProperties().get("x");
             float ty = (float) obj.getProperties().get("y");
             float tw = (float) obj.getProperties().get("width");
             float th = (float) obj.getProperties().get("height");
             String file = "world/images/" + name + ".png";
-            CollideObject co = new CollideObject();
-            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt);
+            InventoryObject co = new InventoryObject();
+            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt, name, flnm);
             collideObjects.add(co);
+            inventoryObjects.add(co);
         }
     }
 
@@ -290,6 +295,10 @@ public class World {
                     mainCharacter.animate(false);
                 }
                 mainCharacter.updateWalls(map, overWalls);
+                mainCharacter.updateInteractObjects(collideObjects);
+                if (input.isKeyDown(Input.Keys.F)){
+                    mainCharacter.interact();
+                }
 
                 for (Spawner s : spawners) {
                     if (s.spawn) {
@@ -357,11 +366,12 @@ public class World {
         batch.setProjectionMatrix(inventory.getRenderCam().combined);
         hud.render(batch);
 
-        toolbar.render(batch);
+        batch.setProjectionMatrix(inventory.getRenderCam().combined);
+        toolbar.render(batch, mainCharacter.getToolbar());
 
         if (inventory.isVisible()) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
-            inventory.render(batch);
+            inventory.render(batch, mainCharacter.getInventory());
         }
         if (battleStage>-1){
             batch.setProjectionMatrix(inventory.getRenderCam().combined);

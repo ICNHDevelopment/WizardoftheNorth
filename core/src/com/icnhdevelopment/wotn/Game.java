@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.icnhdevelopment.wotn.gui.Menu;
 import com.icnhdevelopment.wotn.handlers.*;
+import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.awt.*;
@@ -54,6 +55,7 @@ public class Game extends ApplicationAdapter {
 		os = new OpeningSequence();
 		soundHandler = new SoundHandler();
 		soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/titleMusic.wav")));
+		Item.InitItems();
 	}
 
 	@Override

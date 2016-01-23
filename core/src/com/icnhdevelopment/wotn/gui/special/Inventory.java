@@ -12,7 +12,6 @@ import com.icnhdevelopment.wotn.gui.*;
 import com.icnhdevelopment.wotn.handlers.ButtonFuction;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
-import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.players.Character;
 
 import java.util.ArrayList;
@@ -51,33 +50,25 @@ public class Inventory extends Container {
         invenImage = new ImageLabel(this, new Vector2((Game.WIDTH()-textureSize.x)/2, (Game.HEIGHT()-textureSize.y)/2), textureSize, tex);
         invenImage.setImagealignment(Alignment.STRETCHED);
         this.children.add(invenImage);
-        Container button = new Container(invenImage, new Vector2(354, 544), new Vector2(26, 28));
-        button.setFunc(ButtonFuction.VISIBILITY);
-        button.setDesc(this);
-        buttons.add(button);
+        if (!(this instanceof Toolbar)) {
+            Container button = new Container(invenImage, new Vector2(354, 544), new Vector2(26, 28));
+            button.setFunc(ButtonFuction.VISIBILITY);
+            button.setDesc(this);
+            buttons.add(button);
+        }
     }
 
     void loadInventorySlots(){
         //Default
         int startX = 10, startY = 350;
-        for (int i = 0; i<3; i++){
-            for (int j = 0; j<4; j++){
-                Item it = new Item(new Texture("Items/Ale.png"));
-                if (i==0) {
-                    if (j == 0) {
-                        it = new SpecialItem(new Texture("Items/AmEmerald.png"), SlotType.AMULET);
-                    }
-                    if (j == 1) {
-                        it = new SpecialItem(new Texture("Items/ChestIron.png"), SlotType.CHEST);
-                    }
-                }
+        for (int j = 0; j<4; j++){
+            for (int i = 0; i<3; i++){
                 boolean b = false;
                 if (j>1) {
                     b = true;
                 }
-                ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), it.image, b);
+                ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), null, b);
                 is.setHoverImage(new Texture("Items/highlight.png"));
-               // is.item = it;
                 is.setImagealignment(Alignment.STRETCHED);
                 defaultInventory.add(is);
             }
@@ -157,20 +148,31 @@ public class Inventory extends Container {
     }
 
     public void update(CInputProcessor processor){
-        for (ItemSlot is : defaultInventory){
+        for (int i = 0; i<defaultInventory.size(); i++){
+            ItemSlot is = defaultInventory.get(i);
             if (!is.isBlocked) {
                 if (processor.mouseHovered(is.getAbsolutePosition().x, is.getAbsolutePosition().y, is.getSize().x, is.getSize().y)) {
                     is.setHovering(true);
                     if (processor.didMouseClick()) {
                         if (mouseItem != null) {
                             if (mouseItem.getType().equals(is.getSlotType()) || is.getSlotType().equals(SlotType.NORM)) {
-                                Item temp = is.item;
-                                is.item = mouseItem;
+                                Item temp = is.getItem();
+                                if (i<12) {
+                                    character.swapItemFromInventory(mouseItem, i);
+                                } else if (i<21){
+                                    character.swapItemFromGear(mouseItem, i);
+                                } else {
+
+                                }
                                 mouseItem = temp;
                             }
                         } else {
-                            Item temp = is.item;
-                            is.item = mouseItem;
+                            Item temp = is.getItem();
+                            if (i<12) {
+                                character.swapItemFromInventory(mouseItem, i);
+                            } else {
+                                character.swapItemFromGear(mouseItem, i);
+                            }
                             mouseItem = temp;
                         }
                     }
@@ -182,39 +184,45 @@ public class Inventory extends Container {
         mousePosition = processor.getMousePosition();
     }
 
-    public void render(SpriteBatch batch){
+    public void render(SpriteBatch batch, Item[] inven){
         if (visible) {
-            renderBackground(batch);
-            renderChildren(batch);
-            if (character!=null){
-                for (int i = 0; i<statSlots.size(); i++){
-                    String whatToWrite = "Joe";
-                    if (i==0){
-                        whatToWrite = character.getVitality() + "";
-                    }
-                    if (i==1){
-                        whatToWrite = character.getAgility() + "";
-                    }
-                    if (i==2){
-                        whatToWrite = character.getResistance() + "";
-                    }
-                    if (i==3){
-                        whatToWrite = character.getStrength() + "";
-                    }
-                    if (i==4){
-                        whatToWrite = character.getWisdom() + "";
-                    }
+            if (character!=null) {
+                Item[] items = inven;
+                for (int i = 0; i < items.length; i++) {
+                    defaultInventory.get(i).setItem(items[i]);
+                }
+                renderBackground(batch);
+                renderChildren(batch);
+                if (!(this instanceof Toolbar)) {
+                    for (int i = 0; i < statSlots.size(); i++) {
+                        String whatToWrite = "Joe";
+                        if (i == 0) {
+                            whatToWrite = character.getVitality() + "";
+                        }
+                        if (i == 1) {
+                            whatToWrite = character.getAgility() + "";
+                        }
+                        if (i == 2) {
+                            whatToWrite = character.getResistance() + "";
+                        }
+                        if (i == 3) {
+                            whatToWrite = character.getStrength() + "";
+                        }
+                        if (i == 4) {
+                            whatToWrite = character.getWisdom() + "";
+                        }
 
-                    float width = font.getBounds(whatToWrite).width;
+                        float width = font.getBounds(whatToWrite).width;
+                        batch.begin();
+                        font.draw(batch, whatToWrite, statSlots.get(i).x - width, statSlots.get(i).y);
+                        batch.end();
+                    }
+                }
+                if (mouseItem != null) {
                     batch.begin();
-                    font.draw(batch, whatToWrite, statSlots.get(i).x-width, statSlots.get(i).y);
+                    batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
                     batch.end();
                 }
-            }
-            if (mouseItem!=null) {
-                batch.begin();
-                batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
-                batch.end();
             }
         }
     }
