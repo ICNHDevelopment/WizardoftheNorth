@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="102">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="103">
  <tileset firstgid="1" name="Sewer" tilewidth="32" tileheight="32" tilecount="400">
   <image source="Sewer.png" trans="ff00ff" width="640" height="640"/>
  </tileset>
@@ -54,6 +54,9 @@
   <object id="94" x="739.115" y="654.068" width="28.7463" height="113.827"/>
   <object id="95" x="731.694" y="739.614" width="33.9008" height="28.3319"/>
   <object id="96" x="713.68" y="763.989" width="22.7344" height="64.0311"/>
+ </objectgroup>
+ <objectgroup name="inventories">
+  <object id="102" name="Crate" type="Crate:crate1:false:NORM" x="480" y="724" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="collideObjs">
   <object id="98" name="Web" type="Web:true:WEAPON" x="640" y="800" width="32" height="64"/>
