@@ -26,6 +26,7 @@ public class Character extends AnimatedSprite {
     boolean player;
     boolean isTransitioningLayer = false;
     boolean hasRandomMovement = false, isMovingRandomly = true;
+    private String name;
 
     final int SPEED = 2;
     final Random RAN = new Random();
@@ -65,6 +66,7 @@ public class Character extends AnimatedSprite {
         this.directionalMovement = direcMove;
         if (player){
             stats = new CharacterStats(1, 35, 90, 30, 55, 50);
+            name = "You";
         }
     }
 
@@ -77,6 +79,7 @@ public class Character extends AnimatedSprite {
         direction = 0;
         footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
         this.stats = stats;
+        name = this.getClass().getSimpleName();
     }
 
     public void moveByHitBoxToPosition(Vector2 position){
@@ -337,5 +340,9 @@ public class Character extends AnimatedSprite {
 
     public Item[] getToolbar(){
         return toolbar;
+    }
+
+    public String getName() {
+        return name;
     }
 }
