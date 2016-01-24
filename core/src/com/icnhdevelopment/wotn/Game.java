@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.gui.Menu;
 import com.icnhdevelopment.wotn.handlers.*;
 import com.icnhdevelopment.wotn.items.Item;
@@ -17,6 +18,7 @@ public class Game extends ApplicationAdapter {
 	CInputProcessor inputProcessor;
 	static Menu currentMenu;
 	public static World currentWorld;
+	public static Battle currentBattle;
 	public static OpeningSequence os;
 	public static Game game;
 	public static GameState GAME_STATE;
@@ -51,6 +53,7 @@ public class Game extends ApplicationAdapter {
 		currentMenu = new Menu();
 		currentMenu.init("ui/Menus/MNUMain.txt");
 		currentWorld = new World();
+		currentBattle = new Battle();
 		mouseCursor = new Texture("ui/cursor.png");
 		os = new OpeningSequence();
 		soundHandler = new SoundHandler();
@@ -74,6 +77,9 @@ public class Game extends ApplicationAdapter {
 		} else if (GAME_STATE.equals(GameState.WORLD)){
 			currentWorld.update(inputProcessor);
 			currentWorld.render(batch);
+		} else if (GAME_STATE.equals(GameState.BATTLE)){
+			currentBattle.update(inputProcessor);
+			currentBattle.render(batch);
 		}
 		inputProcessor.update();
 

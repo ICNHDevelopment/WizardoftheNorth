@@ -147,7 +147,7 @@ public class OpeningSequence {
             }
             if (holdStart > 0) {
                 font.draw(batch, "Skip", 2, (4 + fontSize));
-                Rectangle skipBar = new Rectangle(2, (6 + fontSize), font.getBounds("Skip").width, 8);
+                Rectangle skipBar = new Rectangle(2, (10 + fontSize), font.getBounds("Skip").width, 8);
                 Texture bar = new Texture("ui/hud/ExperienceMeter.png");
                 Color c = batch.getColor();
                 Color b = Color.GRAY;

@@ -165,7 +165,7 @@ public class Character extends AnimatedSprite {
             }
         }
         for (CollideObject c : cols){
-            if (c.isVisible() && r.overlaps(c.getHitbox())){
+            if (c.isVisible() && r.overlaps(c.getHitBox())){
                 return false;
             }
         }
@@ -198,7 +198,7 @@ public class Character extends AnimatedSprite {
         CollideObject closest = null;
         float lowestDistance = Float.MAX_VALUE;
         for (CollideObject c : cos) {
-            float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitbox());
+            float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitBox());
             if (dis < lowestDistance) {
                 if (closest!=null){
                     c.setInteractable(false);
@@ -331,7 +331,10 @@ public class Character extends AnimatedSprite {
             if (interactObject instanceof InventoryObject) {
                 InventoryObject invenObject = (InventoryObject) interactObject;
                 if (!invenObject.isOpened()) {
-                    addToInventory(new Item(Item.ITEMS.get("DaggerStone")));
+                    ArrayList<Item> its = invenObject.getItems();
+                    for (Item i : its){
+                        addToInventory(new Item(i));
+                    }
                     invenObject.setOpened(true);
                 }
             } else {

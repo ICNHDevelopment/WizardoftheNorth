@@ -27,5 +27,5 @@ public class Sprite {
 
     public Vector2 getPosition() { return position; }
     public Vector2 getSize() { return new Vector2(width, height); }
-    public Rectangle getHitbox() { return new Rectangle(position.x, position.y, width, height); }
+    public Rectangle getHitBox() { return new Rectangle(position.x, position.y, width, height); }
 }

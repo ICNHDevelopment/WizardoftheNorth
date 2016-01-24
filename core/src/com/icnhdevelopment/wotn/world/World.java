@@ -19,11 +19,13 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.battle.BattleInfo;
 import com.icnhdevelopment.wotn.gui.special.Hud;
 import com.icnhdevelopment.wotn.gui.special.Inventory;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.gui.special.Toolbar;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
@@ -89,7 +91,6 @@ public class World {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (int)(Game.WIDTH()/SCALE), (int)(Game.HEIGHT()/SCALE));
-        //camera.translate(0, (mapProperties.get("height", Integer.class)*mapProperties.get("tileheight", Integer.class)) - (Game.HEIGHT() / SCALE));
         camera.position.x = (mapProperties.get("width", Integer.class)*TileWidth/2);
         camera.position.y = (mapProperties.get("height", Integer.class)*TileHeight) - (Game.HEIGHT());
         camera.update();
@@ -205,7 +206,7 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             String file = "world/images/" + name + ".png";
             InventoryObject co = new InventoryObject();
-            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt, name, flnm);
+            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt, name, fileLocation + flnm);
             collideObjects.add(co);
             inventoryObjects.add(co);
         }
@@ -269,6 +270,10 @@ public class World {
                 }
                 TICK++;
                 if (battleStage == 7) {
+                    BattleInfo bi = new BattleInfo();
+                    bi.setBackFile(fileLocation + "BattleScene.png");
+                    Game.currentBattle.create(bi);
+                    Game.GAME_STATE = GameState.BATTLE;
                     if (input.isKeyDown(Input.Keys.ESCAPE)) {
                         changeToBattle = false;
                     }
@@ -307,6 +312,7 @@ public class World {
                     }
                 }
                 sortMultiDSprites();
+                testForBattle();
 
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
@@ -325,12 +331,20 @@ public class World {
         while (madeChange){
             madeChange = false;
             for (int i = 0; i<multiDSprites.size()-1; i++){
-                if (multiDSprites.get(i).getHitbox().y<multiDSprites.get(i+1).getHitbox().y){
+                if (multiDSprites.get(i).getHitBox().y<multiDSprites.get(i+1).getHitBox().y){
                     Sprite s = multiDSprites.get(i);
                     multiDSprites.set(i, multiDSprites.get(i+1));
                     multiDSprites.set(i+1, s);
                     madeChange = true;
                 }
+            }
+        }
+    }
+
+    void testForBattle(){
+        for (Monster m : enemies){
+            if (m.getHitBox().overlaps(mainCharacter.getHitBox())){
+                changeToBattle = true;
             }
         }
     }
@@ -342,9 +356,6 @@ public class World {
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
         mapRenderer.render(new int[]{0});
-        if (map.getLayers().get(1).getOpacity()==1) {
-            mapRenderer.render(new int[]{1});
-        }
         batch.begin();
         for (CollideObject c : collideObjects){
             c.render(batch);
@@ -355,13 +366,18 @@ public class World {
         for (Sprite s : items){
             s.render(batch);
         }
+        batch.end();
+        if (map.getLayers().get(1).getOpacity()<1) {
+            mapRenderer.render(new int[]{1});
+        } else if (map.getLayers().get(1).getOpacity()==1) {
+            mapRenderer.render(new int[]{1});
+        }
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         for (Sprite m : multiDSprites){
             m.render(batch);
         }
         batch.end();
-        if (map.getLayers().get(1).getOpacity()<1) {
-            mapRenderer.render(new int[]{1});
-        }
 
         batch.setProjectionMatrix(inventory.getRenderCam().combined);
         hud.render(batch);
