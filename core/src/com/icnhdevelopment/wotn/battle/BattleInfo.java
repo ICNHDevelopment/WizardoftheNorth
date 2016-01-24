@@ -30,7 +30,7 @@ public class BattleInfo {
         protSide.add(ch1);
         if (ch2 instanceof Monster){
             Monster monster = (Monster)ch2;
-            String[] monstas = Gdx.files.internal(monster.battleDataFile).readString().replace("\n", "").split(";");
+            String[] monstas = Gdx.files.internal(monster.battleDataFile).readString().replace("\n", "").replace("\r", "").split(";");
             for (int i = 1; i<monstas.length; i++){
                 String[] data = monstas[i].split(":");
                 String type = data[0];
