@@ -11,6 +11,7 @@ import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.players.Character;
+import com.icnhdevelopment.wotn.world.World;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,9 @@ public class Battle {
     Texture background;
     String state = "fadein";
     int battleStage = 7;
+    Vector2 charPos;
+    Character enemy;
+    World world;
 
     int TICK = 1;
     int SCALE = 3;
@@ -32,12 +36,16 @@ public class Battle {
     ArrayList<Character> protSide;
     ArrayList<Character> antSide;
     ArrayList<Character> fightOrder;
+    int whoseturn = 0;
 
     public void create(BattleInfo battleInfo){
         background = new Texture(battleInfo.getBackFile());
         battleTransition = battleInfo.battleTex;
         protSide = battleInfo.getProtSide();
         antSide = battleInfo.getAntSide();
+        charPos = battleInfo.getCharacterWorldPosition();
+        enemy = battleInfo.getEnemy();
+        world = battleInfo.getWorld();
         loadPositions();
         setPositions();
         setBattleOrder();
@@ -104,8 +112,13 @@ public class Battle {
             }
             TICK++;
             if (battleStage == 0 && TICK % 9 == 8) {
-                state = "";
-                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.wav")), .1f);
+                state = "fight";
+            }
+        } else if (state.equals("fight")){
+            if (input.isKeyDown(Input.Keys.ESCAPE)){
+                protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
+                world.kill(enemy);
+                Game.GAME_STATE = GameState.WORLD;
             }
         }
     }

@@ -7,15 +7,12 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.icnhdevelopment.wotn.Game;
-import com.icnhdevelopment.wotn.gui.special.Inventory;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.handlers.WizardHelper;
 import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.world.CollideObject;
 import com.icnhdevelopment.wotn.world.InventoryObject;
 import com.icnhdevelopment.wotn.world.World;
-import com.sun.tools.javac.util.ArrayUtils;
 
 import java.util.*;
 
@@ -83,19 +80,19 @@ public class Character extends AnimatedSprite {
     }
 
     public void moveByHitBoxToPosition(Vector2 position){
-        this.position.y = position.y - height*.15f;
-        this.position.x = position.x - width*.15f/2;
-        Rectangle nextFoot = new Rectangle(this.position.x+width*.15f, this.position.y, width*.7f, height*.15f);
+        this.getPosition().y = position.y - height*.15f;
+        this.getPosition().x = position.x - width*.15f/2;
+        Rectangle nextFoot = new Rectangle(this.getPosition().x+width*.15f, this.getPosition().y, width*.7f, height*.15f);
     }
 
     public void move(Vector2 amount, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols){
         animate(true);
-        Rectangle next = new Rectangle(position.x + amount.x*SPEED, position.y + amount.y*SPEED, width, height);
+        Rectangle next = new Rectangle(getPosition().x + amount.x*SPEED, getPosition().y + amount.y*SPEED, width, height);
         Rectangle nextFoot = new Rectangle(next.x+width*.15f, next.y, width*.7f, height*.15f);
         if (canMove(nextFoot, walls, cols)) {
             footBox = nextFoot;
-            position.x += amount.x * SPEED;
-            position.y += amount.y * SPEED;
+            getPosition().x += amount.x * SPEED;
+            getPosition().y += amount.y * SPEED;
             if (directionalMovement) {
                 if (amount.y == 0) {
                     if (amount.x > 0) {
@@ -235,7 +232,7 @@ public class Character extends AnimatedSprite {
         int DistanceNeeded = SPEED*maxFrames;
         for (int i = -1; i<=1; i++){
             for (int j = -1; j<=1; j++){
-                Rectangle next = new Rectangle(position.x + i*DistanceNeeded, position.y + j*DistanceNeeded, width, height);
+                Rectangle next = new Rectangle(getPosition().x + i*DistanceNeeded, getPosition().y + j*DistanceNeeded, width, height);
                 Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
                 if (canMove(nextFoot, w, cols)&&!(i==0&&j==0)){
                     int retI = i, retJ = j;
@@ -273,12 +270,12 @@ public class Character extends AnimatedSprite {
 
     public void render(SpriteBatch batch){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
-        batch.draw(tr, position.x, position.y, width, height);
+        batch.draw(tr, getPosition().x, getPosition().y, width, height);
     }
 
     public void render(SpriteBatch batch, float scale){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
-        batch.draw(tr, position.x-(width*(scale-1)/2), position.y, width*scale, height*scale);
+        batch.draw(tr, getPosition().x-(width*(scale-1)/2), getPosition().y, width*scale, height*scale);
     }
 
     public void interact(){
@@ -291,7 +288,7 @@ public class Character extends AnimatedSprite {
                         addToInventory(new Item(i));
                     }
                     invenObject.setOpened(true);
-                    //Game.soundHandler.PlaySound(Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")));
+                    Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")).play();
                 }
             } else {
                 if (interactObject.isBreakable()){
@@ -326,6 +323,11 @@ public class Character extends AnimatedSprite {
     }
 
     public boolean isPlayer() { return player; }
+
+    public void setPosition(Vector2 position) {
+        super.setPosition(position);
+        footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
+    }
 
     public Rectangle getHitBox() { return new Rectangle(footBox.x, footBox.y, footBox.width, footBox.height); }
 

@@ -263,6 +263,15 @@ public class World {
         m.setRandomMovementTimer(walls, collideObjects, this);
     }
 
+    public void kill(Character c){
+        if (enemies.contains(c)){
+            enemies.remove(c);
+        }
+        if (multiDSprites.contains(c)){
+            multiDSprites.remove(c);
+        }
+    }
+
     void smoothRecs(ArrayList<Rectangle> recs){
         for (int i =0; i<recs.size(); i++){
             Rectangle r = recs.get(i);
@@ -290,11 +299,15 @@ public class World {
                     BattleInfo bi = new BattleInfo(mainCharacter, battleChar);
                     bi.setBackFile(fileLocation + "BattleScene.png");
                     bi.setBattleTex(battleTransition);
+                    bi.setWorld(this);
+                    bi.setCharacterWorldPosition(new Vector2(mainCharacter.getPosition().x, mainCharacter.getPosition().y));
+                    bi.setEnemy(battleChar);
+                    changeToBattle = false;
+                    battleStage = -1;
+                    state = "fadein";
+                    alpha = 1;
                     Game.currentBattle.create(bi);
                     Game.GAME_STATE = GameState.BATTLE;
-                    if (input.isKeyDown(Input.Keys.ESCAPE)) {
-                        changeToBattle = false;
-                    }
                 }
             } else if (inventory.isVisible()) {
                 inventory.update(input);
@@ -303,6 +316,7 @@ public class World {
                     inventory.setVisible(false);
                 }
             } else {
+                battleChar = null;
                 if (battleStage > -1 && TICK % 9 == 0) {
                     battleStage--;
                 }
@@ -364,6 +378,7 @@ public class World {
             if (m.getHitBox().overlaps(mainCharacter.getHitBox())){
                 changeToBattle = true;
                 battleChar = m;
+                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.wav")), .1f);
                 return;
             }
         }

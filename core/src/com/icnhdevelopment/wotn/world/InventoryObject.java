@@ -37,7 +37,7 @@ public class InventoryObject extends CollideObject {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(currentImage, position.x, position.y, width, height);
+        batch.draw(currentImage, getPosition().x, getPosition().y, width, height);
     }
 
     public boolean isOpened() {

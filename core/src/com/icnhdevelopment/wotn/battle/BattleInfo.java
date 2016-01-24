@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.players.CharacterStats;
 import com.icnhdevelopment.wotn.players.Monster;
+import com.icnhdevelopment.wotn.world.World;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,10 @@ public class BattleInfo {
     String backFile;
     ArrayList<Character> protSide;
     ArrayList<Character> antSide;
+
+    World world;
+    Vector2 characterWorldPosition;
+    Character enemy;
 
     public BattleInfo(Character ch1, Character ch2){
         protSide = new ArrayList<>();
@@ -67,5 +72,29 @@ public class BattleInfo {
 
     public ArrayList<Character> getAntSide() {
         return antSide;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public Vector2 getCharacterWorldPosition() {
+        return characterWorldPosition;
+    }
+
+    public void setCharacterWorldPosition(Vector2 characterWorldPosition) {
+        this.characterWorldPosition = characterWorldPosition;
+    }
+
+    public Character getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(Character enemy) {
+        this.enemy = enemy;
     }
 }

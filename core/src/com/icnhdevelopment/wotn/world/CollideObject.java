@@ -40,7 +40,7 @@ public class CollideObject extends Sprite {
 
     public void render(SpriteBatch batch){
         if (visible) {
-            batch.draw(texture, position.x, position.y, width, height);
+            batch.draw(texture, getPosition().x, getPosition().y, width, height);
         }
     }
 

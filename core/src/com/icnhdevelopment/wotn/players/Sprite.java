@@ -16,16 +16,20 @@ public class Sprite {
 
     public void create(String filename, Vector2 position, Vector2 size){
         texture = new Texture(filename);
-        this.position = position;
+        this.setPosition(position);
         width = (int)size.x;
         height = (int)size.y;
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(texture, position.x, position.y, width, height);
+        batch.draw(texture, getPosition().x, getPosition().y, width, height);
     }
 
     public Vector2 getPosition() { return position; }
     public Vector2 getSize() { return new Vector2(width, height); }
-    public Rectangle getHitBox() { return new Rectangle(position.x, position.y, width, height); }
+    public Rectangle getHitBox() { return new Rectangle(getPosition().x, getPosition().y, width, height); }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
 }

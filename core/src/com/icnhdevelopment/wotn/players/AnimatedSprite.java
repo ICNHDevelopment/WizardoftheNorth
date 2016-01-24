@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.Date;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,7 +52,7 @@ public class AnimatedSprite extends Sprite {
 
     public void render(SpriteBatch batch){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[0][frame];
-        batch.draw(tr, position.x, position.y, width, height);
+        batch.draw(tr, getPosition().x, getPosition().y, width, height);
     }
 
     public boolean isAnimating() { return animating; }
