@@ -15,7 +15,7 @@ public class Item {
 
     public static void InitItems(){
         ITEMS = new HashMap<>();
-        String[] items = Gdx.files.internal("Items/Items.txt").readString().replace("\n", "").split(";");
+        String[] items = Gdx.files.internal("Items/Items.txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 1; i<items.length; i++){
             String t = items[i];
             String[] data = t.split(":");
