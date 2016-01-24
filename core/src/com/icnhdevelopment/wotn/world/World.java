@@ -61,17 +61,16 @@ public class World {
     Toolbar toolbar;
     Inventory inventory;
     Hud hud;
-    boolean showInventory = false;
-    boolean changeToBattle = false;
+    public boolean changeToBattle = false;
 
     Texture battleTransition;
     int battleStage = -1;
+    Character battleChar;
 
     String state = "fadein";
     float alpha = 1f;
 
     public void create(String filename){
-        Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
         fileLocation = filename.substring(0, filename.lastIndexOf("/")+1);
         enemies = new ArrayList<>();
         spawners = new ArrayList<>();
@@ -123,6 +122,7 @@ public class World {
         loadCollideObjects(m);
         loadInventoryObjects(m);
         loadSpawners(m);
+        loadPreSpawns(m);
         loadAnimatedSprites(m);
         loadOverwallRecs(m);
         loadItems(m);
@@ -151,6 +151,22 @@ public class World {
             Spawner s = new Spawner(Monster.getMonster(type), this, new Vector2(tx, ty));
             spawners.add(s);
             s.start();
+        }
+    }
+
+    void loadPreSpawns(TiledMap m){
+        MapLayer layer = m.getLayers().get("preSpawns");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs){
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String type = data[0];
+            String battleDataFile = data[1];
+            float tx = (float)obj.getProperties().get("x");
+            float ty = (float)obj.getProperties().get("y");
+            Monster mon = Monster.getMonster(type);
+            mon.battleDataFile = fileLocation + battleDataFile + ".txt";
+            mon.create(mon.defaultFile, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
+            this.spawn(mon);
         }
     }
 
@@ -244,7 +260,7 @@ public class World {
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
-        m.setRandomMovementTimer(walls, collideObjects);
+        m.setRandomMovementTimer(walls, collideObjects, this);
     }
 
     void smoothRecs(ArrayList<Rectangle> recs){
@@ -262,6 +278,7 @@ public class World {
             alpha -= .02f;
             if (alpha<=0){
                 state="";
+                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
             }
         }else {
             if (changeToBattle) {
@@ -269,9 +286,10 @@ public class World {
                     battleStage++;
                 }
                 TICK++;
-                if (battleStage == 7) {
-                    BattleInfo bi = new BattleInfo();
+                if (battleStage == 7 && TICK%9==8) {
+                    BattleInfo bi = new BattleInfo(mainCharacter, battleChar);
                     bi.setBackFile(fileLocation + "BattleScene.png");
+                    bi.setBattleTex(battleTransition);
                     Game.currentBattle.create(bi);
                     Game.GAME_STATE = GameState.BATTLE;
                     if (input.isKeyDown(Input.Keys.ESCAPE)) {
@@ -345,6 +363,8 @@ public class World {
         for (Monster m : enemies){
             if (m.getHitBox().overlaps(mainCharacter.getHitBox())){
                 changeToBattle = true;
+                battleChar = m;
+                return;
             }
         }
     }
@@ -398,6 +418,7 @@ public class World {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
             mainCharacter.render(batch);
+            battleChar.render(batch);
             batch.end();
         }
         if (state.equals("fadein")){

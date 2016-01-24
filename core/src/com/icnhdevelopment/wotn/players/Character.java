@@ -1,11 +1,13 @@
 package com.icnhdevelopment.wotn.players;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.special.Inventory;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.handlers.WizardHelper;
@@ -23,7 +25,6 @@ import java.util.*;
 public class Character extends AnimatedSprite {
 
     int direction;
-    Vector2 tilePosition;
     Rectangle footBox;
     boolean player;
     boolean isTransitioningLayer = false;
@@ -38,57 +39,19 @@ public class Character extends AnimatedSprite {
 
     CollideObject interactObject;
 
-    //Skills
-    int level;
-    public int getLevel(){ return level; }
-
-    float CurrentExperience;
-    public float getCurrentExperience(){ return CurrentExperience; }
-    float NextLevelExp;
-    float CurrLevelExp;
+    CharacterStats stats;
+    public int getLevel(){ return stats.getLevel(); }
+    public float getCurrentExperience(){ return stats.getCurrentExperience(); }
     public float getRequiredExperience(){
-        return NextLevelExp-CurrLevelExp;
+        return stats.getRequiredExperience();
     }
-
-    float CurrentVitality;
-    public float getCurrentVitality(){ return CurrentVitality; }
-    int BaseVitality;
-    int IvVitality;
-    public int getVitality(){
-        double result = level + 10 + ((((BaseVitality+IvVitality)*2)*level)/100);
-        return (int)Math.floor(result);
-    }
-
-    int BaseAgility;
-    int IvAgility;
-    public int getAgility(){
-        double result = 5 + (((BaseAgility+IvAgility)*2)*level)/100;
-        return (int)Math.floor(result);
-    }
-
-    int BaseResistance;
-    int IvResistance;
-    public int getResistance(){
-        double result = 5 + (((BaseResistance+IvResistance)*2)*level)/100;
-        return (int)Math.floor(result);
-    }
-
-    int BaseStrength;
-    int IvStrength;
-    public int getStrength(){
-        double result = 5 + (((BaseStrength+IvStrength)*2)*level)/100;
-        return (int)Math.floor(result);
-    }
-
-    float CurrentWisdom;
-    public float getCurrentWisdom(){ return CurrentWisdom; }
-    int BaseWisdom;
-    int IvWisdom;
-    public int getWisdom(){
-        double result = 5 + (((BaseWisdom+IvWisdom)*2)*level)/100;
-        return (int)Math.floor(result);
-    }
-    //EndSkills
+    public float getCurrentVitality(){ return stats.getCurrentVitality(); }
+    public int getVitality(){ return stats.getVitality(); }
+    public int getAgility(){ return stats.getAgility(); }
+    public int getResistance(){ return stats.getResistance(); }
+    public int getStrength(){ return stats.getStrength(); }
+    public float getCurrentWisdom(){ return stats.getCurrentWisdom(); }
+    public int getWisdom(){ return stats.getWisdom(); }
 
     public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);
@@ -104,44 +67,31 @@ public class Character extends AnimatedSprite {
         this.player = player;
         this.directionalMovement = direcMove;
         if (player){
-            level = 1;
-            BaseVitality = 35;
-            IvVitality = 10;
-            CurrentVitality = getVitality();
-            BaseAgility = 90;
-            IvAgility = 10;
-            BaseWisdom = 50;
-            IvWisdom = 10;
-            CurrentWisdom = getWisdom();
-            BaseStrength = 55;
-            IvStrength = 10;
-            BaseResistance = 30;
-            IvResistance = 10;
-            CurrentExperience = 0;
-            NextLevelExp = CalculateLevelExp(level+1);
-            CurrLevelExp = CalculateLevelExp(level);
+            stats = new CharacterStats(1, 35, 90, 30, 55, 50);
         }
     }
 
-    float CalculateLevelExp(int currentLevel){
-        float nCube = (float)Math.pow((double)currentLevel, 3.0);
-        float returnVal;
-        if (currentLevel<=15){
-            returnVal = ((((currentLevel+1)/3.0f)+24)/50.0f)*nCube;
-        }
-        else if (currentLevel<=36){
-            returnVal = (((currentLevel)+14)/50.0f)*nCube;
-        }
-        else {
-            returnVal = ((((currentLevel)/2.0f)+32)/50.0f)*nCube;
-        }
-        return (float)Math.floor(returnVal);
+    public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean direcMove, CharacterStats stats) {
+        super.create(filename, maxFrames, position, new Vector2(), animSpeed);
+        regHeight = texture.getHeight()/2;
+        width = (int)(regWidth);//*World.SCALE);
+        height = (int)(regHeight);//* World.SCALE);
+        frame = 0;
+        direction = 0;
+        footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
+        this.stats = stats;
+    }
+
+    public void moveByHitBoxToPosition(Vector2 position){
+        this.position.y = position.y - height*.15f;
+        this.position.x = position.x - width*.15f/2;
+        Rectangle nextFoot = new Rectangle(this.position.x+width*.15f, this.position.y, width*.7f, height*.15f);
     }
 
     public void move(Vector2 amount, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols){
         animate(true);
         Rectangle next = new Rectangle(position.x + amount.x*SPEED, position.y + amount.y*SPEED, width, height);
-        Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
+        Rectangle nextFoot = new Rectangle(next.x+width*.15f, next.y, width*.7f, height*.15f);
         if (canMove(nextFoot, walls, cols)) {
             footBox = nextFoot;
             position.x += amount.x * SPEED;
@@ -234,7 +184,7 @@ public class Character extends AnimatedSprite {
         }, new Date(), 1);
     }
 
-    public void setRandomMovementTimer(ArrayList<Rectangle> w, ArrayList<CollideObject> cols){
+    public void setRandomMovementTimer(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, World world){
         final ArrayList<Rectangle> walls = w;
 
         final Thread movementThread = new Thread(){
@@ -245,7 +195,7 @@ public class Character extends AnimatedSprite {
                     long delay = (long) (1000 * (2 + RAN.nextDouble() * 2));
                     try {
                         Thread.sleep(delay);
-                        moveRandomly(walls, cols);
+                        moveRandomly(walls, cols, world);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         running = false;
@@ -257,7 +207,7 @@ public class Character extends AnimatedSprite {
         movementThread.start();
     }
 
-    void moveRandomly(ArrayList<Rectangle> w, ArrayList<CollideObject> cols){
+    void moveRandomly(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, World world){
         if (isMovingRandomly){
             Random r = new Random();
             ArrayList<Vector2> direcs = getMoveDirections(w, cols);
@@ -265,7 +215,7 @@ public class Character extends AnimatedSprite {
                 Vector2 avail = direcs.get(r.nextInt(direcs.size()));
                 int xDir = (int)avail.x, yDir = (int)avail.y;
                 animating = true;
-                while (animating) {
+                while (animating&&!world.changeToBattle) {
                     move(new Vector2(xDir, yDir), w, cols);
                     try {
                         Thread.sleep(20);
@@ -326,6 +276,11 @@ public class Character extends AnimatedSprite {
         batch.draw(tr, position.x, position.y, width, height);
     }
 
+    public void render(SpriteBatch batch, float scale){
+        TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
+        batch.draw(tr, position.x-(width*(scale-1)/2), position.y, width*scale, height*scale);
+    }
+
     public void interact(){
         if (interactObject!=null) {
             if (interactObject instanceof InventoryObject) {
@@ -336,6 +291,7 @@ public class Character extends AnimatedSprite {
                         addToInventory(new Item(i));
                     }
                     invenObject.setOpened(true);
+                    //Game.soundHandler.PlaySound(Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")));
                 }
             } else {
                 if (interactObject.isBreakable()){
