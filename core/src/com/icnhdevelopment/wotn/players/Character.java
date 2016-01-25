@@ -14,6 +14,7 @@ import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.world.CollideObject;
 import com.icnhdevelopment.wotn.world.InventoryObject;
 import com.icnhdevelopment.wotn.world.World;
+import sun.plugin.dom.core.Text;
 
 import java.util.*;
 
@@ -330,6 +331,10 @@ public class Character extends AnimatedSprite {
     public void render(SpriteBatch batch, float scale){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
         batch.draw(tr, getPosition().x-(width*(scale-1)/2), getPosition().y, width*scale, height*scale);
+    }
+
+    public TextureRegion getImage(){
+        return TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
     }
 
     public void interact(){

@@ -35,6 +35,10 @@ public class Battle {
     Texture vitBar, wisBar;
     Random randomGenerator;
     boolean showOptions = false;
+    Texture orderBack;
+    Texture orderOver;
+    Rectangle orderContainerRec;
+    float orderWidth = 70, orderSpace = 5;
 
     int TICK = 1;
     int SCALE = 3;
@@ -54,6 +58,8 @@ public class Battle {
         font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
         vitBar = new Texture("ui/hud/VitalityMeter.png");
         wisBar = new Texture("ui/hud/WisdomMeter.png");
+        orderBack = new Texture("ui/battle/orderUnderlay.png");
+        orderOver = new Texture("ui/battle/orderOverlay.png");
         randomGenerator = new Random(System.currentTimeMillis());
         background = new Texture(battleInfo.getBackFile());
         battleTransition = battleInfo.battleTex;
@@ -69,6 +75,8 @@ public class Battle {
         characterData = new ArrayList<>();
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
+
+        orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
 
     void loadPositions(){
@@ -163,8 +171,15 @@ public class Battle {
         batch.begin();
         batch.draw(background, 0, 0, Game.WIDTH(), Game.HEIGHT());
 
-        for (Character c : fightOrder){
+        for (int i = 0; i<fightOrder.size(); i++){
+            Character c = fightOrder.get(i);
             c.render(batch, SCALE);
+            Rectangle orderSpot = new Rectangle(orderContainerRec.x + orderWidth*i+orderSpace*i, orderContainerRec.y, orderWidth, orderWidth);
+            batch.draw(orderBack, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
+            batch.draw(c.getImage(), orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
+            if (i==whoseturn) {
+                batch.draw(orderOver, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
+            }
         }
 
         for (CharacterData cd : characterData){
