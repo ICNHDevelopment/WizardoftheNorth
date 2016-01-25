@@ -339,7 +339,11 @@ public class Character extends AnimatedSprite {
                 if (!invenObject.isOpened()) {
                     ArrayList<Item> its = invenObject.getItems();
                     for (Item i : its){
-                        addToInventory(new Item(i));
+                        if (i instanceof SpecialItem){
+                            addToInventory(new SpecialItem((SpecialItem)i));
+                        } else {
+                            addToInventory(new Item(i));
+                        }
                     }
                     invenObject.setOpened(true);
                     Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")).play();

@@ -35,19 +35,39 @@ public class SpecialItem extends Item {
         ArrayList<String> r = new ArrayList<>();
         r.add(name);
         if (VitalityBonus!=0){
-            r.add(VitalityBonus+" Vitality");
+            String add = "";
+            if (VitalityBonus>0){
+                add = "+";
+            }
+            r.add(add + VitalityBonus+" Vitality");
         }
         if (AgilityBonus!=0){
-            r.add(AgilityBonus+" Agility");
+            String add = "";
+            if (AgilityBonus>0){
+                add = "+";
+            }
+            r.add(add + AgilityBonus+" Agility");
         }
         if (ResistanceBonus!=0){
-            r.add(ResistanceBonus+" Resistance");
+            String add = "";
+            if (ResistanceBonus>0){
+                add = "+";
+            }
+            r.add(add + ResistanceBonus+" Resistance");
         }
         if (StrengthBonus!=0){
-            r.add(StrengthBonus+" Strength");
+            String add = "";
+            if (StrengthBonus>0){
+                add = "+";
+            }
+            r.add(add + StrengthBonus+" Strength");
         }
         if (WisdomBonus!=0){
-            r.add(WisdomBonus+" Wisdom");
+            String add = "";
+            if (WisdomBonus>0){
+                add = "+";
+            }
+            r.add(add + WisdomBonus+" Wisdom");
         }
         return r;
     }

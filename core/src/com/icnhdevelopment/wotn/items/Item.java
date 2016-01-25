@@ -13,9 +13,11 @@ import java.util.HashMap;
 public class Item {
 
     public static HashMap<String, Item> ITEMS;
+    public static HashMap<String, SpecialItem> SPECIAL_ITEMS;
 
     public static void InitItems(){
         ITEMS = new HashMap<>();
+        SPECIAL_ITEMS = new HashMap<>();
         String[] items = Gdx.files.internal("Items/Items.txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 1; i<items.length; i++){
             String t = items[i];
@@ -33,7 +35,7 @@ public class Item {
                 si.ResistanceBonus = Integer.valueOf(data[6]);
                 si.StrengthBonus = Integer.valueOf(data[7]);
                 si.WisdomBonus = Integer.valueOf(data[8]);
-                ITEMS.put(k, si);
+                SPECIAL_ITEMS.put(k, si);
             }else {
                 Item it = new Item(tex);
                 it.name = name;

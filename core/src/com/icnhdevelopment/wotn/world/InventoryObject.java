@@ -29,11 +29,12 @@ public class InventoryObject extends CollideObject {
         this.items = new ArrayList<>();
         String[] items = Gdx.files.internal(invenFile + ".txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 0; i<items.length; i++){
-            Item it = Item.ITEMS.get(items[i]);
-            if (it instanceof SpecialItem){
-                this.items.add(new SpecialItem((SpecialItem)it));
-            } else {
+            if (Item.ITEMS.containsKey(items[i])){
+                Item it = Item.ITEMS.get(items[i]);
                 this.items.add(new Item(it));
+            } else if (Item.SPECIAL_ITEMS.containsKey(items[i])){
+                SpecialItem it = Item.SPECIAL_ITEMS.get(items[i]);
+                this.items.add(it);
             }
         }
         currentImage = this.texture;

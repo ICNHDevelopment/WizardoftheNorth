@@ -81,7 +81,7 @@ public class Tooltip {
             batch.draw(sections[6], BLRec.x, BLRec.y, BLRec.width, BLRec.height);
             for (int i = 0; i<lines.size(); i++){
                 String s = lines.get(i);
-                font.draw(batch, s, MRec.x+4, TRec.y-4-(i*12));
+                font.draw(batch, s, MRec.x+4, TRec.y-4-(i*18));
             }
             batch.end();
         }
