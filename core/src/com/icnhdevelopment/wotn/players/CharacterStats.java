@@ -44,28 +44,28 @@ public class CharacterStats {
     int IvVitality = 10;
     public int getVitality(){
         double result = level + 10 + ((((BaseVitality+IvVitality+character.getBonusVitality())*2)*level)/100);
-        return (int)Math.floor(result);
+        return (int)Math.floor(result+character.getBonusVitality()/20);
     }
 
     int BaseAgility;
     int IvAgility = 10;
     public int getAgility(){
         double result = 5 + (((BaseAgility+IvAgility+character.getBonusAgility())*2)*level)/100;
-        return (int)Math.floor(result);
+        return (int)Math.floor(result+character.getBonusAgility()/20);
     }
 
     int BaseResistance;
     int IvResistance = 10;
     public int getResistance(){
         double result = 5 + (((BaseResistance+IvResistance+character.getBonusResistance())*2)*level)/100;
-        return (int)Math.floor(result);
+        return (int)Math.floor(result+character.getBonusResistance()/20);
     }
 
     int BaseStrength;
     int IvStrength = 10;
     public int getStrength(){
         double result = 5 + (((BaseStrength+IvStrength+character.getBonusStrength())*2)*level)/100;
-        return (int)Math.floor(result);
+        return (int)Math.floor(result+character.getBonusStrength()/20);
     }
 
     float CurrentWisdom;
@@ -74,7 +74,7 @@ public class CharacterStats {
     int IvWisdom = 10;
     public int getWisdom(){
         double result = 5 + (((BaseWisdom+IvWisdom+character.getBonusWisdom())*2)*level)/100;
-        return (int)Math.floor(result);
+        return (int)Math.floor(result+character.getBonusWisdom()/20);
     }
 
     float CalculateLevelExp(int currentLevel){
