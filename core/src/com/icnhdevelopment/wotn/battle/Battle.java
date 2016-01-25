@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.Fonts;
+import com.icnhdevelopment.wotn.gui.special.Tooltip;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.players.Character;
@@ -51,6 +52,8 @@ public class Battle {
     ArrayList<Character> antSide;
     ArrayList<Character> fightOrder;
     ArrayList<CharacterData> characterData;
+    Rectangle optionsRec;
+    BattleOptions bo;
     Character charTurn;
     int whoseturn = 0;
 
@@ -75,6 +78,8 @@ public class Battle {
         characterData = new ArrayList<>();
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
+        bo = new BattleOptions();
+        bo.create(protSide.get(0), optionsRec);
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -96,6 +101,7 @@ public class Battle {
         antPositions.add(new Rectangle(1059, 447, 90, 90));
         antPositions.add(new Rectangle(1059, 255, 90, 90));
         antDataPos = new Rectangle(924, 6, 351, 228);
+        optionsRec = new Rectangle(369, 6, 543, 228);
     }
 
     void setPositions(ArrayList<Character> side, ArrayList<Rectangle> recs){
@@ -153,6 +159,7 @@ public class Battle {
         } else if (state.equals("fight")){
             if (protSide.contains(charTurn)){
                 showOptions = true;
+                bo.update(input);
             }else{
                 showOptions = false;
             }
@@ -170,7 +177,6 @@ public class Battle {
     public void render(SpriteBatch batch){
         batch.begin();
         batch.draw(background, 0, 0, Game.WIDTH(), Game.HEIGHT());
-
         for (int i = 0; i<fightOrder.size(); i++){
             Character c = fightOrder.get(i);
             c.render(batch, SCALE);
@@ -181,7 +187,6 @@ public class Battle {
                 batch.draw(orderOver, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
             }
         }
-
         for (CharacterData cd : characterData){
             Character c = cd.getCharacter();
             String name = cd.getName();
@@ -200,7 +205,9 @@ public class Battle {
                 font.draw(batch, (int) c.getCurrentWisdom() + "/" + c.getWisdom(), temp.x + temp.width + 2, temp.y + temp.height);
             }
         }
-
+        if (showOptions) {
+            bo.render(batch);
+        }
         if (state.equals("fadein")){
             TextureRegion tr = new TextureRegion(battleTransition, ((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
             batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
