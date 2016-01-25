@@ -40,8 +40,8 @@ public class BattleInfo {
                 int res = Integer.valueOf(data[4]);
                 int str = Integer.valueOf(data[5]);
                 int wis = Integer.valueOf(data[6]);
-                CharacterStats cs = new CharacterStats(level, vit, agl, res, str, wis);
                 Monster m = Monster.getMonster(type);
+                CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
                 m.create(m.defaultFile, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
                 antSide.add(m);
             }

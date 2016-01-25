@@ -116,7 +116,7 @@ public class Character extends AnimatedSprite {
         this.player = player;
         this.directionalMovement = direcMove;
         if (player){
-            stats = new CharacterStats(1, 35, 90, 30, 55, 50);
+            stats = new CharacterStats(this, 1, 35, 90, 30, 55, 50);
             name = "You";
         }
     }

@@ -5,19 +5,22 @@ package com.icnhdevelopment.wotn.players;
  */
 public class CharacterStats {
 
-    public CharacterStats(int l, int v, int a, int r, int s, int w){
-        level = 1;
-        BaseVitality = 35;
+    Character character;
+
+    public CharacterStats(Character c, int l, int v, int a, int r, int s, int w){
+        this.character = c;
+        level = l;
+        BaseVitality = v;
         IvVitality = 10;
         CurrentVitality = getVitality();
-        BaseAgility = 90;
+        BaseAgility = a;
         IvAgility = 10;
-        BaseWisdom = 50;
+        BaseWisdom = w;
         IvWisdom = 10;
         CurrentWisdom = getWisdom();
-        BaseStrength = 55;
+        BaseStrength = s;
         IvStrength = 10;
-        BaseResistance = 30;
+        BaseResistance = r;
         IvResistance = 10;
         CurrentExperience = 0;
         NextLevelExp = CalculateLevelExp(level+1);
@@ -40,28 +43,28 @@ public class CharacterStats {
     int BaseVitality;
     int IvVitality = 10;
     public int getVitality(){
-        double result = level + 10 + ((((BaseVitality+IvVitality)*2)*level)/100);
+        double result = level + 10 + ((((BaseVitality+IvVitality+character.getBonusVitality())*2)*level)/100);
         return (int)Math.floor(result);
     }
 
     int BaseAgility;
     int IvAgility = 10;
     public int getAgility(){
-        double result = 5 + (((BaseAgility+IvAgility)*2)*level)/100;
+        double result = 5 + (((BaseAgility+IvAgility+character.getBonusAgility())*2)*level)/100;
         return (int)Math.floor(result);
     }
 
     int BaseResistance;
     int IvResistance = 10;
     public int getResistance(){
-        double result = 5 + (((BaseResistance+IvResistance)*2)*level)/100;
+        double result = 5 + (((BaseResistance+IvResistance+character.getBonusResistance())*2)*level)/100;
         return (int)Math.floor(result);
     }
 
     int BaseStrength;
     int IvStrength = 10;
     public int getStrength(){
-        double result = 5 + (((BaseStrength+IvStrength)*2)*level)/100;
+        double result = 5 + (((BaseStrength+IvStrength+character.getBonusStrength())*2)*level)/100;
         return (int)Math.floor(result);
     }
 
@@ -70,7 +73,7 @@ public class CharacterStats {
     int BaseWisdom;
     int IvWisdom = 10;
     public int getWisdom(){
-        double result = 5 + (((BaseWisdom+IvWisdom)*2)*level)/100;
+        double result = 5 + (((BaseWisdom+IvWisdom+character.getBonusWisdom())*2)*level)/100;
         return (int)Math.floor(result);
     }
 
