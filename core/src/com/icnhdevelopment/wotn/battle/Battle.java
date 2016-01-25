@@ -1,6 +1,5 @@
 package com.icnhdevelopment.wotn.battle;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.Fonts;
-import com.icnhdevelopment.wotn.gui.special.Tooltip;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.players.Character;
@@ -163,13 +161,11 @@ public class Battle {
             }else{
                 showOptions = false;
             }
-            /* Keep this for later
             if (input.isKeyDown(Input.Keys.ESCAPE)){
                 protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
                 world.kill(enemy);
                 Game.GAME_STATE = GameState.WORLD;
             }
-            */
             characterData.forEach(CharacterData::updateData);
         }
     }

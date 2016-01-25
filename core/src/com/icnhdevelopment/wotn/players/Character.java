@@ -14,7 +14,6 @@ import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.world.CollideObject;
 import com.icnhdevelopment.wotn.world.InventoryObject;
 import com.icnhdevelopment.wotn.world.World;
-import sun.plugin.dom.core.Text;
 
 import java.util.*;
 
@@ -27,7 +26,7 @@ public class Character extends AnimatedSprite {
     Rectangle footBox;
     boolean player;
     boolean isTransitioningLayer = false;
-    boolean hasRandomMovement = false, isMovingRandomly = true;
+    boolean isMovingRandomly = true;
     private String name;
 
     final int SPEED = 2;

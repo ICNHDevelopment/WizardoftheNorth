@@ -25,7 +25,7 @@ public class TextConverter extends Container{
     }
 
     public static ArrayList<String> Text_To_Array(FileHandle file) {
-        ArrayList<String> text = new ArrayList(Arrays.asList(file.readString().split("\n")));
+        @SuppressWarnings("unchecked") ArrayList<String> text = new ArrayList(Arrays.asList(file.readString().split("\n")));
         return text;
     }
 

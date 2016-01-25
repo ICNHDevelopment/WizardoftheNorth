@@ -2,8 +2,6 @@ package com.icnhdevelopment.wotn.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +13,6 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
@@ -23,7 +20,6 @@ import com.icnhdevelopment.wotn.battle.BattleInfo;
 import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
-import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
@@ -161,6 +157,7 @@ public class World {
             float tx = (float)obj.getProperties().get("x");
             float ty = (float)obj.getProperties().get("y");
             Monster mon = Monster.getMonster(type);
+            assert mon != null;
             mon.battleDataFile = fileLocation + battleDataFile + ".txt";
             mon.create(mon.defaultFile, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
             this.spawn(mon);
@@ -398,16 +395,19 @@ public class World {
         for (Sprite s : items){
             s.render(batch);
         }
-        batch.end();
-        if (map.getLayers().get(1).getOpacity()<1) {
-            mapRenderer.render(new int[]{1});
-        } else if (map.getLayers().get(1).getOpacity()==1) {
-            mapRenderer.render(new int[]{1});
+        for (Sprite m : multiDSprites){
+            if (!m.equals(mainCharacter)||map.getLayers().get(1).getOpacity()<1) {
+                m.render(batch);
+            }
         }
+        batch.end();
+        mapRenderer.render(new int[]{1});
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Sprite m : multiDSprites){
-            m.render(batch);
+            if (m.equals(mainCharacter)&&map.getLayers().get(1).getOpacity()==1) {
+                m.render(batch);
+            }
         }
         batch.end();
 

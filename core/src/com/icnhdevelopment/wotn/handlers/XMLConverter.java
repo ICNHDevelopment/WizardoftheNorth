@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.Alignment;
 import com.icnhdevelopment.wotn.gui.Container;
 import com.icnhdevelopment.wotn.gui.Label;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;

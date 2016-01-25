@@ -3,7 +3,6 @@ package com.icnhdevelopment.wotn.players;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.world.World;
 
-import java.lang.reflect.Constructor;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;

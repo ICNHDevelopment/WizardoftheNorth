@@ -2,7 +2,6 @@ package com.icnhdevelopment.wotn.battle;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.players.Character;
 
 /**

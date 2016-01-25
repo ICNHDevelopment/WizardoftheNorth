@@ -41,6 +41,7 @@ public class BattleOptions {
     }
 
     public void update(CInputProcessor processor){
+        //noinspection unchecked
         for (ArrayList<Option> o : menus){
             for (Option option : o){
                 option.update(processor);
@@ -49,6 +50,7 @@ public class BattleOptions {
     }
 
     public void render(SpriteBatch batch){
+        //noinspection unchecked
         for (ArrayList<Option> o : menus){
             for (Option option : o){
                 option.render(batch);

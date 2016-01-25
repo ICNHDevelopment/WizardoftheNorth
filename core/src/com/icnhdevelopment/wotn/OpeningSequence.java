@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
-import com.icnhdevelopment.wotn.items.Item;
 
 import java.util.ArrayList;
 
@@ -47,7 +45,7 @@ public class OpeningSequence {
 
     long startTime;
     float alpha = 0f;
-    long holdStart = 0l;
+    long holdStart = 0L;
 
     String state = "fadein";
     String stage = "lymric";

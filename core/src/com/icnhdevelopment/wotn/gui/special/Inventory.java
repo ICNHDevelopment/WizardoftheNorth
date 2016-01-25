@@ -199,9 +199,8 @@ public class Inventory extends Container {
     public void render(SpriteBatch batch, Item[] inven){
         if (visible) {
             if (character!=null) {
-                Item[] items = inven;
-                for (int i = 0; i < items.length; i++) {
-                    defaultInventory.get(i).setItem(items[i]);
+                for (int i = 0; i < inven.length; i++) {
+                    defaultInventory.get(i).setItem(inven[i]);
                 }
                 renderBackground(batch);
                 renderChildren(batch);
