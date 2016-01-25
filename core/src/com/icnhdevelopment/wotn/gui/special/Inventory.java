@@ -129,7 +129,7 @@ public class Inventory extends Container {
     }
 
     void loadStatSlots(){
-        int startX = (int)invenImage.getAbsolutePosition().x + 265 + 106, startY=(int)invenImage.getAbsolutePosition().y+146+14;
+        int startX = (int)invenImage.getAbsolutePosition().x + 265, startY=(int)invenImage.getAbsolutePosition().y+146+14;
         for (int j = 0; j<5; j++){
             statSlots.add(new Rectangle(startX, textureSize.y-(startY+j*36), 106, 36));
         }
@@ -208,25 +208,52 @@ public class Inventory extends Container {
                 if (!(this instanceof Toolbar)) {
                     for (int i = 0; i < statSlots.size(); i++) {
                         String whatToWrite = "Joe";
+                        String whatToWrite2 = "Sheila";
+                        String modifiertype = "neutral";
                         if (i == 0) {
                             whatToWrite = character.getVitality() + "";
+                            int val = (int)character.getBonusVitality();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
                         }
                         if (i == 1) {
                             whatToWrite = character.getAgility() + "";
+                            int val = (int)character.getBonusAgility();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
                         }
                         if (i == 2) {
                             whatToWrite = character.getResistance() + "";
+                            int val = (int)character.getBonusResistance();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
                         }
                         if (i == 3) {
                             whatToWrite = character.getStrength() + "";
+                            int val = (int)character.getBonusStrength();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
                         }
                         if (i == 4) {
                             whatToWrite = character.getWisdom() + "";
+                            int val = (int)character.getBonusWisdom();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
                         }
 
-                        float width = font.getBounds(whatToWrite).width;
+                        float width = font.getBounds(whatToWrite2).width;
                         batch.begin();
-                        font.draw(batch, whatToWrite, statSlots.get(i).x - width, statSlots.get(i).y);
+                        font.setColor(Color.WHITE);
+                        font.draw(batch, whatToWrite, statSlots.get(i).x, statSlots.get(i).y);
+                        if (modifiertype.equals("positive")){font.setColor(Color.GREEN);}
+                        else if (modifiertype.equals("negative")){font.setColor(Color.RED);}
+                        else {font.setColor(Color.WHITE);}
+                        font.draw(batch, whatToWrite2, statSlots.get(i).x - width + 106, statSlots.get(i).y);
                         batch.end();
                     }
                     if (mouseItem != null) {
