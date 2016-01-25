@@ -26,7 +26,7 @@ public class InventoryObject extends CollideObject {
         super.create(filename, position, size, b, st);
 
         this.items = new ArrayList<>();
-        String[] items = Gdx.files.internal(invenFile + ".txt").readString().replace("\n", "").split(";");
+        String[] items = Gdx.files.internal(invenFile + ".txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 0; i<items.length; i++){
             this.getItems().add(new Item(Item.ITEMS.get(items[i])));
         }
