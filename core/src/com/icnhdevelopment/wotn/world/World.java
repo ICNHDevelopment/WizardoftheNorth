@@ -20,10 +20,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.battle.BattleInfo;
-import com.icnhdevelopment.wotn.gui.special.Hud;
-import com.icnhdevelopment.wotn.gui.special.Inventory;
-import com.icnhdevelopment.wotn.gui.special.SlotType;
-import com.icnhdevelopment.wotn.gui.special.Toolbar;
+import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.items.Item;
@@ -61,8 +58,8 @@ public class World {
     Toolbar toolbar;
     Inventory inventory;
     Hud hud;
-    public boolean changeToBattle = false;
 
+    public boolean changeToBattle = false;
     Texture battleTransition;
     int battleStage = -1;
     Character battleChar;

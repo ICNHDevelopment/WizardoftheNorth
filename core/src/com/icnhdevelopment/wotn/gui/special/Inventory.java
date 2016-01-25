@@ -12,6 +12,7 @@ import com.icnhdevelopment.wotn.gui.*;
 import com.icnhdevelopment.wotn.handlers.ButtonFuction;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.players.Character;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Inventory extends Container {
     Vector2 mousePosition;
 
     Toolbar toolbar;
+    Tooltip tooltip;
 
     Character character;
 
@@ -42,6 +44,7 @@ public class Inventory extends Container {
         statSlots = new ArrayList<>();
         loadInventorySlots();
         loadStatSlots();
+        tooltip = new Tooltip(this);
     }
 
     void create(String file){
@@ -148,11 +151,17 @@ public class Inventory extends Container {
     }
 
     public void update(CInputProcessor processor){
+        boolean changedTooltipTrue = false;
         for (int i = 0; i<defaultInventory.size(); i++){
             ItemSlot is = defaultInventory.get(i);
             if (!is.isBlocked) {
                 if (processor.mouseHovered(is.getAbsolutePosition().x, is.getAbsolutePosition().y, is.getSize().x, is.getSize().y)) {
                     is.setHovering(true);
+                    if (is.getItem()!=null) {
+                        changedTooltipTrue = true;
+                        Item imanitem = is.getItem();
+                        tooltip.update(imanitem instanceof SpecialItem ? (SpecialItem)imanitem : imanitem);
+                    }
                     if (processor.didMouseClick()) {
                         if (mouseItem != null) {
                             if (mouseItem.getType().equals(is.getSlotType()) || is.getSlotType().equals(SlotType.NORM)) {
@@ -184,6 +193,7 @@ public class Inventory extends Container {
             }
         }
         mousePosition = processor.getMousePosition();
+        tooltip.visible = changedTooltipTrue;
     }
 
     public void render(SpriteBatch batch, Item[] inven){
@@ -223,6 +233,8 @@ public class Inventory extends Container {
                         batch.begin();
                         batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
                         batch.end();
+                    } else {
+                        tooltip.render(batch);
                     }
                 }
             }

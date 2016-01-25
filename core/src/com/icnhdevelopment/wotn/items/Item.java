@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -20,19 +21,22 @@ public class Item {
             String t = items[i];
             String[] data = t.split(":");
             String k = data[0];
-            SlotType st = SlotType.valueOf(data[1]);
-            boolean spec = Boolean.valueOf(data[2]);
+            String name = data[1];
+            SlotType st = SlotType.valueOf(data[2]);
+            boolean spec = Boolean.valueOf(data[3]);
             Texture tex = new Texture("Items/" + k + ".png");
             if (spec){
                 SpecialItem si = new SpecialItem(tex, st);
-                si.VitalityBonus = Integer.valueOf(data[3]);
-                si.AgilityBonus = Integer.valueOf(data[4]);
-                si.ResistanceBonus = Integer.valueOf(data[5]);
-                si.StrengthBonus = Integer.valueOf(data[6]);
-                si.WisdomBonus = Integer.valueOf(data[7]);
+                si.name = name;
+                si.VitalityBonus = Integer.valueOf(data[4]);
+                si.AgilityBonus = Integer.valueOf(data[5]);
+                si.ResistanceBonus = Integer.valueOf(data[6]);
+                si.StrengthBonus = Integer.valueOf(data[7]);
+                si.WisdomBonus = Integer.valueOf(data[8]);
                 ITEMS.put(k, si);
             }else {
                 Item it = new Item(tex);
+                it.name = name;
                 ITEMS.put(k, it);
             }
         }
@@ -40,12 +44,7 @@ public class Item {
 
     public Texture image;
     private SlotType type = SlotType.NORM;
-
-    public int VitalityBonus;
-    public int AgilityBonus;
-    public int ResistanceBonus;
-    public int StrengthBonus;
-    public int WisdomBonus;
+    String name;
 
     public Item(Texture im){
         image = im;
@@ -54,6 +53,7 @@ public class Item {
     public Item(Item i){
         this.image = i.image;
         this.type = i.type;
+        this.name = i.name;
     }
 
     public SlotType getType() {
@@ -62,5 +62,11 @@ public class Item {
 
     public void setType(SlotType type) {
         this.type = type;
+    }
+
+    public ArrayList<String> getTooltipData(){
+        ArrayList<String> r = new ArrayList<>();
+        r.add(name);
+        return r;
     }
 }

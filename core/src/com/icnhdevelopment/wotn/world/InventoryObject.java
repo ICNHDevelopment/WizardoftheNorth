@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.items.SpecialItem;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,12 @@ public class InventoryObject extends CollideObject {
         this.items = new ArrayList<>();
         String[] items = Gdx.files.internal(invenFile + ".txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 0; i<items.length; i++){
-            this.getItems().add(new Item(Item.ITEMS.get(items[i])));
+            Item it = Item.ITEMS.get(items[i]);
+            if (it instanceof SpecialItem){
+                this.items.add(new SpecialItem((SpecialItem)it));
+            } else {
+                this.items.add(new Item(it));
+            }
         }
         currentImage = this.texture;
         String loc = filename.substring(0, filename.lastIndexOf("/")+1);
