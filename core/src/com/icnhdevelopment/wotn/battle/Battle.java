@@ -17,6 +17,7 @@ import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by kyle on 1/23/16.
@@ -32,6 +33,8 @@ public class Battle {
     World world;
     BitmapFont font;
     Texture vitBar, wisBar;
+    Random randomGenerator;
+    boolean showOptions = false;
 
     int TICK = 1;
     int SCALE = 3;
@@ -44,12 +47,14 @@ public class Battle {
     ArrayList<Character> antSide;
     ArrayList<Character> fightOrder;
     ArrayList<CharacterData> characterData;
+    Character charTurn;
     int whoseturn = 0;
 
     public void create(BattleInfo battleInfo){
         font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
         vitBar = new Texture("ui/hud/VitalityMeter.png");
         wisBar = new Texture("ui/hud/WisdomMeter.png");
+        randomGenerator = new Random(System.currentTimeMillis());
         background = new Texture(battleInfo.getBackFile());
         battleTransition = battleInfo.battleTex;
         protSide = battleInfo.getProtSide();
@@ -135,15 +140,22 @@ public class Battle {
             TICK++;
             if (battleStage == 0 && TICK % 9 == 8) {
                 state = "fight";
+                charTurn = fightOrder.get(whoseturn);
             }
         } else if (state.equals("fight")){
-            characterData.forEach(CharacterData::updateData);
-
+            if (protSide.contains(charTurn)){
+                showOptions = true;
+            }else{
+                showOptions = false;
+            }
+            /* Keep this for later
             if (input.isKeyDown(Input.Keys.ESCAPE)){
                 protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
                 world.kill(enemy);
                 Game.GAME_STATE = GameState.WORLD;
             }
+            */
+            characterData.forEach(CharacterData::updateData);
         }
     }
 

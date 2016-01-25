@@ -1,12 +1,12 @@
-NAME:SLOTTYPE:SPECIAL;
+NAME:SLOTTYPE:SPECIAL:(VIT:AGL:RES:STR:WIS)|(TBD);
 
 Ale:NORM:false;
-AmEmerald:AMULET:true;
-BootsIron:FEET:true;
-ChestIron:CHEST:true;
-DaggerStone:WEAPON:true;
-HelmIron:HEAD:true;
-LegsIron:LEGS:true;
-RingGold:RING:true;
-RingSilver:RING:true;
-SwordStone:WEAPON:true;
+AmEmerald:AMULET:true:0:0:0:0:0;
+BootsIron:FEET:true:0:0:0:0:0;
+ChestIron:CHEST:true:0:0:0:0:0;
+DaggerStone:WEAPON:true:0:0:0:10:0;
+HelmIron:HEAD:true:0:0:0:0:0;
+LegsIron:LEGS:true:0:0:0:0:0;
+RingGold:RING:true:0:0:0:0:0;
+RingSilver:RING:true:0:0:0:0:0;
+SwordStone:WEAPON:true:0:0:0:0:0;

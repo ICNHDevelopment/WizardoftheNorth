@@ -2,6 +2,7 @@ package com.icnhdevelopment.wotn.battle;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.players.Character;
 
 /**
@@ -27,6 +28,14 @@ public class CharacterData {
         updateData();
 
         setPositions();
+    }
+
+    public float CalculateDamage(Character recip){
+        float returnVal;
+        float br = recip.getBonusResistance(), bs = character.getBonusStrength();
+        returnVal = ((2*character.getLevel()+10)/250*((character.getStrength()+bs)/(recip.getResistance()+br)))+2+(bs/2);
+        if (returnVal<1) returnVal = 1;
+        return (float)Math.floor(returnVal);
     }
 
     void setPositions(){

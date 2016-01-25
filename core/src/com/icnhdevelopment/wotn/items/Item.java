@@ -25,6 +25,11 @@ public class Item {
             Texture tex = new Texture("Items/" + k + ".png");
             if (spec){
                 SpecialItem si = new SpecialItem(tex, st);
+                si.VitalityBonus = Integer.valueOf(data[3]);
+                si.AgilityBonus = Integer.valueOf(data[4]);
+                si.ResistanceBonus = Integer.valueOf(data[5]);
+                si.StrengthBonus = Integer.valueOf(data[6]);
+                si.WisdomBonus = Integer.valueOf(data[7]);
                 ITEMS.put(k, si);
             }else {
                 Item it = new Item(tex);
@@ -35,6 +40,12 @@ public class Item {
 
     public Texture image;
     private SlotType type = SlotType.NORM;
+
+    public int VitalityBonus;
+    public int AgilityBonus;
+    public int ResistanceBonus;
+    public int StrengthBonus;
+    public int WisdomBonus;
 
     public Item(Texture im){
         image = im;

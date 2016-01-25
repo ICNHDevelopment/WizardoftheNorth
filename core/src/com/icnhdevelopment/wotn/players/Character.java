@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.handlers.WizardHelper;
 import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.world.CollideObject;
 import com.icnhdevelopment.wotn.world.InventoryObject;
 import com.icnhdevelopment.wotn.world.World;
@@ -45,11 +46,61 @@ public class Character extends AnimatedSprite {
     }
     public float getCurrentVitality(){ return stats.getCurrentVitality(); }
     public int getVitality(){ return stats.getVitality(); }
+    public float getBonusVitality(){
+        float bonus = 0;
+        for (int i = 12; i<21; i++) {
+            SpecialItem si = (SpecialItem)getInventory()[i];
+            if (si != null) {
+                bonus += si.VitalityBonus;
+            }
+        }
+        return bonus;
+    }
     public int getAgility(){ return stats.getAgility(); }
+    public float getBonusAgility(){
+        float bonus = 0;
+        for (int i = 12; i<21; i++) {
+            SpecialItem si = (SpecialItem)getInventory()[i];
+            if (si != null) {
+                bonus += si.AgilityBonus;
+            }
+        }
+        return bonus;
+    }
     public int getResistance(){ return stats.getResistance(); }
+    public float getBonusResistance(){
+        float bonus = 0;
+        for (int i = 12; i<21; i++) {
+            SpecialItem si = (SpecialItem)getInventory()[i];
+            if (si != null) {
+                bonus += si.ResistanceBonus;
+            }
+        }
+        return bonus;
+    }
     public int getStrength(){ return stats.getStrength(); }
+    public float getBonusStrength(){
+        float bonus = 0;
+        for (int i = 12; i<21; i++) {
+            SpecialItem si = (SpecialItem)getInventory()[i];
+            if (si != null) {
+                bonus += si.StrengthBonus;
+            }
+        }
+        return bonus;
+    }
     public float getCurrentWisdom(){ return stats.getCurrentWisdom(); }
     public int getWisdom(){ return stats.getWisdom(); }
+    public float getBonusWisdom(){
+        float bonus = 0;
+        for (int i = 12; i<21; i++) {
+            SpecialItem si = (SpecialItem)getInventory()[i];
+            if (si != null) {
+                bonus += si.WisdomBonus;
+            }
+        }
+        return bonus;
+    }
 
     public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);
