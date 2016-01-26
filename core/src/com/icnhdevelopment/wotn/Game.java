@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.battle.Battle;
@@ -13,6 +14,7 @@ import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Game extends ApplicationAdapter {
 
@@ -26,6 +28,10 @@ public class Game extends ApplicationAdapter {
 	public static GameState GAME_STATE;
 	public static SoundHandler soundHandler;
 	Texture mouseCursor;
+	Random random;
+	long lightningTime = 0, lightningTimeNext = 0;
+	boolean drawLightning = false;
+	Vector2 startPos, endPos1, endPos2;
 
 	static int WIDTH, HEIGHT;
 
@@ -58,8 +64,12 @@ public class Game extends ApplicationAdapter {
 		mouseCursor = new Texture("ui/cursor.png");
 		os = new OpeningSequence();
 		soundHandler = new SoundHandler();
-		soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/titleMusic.wav")));
+		soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/rain.wav")));
 		Item.InitItems();
+		random = new Random();
+		GFX.setTexture(new Texture("ui/hud/ExperienceMeter.png"));
+		lightningTimeNext = 500 + (long)(random.nextDouble()*3000L);
+		lightningTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -72,6 +82,31 @@ public class Game extends ApplicationAdapter {
 			currentMenu.update(inputProcessor);
 			batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
 			currentMenu.render(batch);
+			if (drawLightning) {
+				batch.begin();
+				GFX.drawChainLightningRandomBetweenPoints(batch, startPos, endPos1, endPos2, 3f, 3, Color.WHITE, new Color(255f/255f, 216f/255f, 0f/255f, 1f));//, Color.YELLOW, Color.ORANGE);
+				batch.end();
+				if (System.currentTimeMillis()-lightningTime>lightningTimeNext){
+					lightningTimeNext = 500 + (long)(random.nextDouble()*7000L);
+					lightningTime = System.currentTimeMillis();
+					drawLightning = false;
+				}
+			}else{
+				batch.setColor(Color.WHITE);
+				if (System.currentTimeMillis()-lightningTime>lightningTimeNext){
+					startPos = new Vector2(random.nextInt(1280), random.nextInt(720));
+					endPos1 = new Vector2(random.nextInt(1280), random.nextInt(720));
+					endPos2 = new Vector2(random.nextInt(1280), random.nextInt(720));
+					while (WizardHelper.getDistanceFromPoint(endPos1, endPos2)>40){
+						endPos2 = new Vector2(random.nextInt(1280), random.nextInt(720));
+					}
+					drawLightning = true;
+					lightningTimeNext = 500L;
+					lightningTime = System.currentTimeMillis();
+					Gdx.audio.newSound(Gdx.files.internal("audio/lightning.wav")).play();
+
+				}
+			}
 		} else if (GAME_STATE.equals(GameState.OPENING)){
 			os.update(inputProcessor);
 			os.render(batch);

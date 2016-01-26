@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.handlers;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.items.Item;
 
 /**
@@ -14,6 +15,10 @@ public class WizardHelper {
         float center2x = r2.x + r2.width/2;
         float center2y = r2.y + r2.height/2;
         return (float)Math.sqrt(Math.pow(Math.abs(center1x-center2x), 2)+Math.pow(Math.abs(center1y-center2y), 2));
+    }
+
+    public static float getDistanceFromPoint(Vector2 v1, Vector2 v2){
+        return getDistanceFromCenter(new Rectangle(v1.x, v1.y, 1, 1), new Rectangle(v2.x, v2.y, 1, 1));
     }
 
     public static Item[] concat(Item[] a, Item[] b) {
