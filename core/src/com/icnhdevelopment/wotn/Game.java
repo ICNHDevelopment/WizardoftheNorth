@@ -2,8 +2,10 @@ package com.icnhdevelopment.wotn;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.gui.Menu;
 import com.icnhdevelopment.wotn.handlers.*;
@@ -48,7 +50,6 @@ public class Game extends ApplicationAdapter {
 		inputProcessor = new CInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
 		Gdx.input.setCursorCatched(true);
-		//Gdx.input.setCursorPosition(WIDTH/2, HEIGHT/5*4);
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init("ui/Menus/MNUMain.txt");
@@ -82,6 +83,17 @@ public class Game extends ApplicationAdapter {
 			currentBattle.render(batch);
 		}
 		inputProcessor.update();
+		Vector2 mouse = inputProcessor.getMousePosition();
+		if (mouse.x>1270){
+			Gdx.input.setCursorPosition(1270, HEIGHT-(int)mouse.y);
+		} else if (mouse.x<0) {
+			Gdx.input.setCursorPosition(0, HEIGHT-(int)mouse.y);
+		}
+		if (mouse.y>710){
+			Gdx.input.setCursorPosition((int)mouse.x, 0);
+		} else if (mouse.y<0){
+			Gdx.input.setCursorPosition((int)mouse.x, 710);
+		}
 
 		batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
 		batch.begin();
