@@ -2,6 +2,7 @@ package com.icnhdevelopment.wotn.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class Item {
             SlotType st = SlotType.valueOf(data[2]);
             boolean spec = Boolean.valueOf(data[3]);
             Texture tex = new Texture("Items/" + k + ".png");
+            Texture over = null;
+            try { over = new Texture("Items/" + k + "E.png"); } catch (Exception e){}
             if (spec){
                 SpecialItem si = new SpecialItem(tex, st);
                 si.name = name;
@@ -35,6 +38,16 @@ public class Item {
                 si.ResistanceBonus = Integer.valueOf(data[6]);
                 si.StrengthBonus = Integer.valueOf(data[7]);
                 si.WisdomBonus = Integer.valueOf(data[8]);
+                if (over!=null){
+                    si.setCharacterOverlay(over);
+                    Rectangle r = null;
+                    if (k.contains("Helm")){
+                        r = new Rectangle(5, 0, 23, 23);
+                    }
+                    if (r!=null){
+                        si.setOverlayRectangle(r);
+                    }
+                }
                 SPECIAL_ITEMS.put(k, si);
             }else {
                 Item it = new Item(tex);

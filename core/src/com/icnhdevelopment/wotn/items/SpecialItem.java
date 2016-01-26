@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.items;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 
 import java.util.ArrayList;
@@ -16,6 +17,9 @@ public class SpecialItem extends Item {
     public int StrengthBonus;
     public int WisdomBonus;
 
+    private Texture characterOverlay;
+    private Rectangle overlayRectangle;
+
     public SpecialItem(Texture im, SlotType type){
         super(im);
         this.setType(type);
@@ -29,6 +33,8 @@ public class SpecialItem extends Item {
         this.ResistanceBonus = item.ResistanceBonus;
         this.StrengthBonus = item.StrengthBonus;
         this.WisdomBonus = item.WisdomBonus;
+        characterOverlay = item.characterOverlay;
+        overlayRectangle = item.overlayRectangle;
     }
 
     public ArrayList<String> getTooltipData(){
@@ -72,4 +78,19 @@ public class SpecialItem extends Item {
         return r;
     }
 
+    public Texture getCharacterOverlay() {
+        return characterOverlay;
+    }
+
+    public void setCharacterOverlay(Texture characterOverlay) {
+        this.characterOverlay = characterOverlay;
+    }
+
+    public Rectangle getOverlayRectangle() {
+        return overlayRectangle;
+    }
+
+    public void setOverlayRectangle(Rectangle overlayRectangle) {
+        this.overlayRectangle = overlayRectangle;
+    }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
@@ -204,7 +205,25 @@ public class Inventory extends Container {
                 }
                 renderBackground(batch);
                 renderChildren(batch);
+                TextureRegion temp = character.getImage();
+                Rectangle tempRec = new Rectangle(invenImage.getAbsolutePosition().x+(invenImage.getSize().x-temp.getRegionWidth()*3)/2,
+                        defaultInventory.get(defaultInventory.size()-1).getAbsolutePosition().y+40,
+                        temp.getRegionWidth()*3, temp.getRegionHeight()*3);
                 if (!(this instanceof Toolbar)) {
+                    batch.begin();
+                    batch.draw(temp, tempRec.x, tempRec.y, tempRec.width, tempRec.height);
+                    Item[] gear = character.getInventory();
+                    for (int i = 12; i<21; i++){
+                        if (gear[i]!=null){
+                            SpecialItem si = (SpecialItem)gear[i];
+                            if (si.getCharacterOverlay()!=null){
+                                Texture t = si.getCharacterOverlay();
+                                Rectangle r = si.getOverlayRectangle();
+                                batch.draw(t, tempRec.x+r.x*3, tempRec.y+tempRec.height-r.y-r.height*3, r.width*3, r.height*3);
+                            }
+                        }
+                    }
+                    batch.end();
                     for (int i = 0; i < statSlots.size(); i++) {
                         String whatToWrite = "Joe";
                         String whatToWrite2 = "Sheila";

@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.players;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
@@ -47,59 +48,74 @@ public class Character extends AnimatedSprite {
     public float getCurrentVitality(){ return stats.getCurrentVitality(); }
     public int getVitality(){ return stats.getVitality(); }
     public float getBonusVitality(){
-        float bonus = 0;
-        for (int i = 12; i<21; i++) {
-            SpecialItem si = (SpecialItem)getInventory()[i];
-            if (si != null) {
-                bonus += si.VitalityBonus;
+        if (inventory!=null) {
+            float bonus = 0;
+            for (int i = 12; i < 21; i++) {
+                SpecialItem si = (SpecialItem) getInventory()[i];
+                if (si != null) {
+                    bonus += si.VitalityBonus;
+                }
             }
+            return bonus;
         }
-        return bonus;
+        return 0;
     }
     public int getAgility(){ return stats.getAgility(); }
     public float getBonusAgility(){
-        float bonus = 0;
-        for (int i = 12; i<21; i++) {
-            SpecialItem si = (SpecialItem)getInventory()[i];
-            if (si != null) {
-                bonus += si.AgilityBonus;
+        if (inventory!=null) {
+            float bonus = 0;
+            for (int i = 12; i < 21; i++) {
+                SpecialItem si = (SpecialItem) getInventory()[i];
+                if (si != null) {
+                    bonus += si.AgilityBonus;
+                }
             }
+            return bonus;
         }
-        return bonus;
+        return 0;
     }
     public int getResistance(){ return stats.getResistance(); }
     public float getBonusResistance(){
-        float bonus = 0;
-        for (int i = 12; i<21; i++) {
-            SpecialItem si = (SpecialItem)getInventory()[i];
-            if (si != null) {
-                bonus += si.ResistanceBonus;
+        if (inventory!=null) {
+            float bonus = 0;
+            for (int i = 12; i < 21; i++) {
+                SpecialItem si = (SpecialItem) getInventory()[i];
+                if (si != null) {
+                    bonus += si.ResistanceBonus;
+                }
             }
+            return bonus;
         }
-        return bonus;
+        return 0;
     }
     public int getStrength(){ return stats.getStrength(); }
     public float getBonusStrength(){
-        float bonus = 0;
-        for (int i = 12; i<21; i++) {
-            SpecialItem si = (SpecialItem)getInventory()[i];
-            if (si != null) {
-                bonus += si.StrengthBonus;
+        if (inventory!=null) {
+            float bonus = 0;
+            for (int i = 12; i < 21; i++) {
+                SpecialItem si = (SpecialItem) getInventory()[i];
+                if (si != null) {
+                    bonus += si.StrengthBonus;
+                }
             }
+            return bonus;
         }
-        return bonus;
+        return 0;
     }
     public float getCurrentWisdom(){ return stats.getCurrentWisdom(); }
     public int getWisdom(){ return stats.getWisdom(); }
     public float getBonusWisdom(){
-        float bonus = 0;
-        for (int i = 12; i<21; i++) {
-            SpecialItem si = (SpecialItem)getInventory()[i];
-            if (si != null) {
-                bonus += si.WisdomBonus;
+        if (inventory!=null) {
+            float bonus = 0;
+            for (int i = 12; i < 21; i++) {
+                SpecialItem si = (SpecialItem) getInventory()[i];
+                if (si != null) {
+                    bonus += si.WisdomBonus;
+                }
             }
+            return bonus;
         }
-        return bonus;
+        return 0;
     }
 
     public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
@@ -199,18 +215,30 @@ public class Character extends AnimatedSprite {
         CollideObject closest = null;
         float lowestDistance = Float.MAX_VALUE;
         for (CollideObject c : cos) {
-            float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitBox());
-            if (dis < lowestDistance) {
-                if (closest!=null){
-                    c.setInteractable(false);
+            boolean canInteract = true;
+            if (!c.isVisible()){
+                canInteract = false;
+            } else{
+                if (c instanceof InventoryObject){
+                    if (((InventoryObject)c).isOpened()){
+                        canInteract = false;
+                    }
                 }
-                lowestDistance = dis;
-                closest = c;
+            }
+            if (canInteract) {
+                float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitBox());
+                if (dis < lowestDistance) {
+                    if (closest != null) {
+                        c.setInteractable(false);
+                    }
+                    lowestDistance = dis;
+                    closest = c;
+                }
             }
         }
         interactObject = closest;
         if (interactObject!=null){
-            if (lowestDistance<32) {
+            if (lowestDistance<48) {
                 interactObject.setInteractable(true);
             } else {
                 interactObject.setInteractable(false);
@@ -325,6 +353,18 @@ public class Character extends AnimatedSprite {
     public void render(SpriteBatch batch){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
         batch.draw(tr, getPosition().x, getPosition().y, width, height);
+        if (isPlayer()){
+            for (int i = 0; i<9; i++){
+                if (gear[i]!=null){
+                    SpecialItem si = (SpecialItem)gear[i];
+                    if (si.getCharacterOverlay()!=null){
+                        Texture t = si.getCharacterOverlay();
+                        Rectangle r = si.getOverlayRectangle();
+                        batch.draw(t, getPosition().x+r.x, getPosition().y+getSize().y-r.y-r.height, r.width, r.height);
+                    }
+                }
+            }
+        }
     }
 
     public void render(SpriteBatch batch, float scale){
@@ -338,25 +378,27 @@ public class Character extends AnimatedSprite {
 
     public void interact(){
         if (interactObject!=null) {
-            if (interactObject instanceof InventoryObject) {
-                InventoryObject invenObject = (InventoryObject) interactObject;
-                if (!invenObject.isOpened()) {
-                    ArrayList<Item> its = invenObject.getItems();
-                    for (Item i : its){
-                        if (i instanceof SpecialItem){
-                            addToInventory(new SpecialItem((SpecialItem)i));
-                        } else {
-                            addToInventory(new Item(i));
+            if (interactObject.isInteractable()) {
+                if (interactObject instanceof InventoryObject) {
+                    InventoryObject invenObject = (InventoryObject) interactObject;
+                    if (!invenObject.isOpened()) {
+                        ArrayList<Item> its = invenObject.getItems();
+                        for (Item i : its) {
+                            if (i instanceof SpecialItem) {
+                                addToInventory(new SpecialItem((SpecialItem) i));
+                            } else {
+                                addToInventory(new Item(i));
+                            }
                         }
+                        invenObject.setOpened(true);
+                        Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")).play();
                     }
-                    invenObject.setOpened(true);
-                    Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")).play();
-                }
-            } else {
-                if (interactObject.isBreakable()){
-                    SlotType bi = interactObject.getBreakItem();
-                    if (bi.equals(SlotType.NORM)||(bi.equals(SlotType.WEAPON)&&gear[8]!=null)){
-                        interactObject.setVisible(false);
+                } else {
+                    if (interactObject.isBreakable()) {
+                        SlotType bi = interactObject.getBreakItem();
+                        if (bi.equals(SlotType.NORM) || (bi.equals(SlotType.WEAPON) && gear[8] != null)) {
+                            interactObject.setVisible(false);
+                        }
                     }
                 }
             }
