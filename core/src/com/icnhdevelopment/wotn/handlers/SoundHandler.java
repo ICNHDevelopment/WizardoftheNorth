@@ -22,6 +22,16 @@ public class SoundHandler {
         return l;
     }
 
+    public long PlayShortSound(Sound sound){
+        return sound.play();
+    }
+
+    public long PlatShortSound(Sound sound, float volume){
+        long l = PlayShortSound(sound);
+        sound.setVolume(l, volume);
+        return l;
+    }
+
     public long PlaySoundLooping(Sound sound){
         if (currentSound!=null)
             currentSound.stop();
@@ -30,7 +40,7 @@ public class SoundHandler {
     }
 
     public long PlaySoundLooping(Sound sound, float volume){
-        long l = PlaySound(sound);
+        long l = PlaySoundLooping(sound);
         currentSound.setVolume(l, volume);
         return l;
     }

@@ -8,6 +8,7 @@ public class Monster extends Character {
     public String defaultFile;
     public int defaultMaxFrames, defaultMaxSpawns;
     public Spawner spawner;
+    public String battleDataFile;
 
     public void setDefaults(){}
 

@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
-import com.icnhdevelopment.wotn.gui.Alignment;
-import com.icnhdevelopment.wotn.gui.Container;
-import com.icnhdevelopment.wotn.gui.Fonts;
-import com.icnhdevelopment.wotn.gui.ImageLabel;
+import com.icnhdevelopment.wotn.gui.*;
+import com.icnhdevelopment.wotn.handlers.ButtonFuction;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.items.SpecialItem;
@@ -33,6 +32,7 @@ public class Inventory extends Container {
     Vector2 mousePosition;
 
     Toolbar toolbar;
+    Tooltip tooltip;
 
     Character character;
 
@@ -45,6 +45,7 @@ public class Inventory extends Container {
         statSlots = new ArrayList<>();
         loadInventorySlots();
         loadStatSlots();
+        tooltip = new Tooltip(this);
     }
 
     void create(String file){
@@ -53,29 +54,25 @@ public class Inventory extends Container {
         invenImage = new ImageLabel(this, new Vector2((Game.WIDTH()-textureSize.x)/2, (Game.HEIGHT()-textureSize.y)/2), textureSize, tex);
         invenImage.setImagealignment(Alignment.STRETCHED);
         this.children.add(invenImage);
+        if (!(this instanceof Toolbar)) {
+            Container button = new Container(invenImage, new Vector2(354, 544), new Vector2(26, 28));
+            button.setFunc(ButtonFuction.VISIBILITY);
+            button.setDesc(this);
+            buttons.add(button);
+        }
     }
 
     void loadInventorySlots(){
         //Default
         int startX = 10, startY = 350;
-        for (int i = 0; i<3; i++){
-            for (int j = 0; j<4; j++){
-                Item it = new Item(new Texture("Items/Ale.png"));
-                if (i==0) {
-                    if (j == 0) {
-                        it = new SpecialItem(new Texture("Items/AmEmerald.png"), SlotType.AMULET);
-                    }
-                    if (j == 1) {
-                        it = new SpecialItem(new Texture("Items/ChestIron.png"), SlotType.CHEST);
-                    }
-                }
+        for (int j = 0; j<4; j++){
+            for (int i = 0; i<3; i++){
                 boolean b = false;
                 if (j>1) {
                     b = true;
                 }
-                ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), it.image, b);
+                ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), null, b);
                 is.setHoverImage(new Texture("Items/highlight.png"));
-                is.item = it;
                 is.setImagealignment(Alignment.STRETCHED);
                 defaultInventory.add(is);
             }
@@ -133,7 +130,7 @@ public class Inventory extends Container {
     }
 
     void loadStatSlots(){
-        int startX = (int)invenImage.getAbsolutePosition().x + 265 + 106, startY=(int)invenImage.getAbsolutePosition().y+146+14;
+        int startX = (int)invenImage.getAbsolutePosition().x + 265, startY=(int)invenImage.getAbsolutePosition().y+146+14;
         for (int j = 0; j<5; j++){
             statSlots.add(new Rectangle(startX, textureSize.y-(startY+j*36), 106, 36));
         }
@@ -155,20 +152,39 @@ public class Inventory extends Container {
     }
 
     public void update(CInputProcessor processor){
-        for (ItemSlot is : defaultInventory){
+        boolean changedTooltipTrue = false;
+        for (int i = 0; i<defaultInventory.size(); i++){
+            ItemSlot is = defaultInventory.get(i);
             if (!is.isBlocked) {
                 if (processor.mouseHovered(is.getAbsolutePosition().x, is.getAbsolutePosition().y, is.getSize().x, is.getSize().y)) {
                     is.setHovering(true);
+                    if (is.getItem()!=null) {
+                        changedTooltipTrue = true;
+                        Item imanitem = is.getItem();
+                        tooltip.update(imanitem instanceof SpecialItem ? (SpecialItem)imanitem : imanitem);
+                    }
                     if (processor.didMouseClick()) {
                         if (mouseItem != null) {
                             if (mouseItem.getType().equals(is.getSlotType()) || is.getSlotType().equals(SlotType.NORM)) {
-                                Item temp = is.item;
-                                is.item = mouseItem;
+                                Item temp = is.getItem();
+                                if (i<12) {
+                                    character.swapItemFromInventory(mouseItem, i);
+                                } else if (i<21){
+                                    character.swapItemFromGear(mouseItem, i);
+                                } else {
+                                    character.swapItemFromToolbar(mouseItem, i);
+                                }
                                 mouseItem = temp;
                             }
                         } else {
-                            Item temp = is.item;
-                            is.item = mouseItem;
+                            Item temp = is.getItem();
+                            if (i<12) {
+                                character.swapItemFromInventory(mouseItem, i);
+                            } else if (i<21){
+                                character.swapItemFromGear(mouseItem, i);
+                            } else {
+                                character.swapItemFromToolbar(mouseItem, i);
+                            }
                             mouseItem = temp;
                         }
                     }
@@ -178,41 +194,94 @@ public class Inventory extends Container {
             }
         }
         mousePosition = processor.getMousePosition();
+        tooltip.visible = changedTooltipTrue;
     }
 
-    public void render(SpriteBatch batch){
+    public void render(SpriteBatch batch, Item[] inven){
         if (visible) {
-            renderBackground(batch);
-            renderChildren(batch);
-            if (character!=null){
-                for (int i = 0; i<statSlots.size(); i++){
-                    String whatToWrite = "Joe";
-                    if (i==0){
-                        whatToWrite = character.getVitality() + "";
-                    }
-                    if (i==1){
-                        whatToWrite = character.getAgility() + "";
-                    }
-                    if (i==2){
-                        whatToWrite = character.getResistance() + "";
-                    }
-                    if (i==3){
-                        whatToWrite = character.getStrength() + "";
-                    }
-                    if (i==4){
-                        whatToWrite = character.getWisdom() + "";
-                    }
-
-                    float width = font.getBounds(whatToWrite).width;
-                    batch.begin();
-                    font.draw(batch, whatToWrite, statSlots.get(i).x-width, statSlots.get(i).y);
-                    batch.end();
+            if (character!=null) {
+                for (int i = 0; i < inven.length; i++) {
+                    defaultInventory.get(i).setItem(inven[i]);
                 }
-            }
-            if (mouseItem!=null) {
-                batch.begin();
-                batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
-                batch.end();
+                renderBackground(batch);
+                renderChildren(batch);
+                TextureRegion temp = character.getImage();
+                Rectangle tempRec = new Rectangle(invenImage.getAbsolutePosition().x+(invenImage.getSize().x-temp.getRegionWidth()*3)/2,
+                        defaultInventory.get(defaultInventory.size()-1).getAbsolutePosition().y+40,
+                        temp.getRegionWidth()*3, temp.getRegionHeight()*3);
+                if (!(this instanceof Toolbar)) {
+                    batch.begin();
+                    batch.draw(temp, tempRec.x, tempRec.y, tempRec.width, tempRec.height);
+                    Item[] gear = character.getInventory();
+                    for (int i = 12; i<21; i++){
+                        if (gear[i]!=null){
+                            SpecialItem si = (SpecialItem)gear[i];
+                            if (si.getCharacterOverlay()!=null){
+                                Texture t = si.getCharacterOverlay();
+                                Rectangle r = si.getOverlayRectangle();
+                                batch.draw(t, tempRec.x+r.x*3, tempRec.y+tempRec.height-r.y-r.height*3, r.width*3, r.height*3);
+                            }
+                        }
+                    }
+                    batch.end();
+                    for (int i = 0; i < statSlots.size(); i++) {
+                        String whatToWrite = "Joe";
+                        String whatToWrite2 = "Sheila";
+                        String modifiertype = "neutral";
+                        if (i == 0) {
+                            whatToWrite = character.getVitality() + "";
+                            int val = (int)character.getBonusVitality();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
+                        }
+                        if (i == 1) {
+                            whatToWrite = character.getAgility() + "";
+                            int val = (int)character.getBonusAgility();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
+                        }
+                        if (i == 2) {
+                            whatToWrite = character.getResistance() + "";
+                            int val = (int)character.getBonusResistance();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
+                        }
+                        if (i == 3) {
+                            whatToWrite = character.getStrength() + "";
+                            int val = (int)character.getBonusStrength();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
+                        }
+                        if (i == 4) {
+                            whatToWrite = character.getWisdom() + "";
+                            int val = (int)character.getBonusWisdom();
+                            if (val>0){modifiertype = "positive";}
+                            else if (val<0){modifiertype = "negative";}
+                            whatToWrite2 = val + "";
+                        }
+
+                        float width = font.getBounds(whatToWrite2).width;
+                        batch.begin();
+                        font.setColor(Color.WHITE);
+                        font.draw(batch, whatToWrite, statSlots.get(i).x, statSlots.get(i).y);
+                        if (modifiertype.equals("positive")){font.setColor(Color.GREEN);}
+                        else if (modifiertype.equals("negative")){font.setColor(Color.RED);}
+                        else {font.setColor(Color.WHITE);}
+                        font.draw(batch, whatToWrite2, statSlots.get(i).x - width + 106, statSlots.get(i).y);
+                        batch.end();
+                    }
+                    if (mouseItem != null) {
+                        batch.begin();
+                        batch.draw(mouseItem.image, mousePosition.x - mouseItem.image.getWidth() / 2, mousePosition.y - mouseItem.image.getHeight() / 2, mouseItem.image.getWidth(), mouseItem.image.getHeight());
+                        batch.end();
+                    } else {
+                        tooltip.render(batch);
+                    }
+                }
             }
         }
     }

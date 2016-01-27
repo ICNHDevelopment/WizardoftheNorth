@@ -2,8 +2,6 @@ package com.icnhdevelopment.wotn.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,14 +13,13 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
-import com.icnhdevelopment.wotn.gui.special.Hud;
-import com.icnhdevelopment.wotn.gui.special.Inventory;
-import com.icnhdevelopment.wotn.gui.special.Toolbar;
+import com.icnhdevelopment.wotn.battle.BattleInfo;
+import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
@@ -40,13 +37,15 @@ public class World {
     public static double SCALE = 2;
     Character mainCharacter;
     public static int TileWidth, TileHeight;
-    Sound backMusic;
+    String fileLocation;
 
     public static int TICK = 0;
 
     ArrayList<Monster> enemies;
     ArrayList<Spawner> spawners;
     ArrayList<Rectangle> walls;
+    ArrayList<CollideObject> collideObjects;
+    ArrayList<InventoryObject> inventoryObjects;
     ArrayList<Rectangle> overWalls;
     ArrayList<AnimatedSprite> animatedSprites;
     ArrayList<Sprite> multiDSprites;
@@ -55,20 +54,22 @@ public class World {
     Toolbar toolbar;
     Inventory inventory;
     Hud hud;
-    boolean showInventory = false;
-    boolean changeToBattle = false;
 
+    public boolean changeToBattle = false;
     Texture battleTransition;
     int battleStage = -1;
+    Character battleChar;
 
     String state = "fadein";
     float alpha = 1f;
 
     public void create(String filename){
-        Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
+        fileLocation = filename.substring(0, filename.lastIndexOf("/")+1);
         enemies = new ArrayList<>();
         spawners = new ArrayList<>();
         walls = new ArrayList<>();
+        collideObjects = new ArrayList<>();
+        inventoryObjects = new ArrayList<>();
         overWalls = new ArrayList<>();
         animatedSprites = new ArrayList<>();
         multiDSprites = new ArrayList<>();
@@ -82,7 +83,6 @@ public class World {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (int)(Game.WIDTH()/SCALE), (int)(Game.HEIGHT()/SCALE));
-        //camera.translate(0, (mapProperties.get("height", Integer.class)*mapProperties.get("tileheight", Integer.class)) - (Game.HEIGHT() / SCALE));
         camera.position.x = (mapProperties.get("width", Integer.class)*TileWidth/2);
         camera.position.y = (mapProperties.get("height", Integer.class)*TileHeight) - (Game.HEIGHT());
         camera.update();
@@ -93,6 +93,8 @@ public class World {
         multiDSprites.add(mainCharacter);
 
         toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
+        toolbar.setVisible(true);
+        toolbar.setCharacter(mainCharacter);
         inventory = new Inventory("ui/inventory/Inventory.png");
         inventory.createFont();
         inventory.setVisible(false);
@@ -109,11 +111,14 @@ public class World {
     }
 
     void initMap(TiledMap m){
-        loadWalls(map);
-        loadSpawners(map);
-        loadAnimatedSprites(map);
-        loadOverwallRecs(map);
-        loadItems(map);
+        loadWalls(m);
+        loadCollideObjects(m);
+        loadInventoryObjects(m);
+        loadSpawners(m);
+        loadPreSpawns(m);
+        loadAnimatedSprites(m);
+        loadOverwallRecs(m);
+        loadItems(m);
     }
 
     void loadWalls(TiledMap m){
@@ -142,6 +147,23 @@ public class World {
         }
     }
 
+    void loadPreSpawns(TiledMap m){
+        MapLayer layer = m.getLayers().get("preSpawns");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs){
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String type = data[0];
+            String battleDataFile = data[1];
+            float tx = (float)obj.getProperties().get("x");
+            float ty = (float)obj.getProperties().get("y");
+            Monster mon = Monster.getMonster(type);
+            assert mon != null;
+            mon.battleDataFile = fileLocation + battleDataFile + ".txt";
+            mon.create(mon.defaultFile, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
+            this.spawn(mon);
+        }
+    }
+
     void loadAnimatedSprites(TiledMap m){
         MapLayer layer = m.getLayers().get("objectF");
         MapObjects objs = layer.getObjects();
@@ -157,6 +179,46 @@ public class World {
             AnimatedSprite temp = new AnimatedSprite();
             temp.create(file, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
             animatedSprites.add(temp);
+        }
+    }
+
+    void loadCollideObjects(TiledMap m){
+        MapLayer layer = m.getLayers().get("collideObjs");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs) {
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String name = data[0];
+            boolean brk = Boolean.valueOf(data[1]);
+            SlotType slt = SlotType.valueOf(data[2]);
+            float tx = (float) obj.getProperties().get("x");
+            float ty = (float) obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            String file = "world/images/" + name + ".png";
+            CollideObject co = new CollideObject();
+            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt);
+            collideObjects.add(co);
+        }
+    }
+
+    void loadInventoryObjects(TiledMap m){
+        MapLayer layer = m.getLayers().get("inventories");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs) {
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String name = data[0];
+            String flnm = data[1];
+            boolean brk = Boolean.valueOf(data[2]);
+            SlotType slt = SlotType.valueOf(data[3]);
+            float tx = (float) obj.getProperties().get("x");
+            float ty = (float) obj.getProperties().get("y");
+            float tw = (float) obj.getProperties().get("width");
+            float th = (float) obj.getProperties().get("height");
+            String file = "world/images/" + name + ".png";
+            InventoryObject co = new InventoryObject();
+            co.create(file, new Vector2(tx, ty), new Vector2(tw, th), brk, slt, name, fileLocation + flnm);
+            collideObjects.add(co);
+            inventoryObjects.add(co);
         }
     }
 
@@ -192,7 +254,16 @@ public class World {
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
-        m.setRandomMovementTimer(walls);
+        m.setRandomMovementTimer(walls, collideObjects, this);
+    }
+
+    public void kill(Character c){
+        if (enemies.contains(c)){
+            enemies.remove(c);
+        }
+        if (multiDSprites.contains(c)){
+            multiDSprites.remove(c);
+        }
     }
 
     void smoothRecs(ArrayList<Rectangle> recs){
@@ -210,6 +281,7 @@ public class World {
             alpha -= .02f;
             if (alpha<=0){
                 state="";
+                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
             }
         }else {
             if (changeToBattle) {
@@ -217,32 +289,47 @@ public class World {
                     battleStage++;
                 }
                 TICK++;
-                if (battleStage == 7) {
-                    if (input.isKeyDown(Input.Keys.ESCAPE)) {
-                        changeToBattle = false;
-                    }
+                if (battleStage == 7 && TICK%9==8) {
+                    BattleInfo bi = new BattleInfo(mainCharacter, battleChar);
+                    bi.setBackFile(fileLocation + "BattleScene.png");
+                    bi.setBattleTex(battleTransition);
+                    bi.setWorld(this);
+                    bi.setCharacterWorldPosition(new Vector2(mainCharacter.getPosition().x, mainCharacter.getPosition().y));
+                    bi.setEnemy(battleChar);
+                    changeToBattle = false;
+                    battleStage = -1;
+                    state = "fadein";
+                    alpha = 1;
+                    Game.currentBattle.create(bi);
+                    Game.GAME_STATE = GameState.BATTLE;
                 }
             } else if (inventory.isVisible()) {
                 inventory.update(input);
+                inventory.updateChildren(input);
                 if (input.isKeyDown(Input.Keys.ESCAPE)) {
                     inventory.setVisible(false);
                 }
             } else {
+                battleChar = null;
                 if (battleStage > -1 && TICK % 9 == 0) {
                     battleStage--;
                 }
                 if (input.isKeyDown(Input.Keys.W)) {
-                    mainCharacter.move(new Vector2(0, 1), walls);
+                    mainCharacter.move(new Vector2(0, 1), walls, collideObjects);
                 } else if (input.isKeyDown(Input.Keys.S)) {
-                    mainCharacter.move(new Vector2(0, -1), walls);
+                    mainCharacter.move(new Vector2(0, -1), walls, collideObjects);
                 } else if (input.isKeyDown(Input.Keys.A)) {
-                    mainCharacter.move(new Vector2(-1, 0), walls);
+                    mainCharacter.move(new Vector2(-1, 0), walls, collideObjects);
                 } else if (input.isKeyDown(Input.Keys.D)) {
-                    mainCharacter.move(new Vector2(1, 0), walls);
+                    mainCharacter.move(new Vector2(1, 0), walls, collideObjects);
                 } else {
                     mainCharacter.animate(false);
                 }
                 mainCharacter.updateWalls(map, overWalls);
+                mainCharacter.updateInteractObjects(collideObjects);
+                if (input.isKeyDown(Input.Keys.F)){
+                    mainCharacter.interact();
+                }
 
                 for (Spawner s : spawners) {
                     if (s.spawn) {
@@ -251,6 +338,7 @@ public class World {
                     }
                 }
                 sortMultiDSprites();
+                testForBattle();
 
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
@@ -269,12 +357,23 @@ public class World {
         while (madeChange){
             madeChange = false;
             for (int i = 0; i<multiDSprites.size()-1; i++){
-                if (multiDSprites.get(i).getHitbox().y<multiDSprites.get(i+1).getHitbox().y){
+                if (multiDSprites.get(i).getHitBox().y<multiDSprites.get(i+1).getHitBox().y){
                     Sprite s = multiDSprites.get(i);
                     multiDSprites.set(i, multiDSprites.get(i+1));
                     multiDSprites.set(i+1, s);
                     madeChange = true;
                 }
+            }
+        }
+    }
+
+    void testForBattle(){
+        for (Monster m : enemies){
+            if (m.getHitBox().overlaps(mainCharacter.getHitBox())){
+                changeToBattle = true;
+                battleChar = m;
+                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.wav")), .1f);
+                return;
             }
         }
     }
@@ -286,10 +385,10 @@ public class World {
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
         mapRenderer.render(new int[]{0});
-        if (map.getLayers().get(1).getOpacity()==1) {
-            mapRenderer.render(new int[]{1});
-        }
         batch.begin();
+        for (CollideObject c : collideObjects){
+            c.render(batch);
+        }
         for (AnimatedSprite as : animatedSprites){
             as.render(batch);
         }
@@ -297,21 +396,30 @@ public class World {
             s.render(batch);
         }
         for (Sprite m : multiDSprites){
-            m.render(batch);
+            if (!m.equals(mainCharacter)||map.getLayers().get(1).getOpacity()<1) {
+                m.render(batch);
+            }
         }
         batch.end();
-        if (map.getLayers().get(1).getOpacity()<1) {
-            mapRenderer.render(new int[]{1});
+        mapRenderer.render(new int[]{1});
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        for (Sprite m : multiDSprites){
+            if (m.equals(mainCharacter)&&map.getLayers().get(1).getOpacity()==1) {
+                m.render(batch);
+            }
         }
+        batch.end();
 
         batch.setProjectionMatrix(inventory.getRenderCam().combined);
         hud.render(batch);
 
-        toolbar.render(batch);
+        batch.setProjectionMatrix(inventory.getRenderCam().combined);
+        toolbar.render(batch, mainCharacter.getToolbar());
 
         if (inventory.isVisible()) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
-            inventory.render(batch);
+            inventory.render(batch, mainCharacter.getInventory());
         }
         if (battleStage>-1){
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
@@ -322,6 +430,7 @@ public class World {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
             mainCharacter.render(batch);
+            battleChar.render(batch);
             batch.end();
         }
         if (state.equals("fadein")){

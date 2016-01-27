@@ -12,7 +12,7 @@ import com.icnhdevelopment.wotn.items.Item;
  */
 public class ItemSlot extends ImageLabel {
 
-    Item item;
+    private Item item;
     protected SlotType slotType = SlotType.NORM;
     protected Texture defaultImage;
 
@@ -23,7 +23,7 @@ public class ItemSlot extends ImageLabel {
 
         isBlocked = block;
         if (isBlocked){
-            item = null;
+            setItem(null);
             setDefaultImage(new Texture("Items/Blocked.png"));
         }
     }
@@ -31,20 +31,20 @@ public class ItemSlot extends ImageLabel {
     public void render(SpriteBatch batch){
         if (visible) {
             if (isBlocked){
-                item = null;
+                setItem(null);
                 setDefaultImage(new Texture("Items/Blocked.png"));
             }
             batch.begin();
             if (isHovering()) {
                 batch.draw(hoverImage, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
             }
-            if (item == null) {
+            if (getItem() == null) {
                 if (getSlotType() != SlotType.NORM || isBlocked) {
                     batch.draw(getDefaultImage(), getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
                 }
             }
-            if (item != null) {
-                batch.draw(item.image, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
+            if (getItem() != null) {
+                batch.draw(getItem().image, getAbsolutePosition().x + imagePosition.x, getAbsolutePosition().y + imagePosition.y, imageSize.x * 2, imageSize.y * 2);
             }
             batch.end();
         }
@@ -64,5 +64,13 @@ public class ItemSlot extends ImageLabel {
 
     public void setDefaultImage(Texture defaultImage) {
         this.defaultImage = defaultImage;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 }

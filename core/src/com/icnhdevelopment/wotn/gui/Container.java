@@ -41,7 +41,7 @@ public class Container implements Button {
 
     //BUTTON FUNCTIONS
     private ButtonFuction func;
-    private String desc;
+    private Object desc;
 
     public static Container getContainer(String typeName){
         if (typeName.equals("Label")) return new Label();
@@ -312,9 +312,15 @@ public class Container implements Button {
     public void Click() {
         if (func != null){
             if (func.equals(ButtonFuction.CHANGESTATE)){
-                if (desc.toLowerCase().equals("opening")){
+                if (desc.toString().toLowerCase().equals("opening")){
                     Game.GAME_STATE = GameState.OPENING;
                     Game.os.start();
+                }
+            }
+            else if (func.equals(ButtonFuction.VISIBILITY)){
+                if (desc instanceof Container){
+                    Container c = (Container)desc;
+                    (c).setVisible(!c.isVisible());
                 }
             }
         }
@@ -328,11 +334,11 @@ public class Container implements Button {
         this.func = func;
     }
 
-    public String getDesc() {
+    public Object getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
+    public void setDesc(Object desc) {
         this.desc = desc;
     }
 }

@@ -20,12 +20,8 @@ import java.util.ArrayList;
 
 public class TextConverter extends Container{
 
-    public static void main(String[] args) {
-        //Container test = Array_To_Container(Text_To_Array(new File("X:\\WizardoftheNorth\\core\\assets\\ui\\Menus\\MNUMain.txt")));
-    }
-
     public static ArrayList<String> Text_To_Array(FileHandle file) {
-        ArrayList<String> text = new ArrayList(Arrays.asList(file.readString().split("\n")));
+        @SuppressWarnings("unchecked") ArrayList<String> text = new ArrayList(Arrays.asList(file.readString().split("\n")));
         return text;
     }
 
