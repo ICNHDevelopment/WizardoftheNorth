@@ -64,7 +64,7 @@ public class Game extends ApplicationAdapter {
 		mouseCursor = new Texture("ui/cursor.png");
 		os = new OpeningSequence();
 		soundHandler = new SoundHandler();
-		soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/rain.wav")));
+		soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/rain.ogg")));
 		Item.InitItems();
 		random = new Random();
 		GFX.setTexture(new Texture("ui/hud/ExperienceMeter.png"));
@@ -84,7 +84,7 @@ public class Game extends ApplicationAdapter {
 			currentMenu.render(batch);
 			if (drawLightning) {
 				batch.begin();
-				GFX.drawChainLightningRandomBetweenPoints(batch, startPos, endPos1, endPos2, 3f, 3, Color.WHITE, new Color(255f/255f, 216f/255f, 0f/255f, 1f));//, Color.YELLOW, Color.ORANGE);
+				GFX.drawChainLightningRandomBetweenPoints(batch, startPos, endPos1, endPos2, 3f, 3, Color.BLUE, Color.RED);
 				batch.end();
 				if (System.currentTimeMillis()-lightningTime>lightningTimeNext){
 					lightningTimeNext = 500 + (long)(random.nextDouble()*7000L);
@@ -103,7 +103,8 @@ public class Game extends ApplicationAdapter {
 					drawLightning = true;
 					lightningTimeNext = 500L;
 					lightningTime = System.currentTimeMillis();
-					Gdx.audio.newSound(Gdx.files.internal("audio/lightning.wav")).play();
+					int which = random.nextInt(4)+1;
+					Gdx.audio.newSound(Gdx.files.internal("audio/thunder/thunder" + which + ".ogg")).play();
 
 				}
 			}
@@ -130,10 +131,12 @@ public class Game extends ApplicationAdapter {
 			Gdx.input.setCursorPosition((int)mouse.x, 710);
 		}
 
-		batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
-		batch.begin();
-		batch.draw(mouseCursor, inputProcessor.getMousePosition().x, inputProcessor.getMousePosition().y-20, 20, 20);
-		batch.end();
+		if (!GAME_STATE.equals(GameState.OPENING)) {
+			batch.setProjectionMatrix(currentMenu.mainContainer.getRenderCam().combined);
+			batch.begin();
+			batch.draw(mouseCursor, inputProcessor.getMousePosition().x, inputProcessor.getMousePosition().y - 20, 20, 20);
+			batch.end();
+		}
 
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}

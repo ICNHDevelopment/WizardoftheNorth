@@ -56,7 +56,7 @@ public class OpeningSequence {
     float textY = 0;
 
     public void start(){
-        Game.soundHandler.PlaySound(Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic.wav")), .5f);
+        Game.soundHandler.PlaySound(Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic.ogg")), .5f);
         lymrics = new ArrayList<>();
         for (int i = 1; i<=NUMofLYMRICS; i++){
             Lymric l = new Lymric();
@@ -69,7 +69,7 @@ public class OpeningSequence {
         font = Fonts.loadFont(Fonts.PRINCE_VALIANT, fontSize, Color.WHITE, Color.BLACK);
         font.setColor(font.getColor().r, font.getColor().g, font.getColor().b, alpha);
 
-        starwars = Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic2.wav"));
+        starwars = Gdx.audio.newSound(Gdx.files.internal("audio/openingMusic2.ogg"));
         starwarsText = Gdx.files.internal("audio/lymrics/starwars.txt").readString().split("\n");
         starWarsFont = Fonts.loadFont(Fonts.STAR_WARS, 42, Color.YELLOW, Color.BLACK);
     }
