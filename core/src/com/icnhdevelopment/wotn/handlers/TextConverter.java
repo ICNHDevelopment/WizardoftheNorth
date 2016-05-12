@@ -35,7 +35,7 @@ public class TextConverter extends Container{
         try{ contain.setSize(new Vector2(Float.parseFloat(valueOf(a, contain.getName() + ".Size.X")), Float.parseFloat(valueOf(a, contain.getName() + ".Size.Y")))); } catch(Exception e){}
 
         for (String line : a) if (line.contains(contain.getName() + ".Children")) hasChildren = true;
-        if (hasChildren) contain.setChildren(new ArrayList<>());
+        if (hasChildren) contain.setChildren(new ArrayList<Container>());
 
         for (String line : a) {
             if (line.contains(contain.getName() + ".Children.") && (line.length() - line.replace(".", "").length()) == 2) {

@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.battle.battlegui.BattleMenu;
+import com.icnhdevelopment.wotn.battle.battlegui.BattleMenuMain;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
@@ -50,8 +52,7 @@ public class Battle {
     ArrayList<Character> antSide;
     ArrayList<Character> fightOrder;
     ArrayList<CharacterData> characterData;
-    Rectangle optionsRec;
-    BattleOptions bo;
+    BattleMenuMain bm;
     Character charTurn;
     int whoseturn = 0;
 
@@ -61,7 +62,7 @@ public class Battle {
         wisBar = new Texture("ui/hud/WisdomMeter.png");
         orderBack = new Texture("ui/battle/orderUnderlay.png");
         orderOver = new Texture("ui/battle/orderOverlay.png");
-        randomGenerator = new Random(System.currentTimeMillis());
+        randomGenerator = new Random();
         background = new Texture(battleInfo.getBackFile());
         battleTransition = battleInfo.battleTex;
         protSide = battleInfo.getProtSide();
@@ -76,8 +77,7 @@ public class Battle {
         characterData = new ArrayList<>();
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
-        bo = new BattleOptions();
-        bo.create(protSide.get(0), optionsRec);
+        bm = new BattleMenuMain();
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -85,21 +85,20 @@ public class Battle {
     void loadPositions(){
         protPositions = new ArrayList<>();
         protPositions.add(new Rectangle(387, 351, 90, 90));
-        protPositions.add(new Rectangle(387, 447, 90, 90));
-        protPositions.add(new Rectangle(387, 255, 90, 90));
+        protPositions.add(new Rectangle(297, 447, 90, 90));
+        protPositions.add(new Rectangle(297, 255, 90, 90));
         protPositions.add(new Rectangle(195, 351, 90, 90));
-        protPositions.add(new Rectangle(195, 447, 90, 90));
-        protPositions.add(new Rectangle(195, 255, 90, 90));
+        protPositions.add(new Rectangle(105, 447, 90, 90));
+        protPositions.add(new Rectangle(105, 255, 90, 90));
         protDataPos = new Rectangle(6, 6, 351, 228);
         antPositions = new ArrayList<>();
         antPositions.add(new Rectangle(867, 351, 90, 90));
-        antPositions.add(new Rectangle(867, 447, 90, 90));
-        antPositions.add(new Rectangle(867, 255, 90, 90));
+        antPositions.add(new Rectangle(957, 447, 90, 90));
+        antPositions.add(new Rectangle(957, 255, 90, 90));
         antPositions.add(new Rectangle(1059, 351, 90, 90));
-        antPositions.add(new Rectangle(1059, 447, 90, 90));
-        antPositions.add(new Rectangle(1059, 255, 90, 90));
+        antPositions.add(new Rectangle(1149, 447, 90, 90));
+        antPositions.add(new Rectangle(1149, 255, 90, 90));
         antDataPos = new Rectangle(924, 6, 351, 228);
-        optionsRec = new Rectangle(369, 6, 543, 228);
     }
 
     void setPositions(ArrayList<Character> side, ArrayList<Rectangle> recs){
@@ -157,7 +156,7 @@ public class Battle {
         } else if (state.equals("fight")){
             if (protSide.contains(charTurn)){
                 showOptions = true;
-                bo.update(input);
+                bm.update(input);
             }else{
                 showOptions = false;
             }
@@ -166,7 +165,9 @@ public class Battle {
                 world.kill(enemy);
                 Game.GAME_STATE = GameState.WORLD;
             }
-            characterData.forEach(CharacterData::updateData);
+            for (CharacterData cd : characterData){
+                cd.updateData();
+            }
         }
     }
 
@@ -202,7 +203,7 @@ public class Battle {
             }
         }
         if (showOptions) {
-            bo.render(batch);
+            bm.render(batch);
         }
         if (state.equals("fadein")){
             TextureRegion tr = new TextureRegion(battleTransition, ((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
