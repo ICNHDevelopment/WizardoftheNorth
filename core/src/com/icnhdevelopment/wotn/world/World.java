@@ -330,6 +330,9 @@ public class World {
                 if (input.isKeyDown(Input.Keys.F)){
                     mainCharacter.interact();
                 }
+                if (TICK%300==0){
+                    mainCharacter.heal(1);
+                }
 
                 for (Spawner s : spawners) {
                     if (s.spawn) {

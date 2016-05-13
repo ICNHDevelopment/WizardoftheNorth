@@ -119,8 +119,9 @@ public class Character extends AnimatedSprite {
         return 0;
     }
     public CharacterStats getCharacterStats() { return stats; }
-    public boolean damage(float damage) { return stats.damage(damage); }
     public float getDamage(Character a, Character b) { return stats.CalculateDamage(a, b); }
+    public boolean damage(float damage) { return stats.damage(damage); }
+    public void heal(float heal) { stats.heal(heal); }
 
     public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);

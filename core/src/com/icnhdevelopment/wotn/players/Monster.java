@@ -19,4 +19,9 @@ public class Monster extends Character {
         return null;
     }
 
+    public Object[] possibleActions(){
+        //Temporary
+        return new Object[] { "Aslash", "Sprotect", "Sfocus" };
+    }
+
 }

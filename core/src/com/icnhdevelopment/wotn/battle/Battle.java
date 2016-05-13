@@ -15,6 +15,7 @@ import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.players.Character;
+import com.icnhdevelopment.wotn.players.Monster;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.ArrayList;
@@ -159,35 +160,94 @@ public class Battle {
                 charTurn = fightOrder.get(whoseturn);
             }
         } else if (state.equals("fight")){
-            if (protSide.contains(charTurn)){
-                if (stateState.equals("chooseaction")) {
-                    showOptions = true;
-                    bm.update(input, this);
-                    if (BattleMenuMain.choseAction) {
-                        stateState = "doaction";
-                    }
-                } else if (stateState.equals("doaction")){
-                    showOptions = false;
-                    if (actionDoer.doAction(this)){
-                        whoseturn++;
-                        if (whoseturn>fightOrder.size()){
-                            whoseturn = 0;
+            if (charTurn.getCurrentVitality()<=0){
+                switchTurn();
+            } else {
+                if (protSide.contains(charTurn)) {
+                    if (stateState.equals("chooseaction")) {
+                        showOptions = true;
+                        bm.update(input, this);
+                        if (BattleMenuMain.choseAction) {
+                            stateState = "doaction";
+                            BattleMenuMain.choseAction = false;
+                            bm = new BattleMenuMain();
                         }
-                        charTurn = fightOrder.get(whoseturn);
+                    } else if (stateState.equals("doaction")) {
+                        showOptions = false;
+                        switchTurn();
+                    }
+                } else {
+                    showOptions = false;
+                    if (stateState.equals("chooseaction")) {
+                        Object[] acts = ((Monster) charTurn).possibleActions();
+                        Object action = acts[randomGenerator.nextInt(acts.length)];
+                        if (action instanceof String) {
+                            String realAction = (String) action;
+                            if (realAction.startsWith("A")) {
+                                Character target = protSide.get(randomGenerator.nextInt(protSide.size()));
+                                setAction(realAction.substring(1), false, charTurn, target);
+                                stateState = "doaction";
+                            } else if (realAction.startsWith("S")) {
+                                setAction(realAction.substring(1), false, charTurn, charTurn);
+                                stateState = "doaction";
+                            }
+                        }
+                    } else if (stateState.equals("doaction")) {
+                        switchTurn();
                     }
                 }
-            }else{
-                showOptions = false;
-                //DO AI STUFF
             }
             if (input.isKeyDown(Input.Keys.ESCAPE)){
-                protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
-                world.kill(enemy);
-                Game.GAME_STATE = GameState.WORLD;
+                backToWorldWin();
             }
             for (CharacterData cd : characterData){
                 cd.updateData();
             }
+        }
+    }
+
+    void checkForWinner(){
+        boolean anyAlive = false;
+        for (Character c : antSide){
+            if (c.getCurrentVitality()>0){
+                anyAlive = true;
+            }
+        }
+        if (!anyAlive){
+            backToWorldWin();
+            return;
+        }
+        anyAlive = false;
+        for (Character c : protSide){
+            if (c.getCurrentVitality()>0){
+                anyAlive = true;
+            }
+        }
+        if (!anyAlive){
+            backToWorldLose();
+            return;
+        }
+    }
+
+    void backToWorldLose(){
+        protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
+        Game.GAME_STATE = GameState.WORLD;
+    }
+
+    public void backToWorldWin(){
+        world.kill(enemy);
+        backToWorldLose();
+    }
+
+    void switchTurn(){
+        if (actionDoer.doAction(this)){
+            checkForWinner();
+            whoseturn++;
+            if (whoseturn>=fightOrder.size()){
+                whoseturn = 0;
+            }
+            charTurn = fightOrder.get(whoseturn);
+            stateState = "chooseaction";
         }
     }
 

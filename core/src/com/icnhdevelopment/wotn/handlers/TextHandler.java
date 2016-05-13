@@ -13,7 +13,7 @@ public class TextHandler {
 	final int maxCharactersPerLine = 0; //Change This Later
 	final int maxNumOfLines = 0; //Change This Later
  	
- 	public static ArrayList<String> textToLines(String text){
+ 	public ArrayList<String> textToLines(String text){
  		ArrayList<String> t = new ArrayList(Arrays.asList(text.split("\\s+"))); //Added temporary parameter because errors
  		ArrayList<String> lines = new ArrayList<>();
  		String temp="";
@@ -41,7 +41,7 @@ public class TextHandler {
  	
  	public void scrollText(ArrayList<String> t, int scrollSpeed){
  	    int count = 0;
- 	    string temp = "";
+ 	    String temp = "";
  		for (int i = 0; i < t.size(); i++){
  			for (int j = 0; j < t.get(i).length()*scrollSpeed; j++){
  				count++;

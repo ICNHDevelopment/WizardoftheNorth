@@ -56,6 +56,15 @@ public class CharacterStats {
         CurrentVitality -= damage;
         return (CurrentVitality<=0);
     }
+    public void heal(float heal){
+        if (CurrentVitality<getVitality()) {
+            CurrentVitality += heal;
+        }
+        if (CurrentVitality>=getVitality()) {
+            CurrentVitality = getVitality();
+        }
+    }
+
     int BaseAgility;
     int IvAgility = 10;
     public int getAgility(){
