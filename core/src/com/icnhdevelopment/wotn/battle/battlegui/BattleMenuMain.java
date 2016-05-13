@@ -3,6 +3,7 @@ package com.icnhdevelopment.wotn.battle.battlegui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.players.Sprite;
 
@@ -13,6 +14,7 @@ public class BattleMenuMain extends BattleMenu {
 
     BattleMenuButton attack, support, items, magic;
     static BattleMenu current;
+    public static boolean choseAction = false;
 
     public BattleMenuMain() {
         super();
@@ -23,7 +25,12 @@ public class BattleMenuMain extends BattleMenu {
         magic = new BattleMenuButton("Magic", buttonSpots[3], new BattleMenuMagic());
     }
 
-    public void update(CInputProcessor input){
+    public void update(CInputProcessor input, Battle battle){
+        current.updateMenu(input, battle);
+    }
+
+    @Override
+    public void updateMenu(CInputProcessor input, Battle battle) {
         attack.update(input);
         items.update(input);
         support.update(input);

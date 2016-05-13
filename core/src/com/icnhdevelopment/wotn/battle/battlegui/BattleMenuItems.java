@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.battle.battlegui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 
 /**
@@ -9,7 +10,12 @@ import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 public class BattleMenuItems extends BattleMenu {
 
     @Override
-    public void update(CInputProcessor input) {
+    public void update(CInputProcessor input, Battle battle) {
+
+    }
+
+    @Override
+    public void updateMenu(CInputProcessor input, Battle battle) {
 
     }
 

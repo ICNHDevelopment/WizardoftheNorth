@@ -2,6 +2,7 @@ package com.icnhdevelopment.wotn.battle.battlegui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 
 /**
@@ -19,7 +20,9 @@ public abstract class BattleMenu {
         buttonSpots[3] = new Rectangle(container.x+(container.width-(182*2))/2+186, container.y+container.height-(12+152), 182, 76);
     }
 
-    public abstract void update(CInputProcessor input);
+    public abstract void update(CInputProcessor input, Battle battle);
+
+    public abstract void updateMenu(CInputProcessor input, Battle battle);
 
     public abstract void render(SpriteBatch batch);
 

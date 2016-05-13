@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.players;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -352,6 +353,7 @@ public class Character extends AnimatedSprite {
 
     public void render(SpriteBatch batch){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
+        batch.setColor(drawTint);
         batch.draw(tr, getPosition().x, getPosition().y, width, height);
         if (isPlayer()){
             for (int i = 0; i<9; i++){
@@ -365,11 +367,14 @@ public class Character extends AnimatedSprite {
                 }
             }
         }
+        batch.setColor(new Color(Color.WHITE));
     }
 
     public void render(SpriteBatch batch, float scale){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
+        batch.setColor(drawTint);
         batch.draw(tr, getPosition().x-(width*(scale-1)/2), getPosition().y, width*scale, height*scale);
+        batch.setColor(new Color(Color.WHITE));
     }
 
     public TextureRegion getImage(){

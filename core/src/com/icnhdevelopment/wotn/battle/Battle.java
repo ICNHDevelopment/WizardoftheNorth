@@ -28,6 +28,7 @@ public class Battle {
     Texture battleTransition;
     Texture background;
     String state = "fadein";
+    String stateState = "chooseaction";
     int battleStage = 7;
     Vector2 charPos;
     Character enemy;
@@ -55,6 +56,7 @@ public class Battle {
     BattleMenuMain bm;
     Character charTurn;
     int whoseturn = 0;
+    ActionDoer actionDoer;
 
     public void create(BattleInfo battleInfo){
         font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
@@ -78,6 +80,7 @@ public class Battle {
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
         bm = new BattleMenuMain();
+        actionDoer = new ActionDoer();
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -124,6 +127,8 @@ public class Battle {
                 Character c2 = fightOrder.get(i+1);
                 if (c2.getAgility()>c1.getAgility()){
                     fightOrder.set(i, c2);
+                    CharacterData cd2 = characterData.get(i+1);
+                    characterData.set(i, cd2);
                     changed = true;
                 }
             }
@@ -155,10 +160,25 @@ public class Battle {
             }
         } else if (state.equals("fight")){
             if (protSide.contains(charTurn)){
-                showOptions = true;
-                bm.update(input);
+                if (stateState.equals("chooseaction")) {
+                    showOptions = true;
+                    bm.update(input, this);
+                    if (BattleMenuMain.choseAction) {
+                        stateState = "doaction";
+                    }
+                } else if (stateState.equals("doaction")){
+                    showOptions = false;
+                    if (actionDoer.doAction()){
+                        whoseturn++;
+                        if (whoseturn>fightOrder.size()){
+                            whoseturn = 0;
+                        }
+                        charTurn = fightOrder.get(whoseturn);
+                    }
+                }
             }else{
                 showOptions = false;
+                //DO AI STUFF
             }
             if (input.isKeyDown(Input.Keys.ESCAPE)){
                 protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
@@ -210,5 +230,14 @@ public class Battle {
             batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
         }
         batch.end();
+    }
+
+    public Character currentTurn(){
+        return charTurn;
+    }
+
+    public void setAction(Object o, Character d, Character r){
+        actionDoer.setAction(o);
+        actionDoer.setCharacters(d, r);
     }
 }

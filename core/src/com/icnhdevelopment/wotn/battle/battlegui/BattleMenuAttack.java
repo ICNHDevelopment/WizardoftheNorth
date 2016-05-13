@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.players.Character;
 
 /**
  * Created by kyle on 5/12/16.
@@ -12,6 +14,10 @@ import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 public class BattleMenuAttack extends BattleMenu {
 
     BattleMenuAction onlyAction;
+    String choosingWhat = "action";
+
+    Object action;
+    Character doer;
 
     public BattleMenuAttack() {
         super();
@@ -21,8 +27,21 @@ public class BattleMenuAttack extends BattleMenu {
     }
 
     @Override
-    public void update(CInputProcessor input) {
+    public void update(CInputProcessor input, Battle battle) {
+        updateMenu(input, battle);
+    }
 
+    @Override
+    public void updateMenu(CInputProcessor input, Battle battle) {
+        if (choosingWhat.equals("action")) {
+            if (onlyAction.update(input)) {
+                action = "slash";
+                doer = battle.currentTurn();
+            }
+        } else if (choosingWhat.equals("target")){
+
+            BattleMenuMain.choseAction = true;
+        }
     }
 
     @Override

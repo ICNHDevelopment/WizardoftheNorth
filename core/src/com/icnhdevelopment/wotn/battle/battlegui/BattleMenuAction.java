@@ -24,7 +24,6 @@ public class BattleMenuAction {
                 return true;
             }
         }
-
         return false;
     }
 
