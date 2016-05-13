@@ -118,6 +118,9 @@ public class Character extends AnimatedSprite {
         }
         return 0;
     }
+    public CharacterStats getCharacterStats() { return stats; }
+    public boolean damage(float damage) { return stats.damage(damage); }
+    public float getDamage(Character a, Character b) { return stats.CalculateDamage(a, b); }
 
     public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
         super.create(filename, maxFrames, position, new Vector2(), animSpeed);
@@ -354,7 +357,7 @@ public class Character extends AnimatedSprite {
     public void render(SpriteBatch batch){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
         batch.setColor(drawTint);
-        batch.draw(tr, getPosition().x, getPosition().y, width, height);
+        batch.draw(tr, getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width, height);
         if (isPlayer()){
             for (int i = 0; i<9; i++){
                 if (gear[i]!=null){
@@ -362,7 +365,7 @@ public class Character extends AnimatedSprite {
                     if (si.getCharacterOverlay()!=null){
                         Texture t = si.getCharacterOverlay();
                         Rectangle r = si.getOverlayRectangle();
-                        batch.draw(t, getPosition().x+r.x, getPosition().y+getSize().y-r.y-r.height, r.width, r.height);
+                        batch.draw(t, getPosition().x+r.x+drawOffset.x, getPosition().y+getSize().y-r.y-r.height+drawOffset.y, r.width, r.height);
                     }
                 }
             }
@@ -373,7 +376,7 @@ public class Character extends AnimatedSprite {
     public void render(SpriteBatch batch, float scale){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
         batch.setColor(drawTint);
-        batch.draw(tr, getPosition().x-(width*(scale-1)/2), getPosition().y, width*scale, height*scale);
+        batch.draw(tr, getPosition().x-(width*(scale-1)/2)+drawOffset.x, getPosition().y+drawOffset.y, width*scale, height*scale);
         batch.setColor(new Color(Color.WHITE));
     }
 

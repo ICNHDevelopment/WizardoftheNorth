@@ -52,7 +52,7 @@ public class AnimatedSprite extends Sprite {
 
     public void render(SpriteBatch batch){
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[0][frame];
-        batch.draw(tr, getPosition().x, getPosition().y, width, height);
+        batch.draw(tr, getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width, height);
     }
 
     public boolean isAnimating() { return animating; }

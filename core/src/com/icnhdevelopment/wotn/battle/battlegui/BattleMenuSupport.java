@@ -32,10 +32,10 @@ public class BattleMenuSupport extends BattleMenu {
     @Override
     public void updateMenu(CInputProcessor input, Battle battle) {
         if (focus.update(input)){
-            battle.setAction("focus", battle.currentTurn(), battle.currentTurn());
+            battle.setAction("focus", true, battle.currentTurn(), battle.currentTurn());
             BattleMenuMain.choseAction = true;
         } else if (protect.update(input)){
-            battle.setAction("protect", battle.currentTurn(), battle.currentTurn());
+            battle.setAction("protect", true, battle.currentTurn(), battle.currentTurn());
             BattleMenuMain.choseAction = true;
         }
     }

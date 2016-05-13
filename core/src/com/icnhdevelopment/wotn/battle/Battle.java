@@ -168,7 +168,7 @@ public class Battle {
                     }
                 } else if (stateState.equals("doaction")){
                     showOptions = false;
-                    if (actionDoer.doAction()){
+                    if (actionDoer.doAction(this)){
                         whoseturn++;
                         if (whoseturn>fightOrder.size()){
                             whoseturn = 0;
@@ -232,12 +232,24 @@ public class Battle {
         batch.end();
     }
 
+    public ArrayList<Character> getAntagonists(){
+        return antSide;
+    }
+
+    public ArrayList<Character> getFightOrder(){
+        return fightOrder;
+    }
+
+    public ArrayList<CharacterData> getCharacterData(){
+        return characterData;
+    }
+
     public Character currentTurn(){
         return charTurn;
     }
 
-    public void setAction(Object o, Character d, Character r){
-        actionDoer.setAction(o);
+    public void setAction(Object o, boolean gg, Character d, Character r){
+        actionDoer.setAction(o, gg);
         actionDoer.setCharacters(d, r);
     }
 }
