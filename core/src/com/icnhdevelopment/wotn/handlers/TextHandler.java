@@ -40,9 +40,12 @@ public class TextHandler {
  	}
  	
  	public void scrollText(ArrayList<String> t, int scrollSpeed){
+ 	    int count = 0;
+ 	    string temp = "";
  		for (int i = 0; i < t.size(); i++){
- 			for (int j = 0; j < t.get(i).length(); j++){
- 				//Something
+ 			for (int j = 0; j < t.get(i).length()*scrollSpeed; j++){
+ 				count++;
+ 				if (count%scrollSpeed==0) temp = t.get(i).substring(0,i+1); //replace temp with line[i].text or something like that to indicate which line
  			}
  		}
  	}
