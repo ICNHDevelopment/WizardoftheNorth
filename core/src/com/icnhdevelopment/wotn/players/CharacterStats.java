@@ -107,19 +107,15 @@ public class CharacterStats {
         else {
             returnVal = ((((currentLevel)/2.0f)+32)/50.0f)*nCube;
         }
-        return (float)Math.floor(returnVal);
+        return (float)Math.floor(returnVal);    
     }
 
     float CalculateDamage(Character attacker, Character taker){
-        float A = attacker.getLevel();
-        float B = attacker.getStrength();
-        float C = 100;
-        float D = taker.getResistance();
-        float X = 1;
-        float Y = 10;
-        float Z = random.nextInt(38) + 217;
-        float damage = ((((((((2*A/5+2)*B*C)/D)/50)+2)*X)*Y/10)*Z)/255;
-        return damage;
+        float returnVal;
+        float br = taker.getBonusResistance(), bs = attacker.getBonusStrength();
+        returnVal = ((2*attacker.getLevel()+10)/250*((attacker.getStrength()+bs)/(taker.getResistance()+br)))+2+(bs/2);
+        if (returnVal<1) returnVal = 1;
+        return (float)Math.floor(returnVal);
     }
 
     public void addModifiers(int[] mods){

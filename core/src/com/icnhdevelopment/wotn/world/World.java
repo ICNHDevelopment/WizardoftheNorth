@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.battle.BattleInfo;
 import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
@@ -300,6 +301,7 @@ public class World {
                     battleStage = -1;
                     state = "fadein";
                     alpha = 1;
+                    Game.currentBattle = new Battle();
                     Game.currentBattle.create(bi);
                     Game.GAME_STATE = GameState.BATTLE;
                 }
@@ -327,11 +329,9 @@ public class World {
                 }
                 mainCharacter.updateWalls(map, overWalls);
                 mainCharacter.updateInteractObjects(collideObjects);
+                mainCharacter.heal(1f/300f);
                 if (input.isKeyDown(Input.Keys.F)){
                     mainCharacter.interact();
-                }
-                if (TICK%300==0){
-                    mainCharacter.heal(1);
                 }
 
                 for (Spawner s : spawners) {

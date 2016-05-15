@@ -44,7 +44,7 @@ public class ActionDoer {
                     return true;
                 }
             } else if (act.equals("slash")){
-                if (attackActorWithActor(doer, receiver, 3)){
+                if (attackActorWithActor(doer, receiver, 0.8f)){
                     receiver.damage(doer.getDamage(doer, receiver));
                     return true;
                 }
@@ -62,10 +62,10 @@ public class ActionDoer {
             mover.changeDrawOffset(new Vector2(deltaMove, 0));
         } else if (actionDuration<time){
             mover.changeDrawOffset(new Vector2(-deltaMove, 0));
-            flashColor(getHit, new Color(Color.RED), time, (int)time);
+            flashColor(getHit, new Color(Color.RED), time, 2);
         } else {
             doer.setDrawTint(new Color(Color.WHITE));
-            flashColor(getHit, new Color(Color.RED), time, (int)time);
+            flashColor(getHit, new Color(Color.RED), time, 2);
             return true;
         }
         return false;

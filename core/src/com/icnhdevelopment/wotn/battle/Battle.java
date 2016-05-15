@@ -230,8 +230,8 @@ public class Battle {
     }
 
     void backToWorldLose(){
-        protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
         Game.GAME_STATE = GameState.WORLD;
+        protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
     }
 
     public void backToWorldWin(){
@@ -241,13 +241,13 @@ public class Battle {
 
     void switchTurn(){
         if (actionDoer.doAction(this)){
+            stateState = "chooseaction";
             checkForWinner();
             whoseturn++;
             if (whoseturn>=fightOrder.size()){
                 whoseturn = 0;
             }
             charTurn = fightOrder.get(whoseturn);
-            stateState = "chooseaction";
         }
     }
 
