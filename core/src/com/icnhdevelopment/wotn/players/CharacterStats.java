@@ -43,6 +43,15 @@ public class CharacterStats {
     public float getRequiredExperience(){
         return NextLevelExp-CurrLevelExp;
     }
+    public void addExperience(int exp){
+        CurrentExperience += exp;
+        if (CurrentExperience >= getRequiredExperience()){
+            CurrentExperience -= getRequiredExperience();
+            level++;
+            NextLevelExp = CalculateLevelExp(level+1);
+            CurrLevelExp = CalculateLevelExp(level);
+        }
+    }
 
     float CurrentVitality;
     public float getCurrentVitality(){ return CurrentVitality; }

@@ -52,6 +52,7 @@ public class Battle {
     Rectangle antDataPos;
     ArrayList<Character> protSide;
     ArrayList<Character> antSide;
+    ArrayList<Integer> expValues;
     ArrayList<Character> fightOrder;
     ArrayList<CharacterData> characterData;
     BattleMenuMain bm;
@@ -70,6 +71,7 @@ public class Battle {
         battleTransition = battleInfo.battleTex;
         protSide = battleInfo.getProtSide();
         antSide = battleInfo.getAntSide();
+        expValues = battleInfo.getExpAmounts();
         charPos = battleInfo.getCharacterWorldPosition();
         enemy = battleInfo.getEnemy();
         world = battleInfo.getWorld();
@@ -236,6 +238,9 @@ public class Battle {
 
     public void backToWorldWin(){
         world.kill(enemy);
+        for (Integer i : expValues) {
+            protSide.get(0).addExperience(i);
+        }
         backToWorldLose();
     }
 

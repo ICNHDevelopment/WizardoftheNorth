@@ -46,6 +46,7 @@ public class ActionDoer {
             } else if (act.equals("slash")){
                 if (attackActorWithActor(doer, receiver, 0.8f)){
                     receiver.damage(doer.getDamage(doer, receiver));
+                    doer.setDrawOffset(new Vector2(0, 0));
                     return true;
                 }
             }

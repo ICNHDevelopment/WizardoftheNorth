@@ -36,6 +36,7 @@ public class Sprite {
     public Vector2 getSize() { return new Vector2(width, height); }
     public Rectangle getHitBox() { return new Rectangle(getPosition().x, getPosition().y, width, height); }
     public void changeDrawOffset(Vector2 deltaOffset) { drawOffset.x += deltaOffset.x; drawOffset.y += deltaOffset.y; }
+    public void setDrawOffset(Vector2 offset) { drawOffset.x = offset.x; drawOffset.y = offset.y; }
 
     public void setPosition(Vector2 position) {
         this.position = position;

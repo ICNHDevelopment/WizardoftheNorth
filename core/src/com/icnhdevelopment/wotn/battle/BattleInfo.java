@@ -19,6 +19,7 @@ public class BattleInfo {
     String backFile;
     ArrayList<Character> protSide;
     ArrayList<Character> antSide;
+    ArrayList<Integer> expAmounts;
 
     World world;
     Vector2 characterWorldPosition;
@@ -27,6 +28,7 @@ public class BattleInfo {
     public BattleInfo(Character ch1, Character ch2){
         protSide = new ArrayList<>();
         antSide = new ArrayList<>();
+        expAmounts = new ArrayList<>();
         protSide.add(ch1);
         if (ch2 instanceof Monster){
             Monster monster = (Monster)ch2;
@@ -40,10 +42,12 @@ public class BattleInfo {
                 int res = Integer.valueOf(data[4]);
                 int str = Integer.valueOf(data[5]);
                 int wis = Integer.valueOf(data[6]);
+                int exp = Integer.valueOf(data[7]);
                 Monster m = Monster.getMonster(type);
                 CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
                 m.create(m.defaultFile, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
                 antSide.add(m);
+                expAmounts.add(exp);
             }
         } else {
             antSide.add(ch2);
@@ -73,6 +77,8 @@ public class BattleInfo {
     public ArrayList<Character> getAntSide() {
         return antSide;
     }
+
+    public ArrayList<Integer> getExpAmounts() { return expAmounts; }
 
     public World getWorld() {
         return world;

@@ -46,6 +46,7 @@ public class Character extends AnimatedSprite {
     public float getRequiredExperience(){
         return stats.getRequiredExperience();
     }
+    public void addExperience(int exp) { stats.addExperience(exp); }
     public float getCurrentVitality(){ return stats.getCurrentVitality(); }
     public int getVitality(){ return stats.getVitality(); }
     public float getBonusVitality(){
@@ -356,22 +357,7 @@ public class Character extends AnimatedSprite {
     }
 
     public void render(SpriteBatch batch){
-        TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
-        batch.setColor(drawTint);
-        batch.draw(tr, getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width, height);
-        if (isPlayer()){
-            for (int i = 0; i<9; i++){
-                if (gear[i]!=null){
-                    SpecialItem si = (SpecialItem)gear[i];
-                    if (si.getCharacterOverlay()!=null){
-                        TextureRegion t = si.getTextureRegion(direction, frame);
-                        Rectangle r = new Rectangle(getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width, height);
-                        batch.draw(t, r.x, r.y, r.width, r.height);
-                    }
-                }
-            }
-        }
-        batch.setColor(new Color(Color.WHITE));
+        render(batch, 1);
     }
 
     public void render(SpriteBatch batch, float scale){
