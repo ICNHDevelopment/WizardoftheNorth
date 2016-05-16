@@ -29,14 +29,6 @@ public class CharacterData {
         setPositions();
     }
 
-    public float CalculateDamage(Character recip){
-        float returnVal;
-        float br = recip.getBonusResistance(), bs = character.getBonusStrength();
-        returnVal = ((2*character.getLevel()+10)/250*((character.getStrength()+bs)/(recip.getResistance()+br)))+2+(bs/2);
-        if (returnVal<1) returnVal = 1;
-        return (float)Math.floor(returnVal);
-    }
-
     void setPositions(){
         float x = position.x + 2;
         float y = position.y - 2;
@@ -49,8 +41,8 @@ public class CharacterData {
     }
 
     public void updateData(){
-        vitPerc = getCharacter().getCurrentVitality()/ getCharacter().getVitality();
-        wisPerc = getCharacter().getCurrentWisdom()/ getCharacter().getWisdom();
+        vitPerc = Math.max(getCharacter().getCurrentVitality() / getCharacter().getVitality(), 0);
+        wisPerc = Math.max(getCharacter().getCurrentWisdom() / getCharacter().getWisdom(), 0);
     }
 
     public Vector2 getNamePos() {

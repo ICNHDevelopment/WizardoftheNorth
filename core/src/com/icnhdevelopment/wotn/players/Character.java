@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.players;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -45,6 +46,7 @@ public class Character extends AnimatedSprite {
     public float getRequiredExperience(){
         return stats.getRequiredExperience();
     }
+    public void addExperience(int exp) { stats.addExperience(exp); }
     public float getCurrentVitality(){ return stats.getCurrentVitality(); }
     public int getVitality(){ return stats.getVitality(); }
     public float getBonusVitality(){
@@ -117,9 +119,13 @@ public class Character extends AnimatedSprite {
         }
         return 0;
     }
+    public CharacterStats getCharacterStats() { return stats; }
+    public float getDamage(Character a, Character b) { return stats.CalculateDamage(a, b); }
+    public boolean damage(float damage) { return stats.damage(damage); }
+    public void heal(float heal) { stats.heal(heal); }
 
-    public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
-        super.create(filename, maxFrames, position, new Vector2(), animSpeed);
+    public void create(String filename, String attackString, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
+        super.create(filename, attackString, maxFrames, position, new Vector2(), animSpeed);
         inventory = new Item[12];
         gear = new Item[9];
         toolbar = new Item[4];
@@ -137,8 +143,8 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    public void create(String filename, int maxFrames, Vector2 position, int animSpeed, boolean direcMove, CharacterStats stats) {
-        super.create(filename, maxFrames, position, new Vector2(), animSpeed);
+    public void create(String filename, String attackString, int maxFrames, Vector2 position, int animSpeed, boolean direcMove, CharacterStats stats) {
+        super.create(filename, attackString, maxFrames, position, new Vector2(), animSpeed);
         regHeight = texture.getHeight()/2;
         width = (int)(regWidth);//*World.SCALE);
         height = (int)(regHeight);//* World.SCALE);
@@ -351,29 +357,60 @@ public class Character extends AnimatedSprite {
     }
 
     public void render(SpriteBatch batch){
-        TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
-        batch.draw(tr, getPosition().x, getPosition().y, width, height);
-        if (isPlayer()){
-            for (int i = 0; i<9; i++){
-                if (gear[i]!=null){
-                    SpecialItem si = (SpecialItem)gear[i];
-                    if (si.getCharacterOverlay()!=null){
-                        Texture t = si.getCharacterOverlay();
-                        Rectangle r = si.getOverlayRectangle();
-                        batch.draw(t, getPosition().x+r.x, getPosition().y+getSize().y-r.y-r.height, r.width, r.height);
-                    }
-                }
-            }
-        }
+        render(batch, 1);
     }
 
     public void render(SpriteBatch batch, float scale){
-        TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
-        batch.draw(tr, getPosition().x-(width*(scale-1)/2), getPosition().y, width*scale, height*scale);
+        if (currentTexture.equals(texture)) {
+            TextureRegion tr = TextureRegion.split(texture, (int) regWidth, (int) regHeight)[direction][frame];
+            batch.setColor(drawTint);
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+            if (isPlayer()) {
+                for (int i = 0; i < 9; i++) {
+                    if (gear[i] != null) {
+                        SpecialItem si = (SpecialItem) gear[i];
+                        if (si.getCharacterOverlay() != null) {
+                            TextureRegion t = si.getTextureRegion(direction, frame);
+                            Rectangle r = new Rectangle(getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+                            batch.draw(t, r.x, r.y, r.width, r.height);
+                        }
+                    }
+                }
+            }
+            batch.setColor(new Color(Color.WHITE));
+        } else {
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[frame/9][frame%9];
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+        }
+    }
+
+    public void animateAttack(float maxTime, float time){
+        currentTexture = attackAnimation;
+        float switchLen = maxTime/13;
+        frame = (int)(time/switchLen);
+        if (time>=maxTime){
+            currentTexture = texture;
+        }
     }
 
     public TextureRegion getImage(){
-        return TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
+        return TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][0];
+    }
+
+    public Texture getAttackAnimation(){
+        return attackAnimation;
+    }
+
+    public int getDirection(){
+        return direction;
+    }
+
+    public void setDirection(int dir){
+        this.direction = dir;
+    }
+
+    public void setFrame(int frame){
+        this.frame = frame;
     }
 
     public void interact(){

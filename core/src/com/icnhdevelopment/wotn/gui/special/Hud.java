@@ -60,9 +60,9 @@ public class Hud extends Container {
         super.render(batch);
 
         batch.begin();
-        float percV = Math.min(character.getCurrentVitality()/(float)character.getVitality(), 1f);
-        float percW = Math.min(character.getCurrentWisdom()/(float)character.getWisdom(), 1f);
-        float percE = Math.min(character.getCurrentExperience()/character.getRequiredExperience(), 1f);
+        float percV = Math.max(0f, Math.min(character.getCurrentVitality()/(float)character.getVitality(), 1f));
+        float percW = Math.max(0f, Math.min(character.getCurrentWisdom()/(float)character.getWisdom(), 1f));
+        float percE = Math.max(0f, Math.min(character.getCurrentExperience()/character.getRequiredExperience(), 1f));
         batch.draw(vitT, vitR.x, vitR.y, percV*vitR.getWidth(), vitR.getHeight());
         batch.draw(wisT, wisR.x, wisR.y, percW*wisR.getWidth(), wisR.getHeight());
         batch.draw(expT, expR.x, expR.y, percE*expR.getWidth(), expR.getHeight());

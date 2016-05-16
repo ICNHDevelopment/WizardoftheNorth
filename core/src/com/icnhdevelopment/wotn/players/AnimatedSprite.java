@@ -1,11 +1,13 @@
 package com.icnhdevelopment.wotn.players;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,12 +22,19 @@ public class AnimatedSprite extends Sprite {
     Timer animator;
     boolean directionalMovement = true;
 
-    public void create(String filename, int maxFrames, Vector2 position, Vector2 size, int animSpeed){
+    Texture currentTexture;
+    Texture attackAnimation;
+
+    public void create(String filename, String attackFile, int maxFrames, Vector2 position, Vector2 size, int animSpeed){
         super.create(filename, position, size);
         this.maxFrames = maxFrames;
         speed = animSpeed;
         regWidth =  texture.getWidth()/maxFrames;
         regHeight = texture.getHeight();
+        currentTexture = texture;
+        try {
+            attackAnimation = new Texture(attackFile);
+        } catch(Exception e){}
         if (!(this instanceof Character)) start();
     }
 
@@ -51,8 +60,8 @@ public class AnimatedSprite extends Sprite {
     }
 
     public void render(SpriteBatch batch){
-        TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[0][frame];
-        batch.draw(tr, getPosition().x, getPosition().y, width, height);
+        TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][frame];
+        batch.draw(tr, getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width, height);
     }
 
     public boolean isAnimating() { return animating; }

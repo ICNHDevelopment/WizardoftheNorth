@@ -217,9 +217,8 @@ public class Inventory extends Container {
                         if (gear[i]!=null){
                             SpecialItem si = (SpecialItem)gear[i];
                             if (si.getCharacterOverlay()!=null){
-                                Texture t = si.getCharacterOverlay();
-                                Rectangle r = si.getOverlayRectangle();
-                                batch.draw(t, tempRec.x+r.x*3, tempRec.y+tempRec.height-r.y-r.height*3, r.width*3, r.height*3);
+                                TextureRegion t = si.getTextureRegion(character.getDirection(), 0);
+                                batch.draw(t, tempRec.x, tempRec.y, tempRec.width, tempRec.height);
                             }
                         }
                     }

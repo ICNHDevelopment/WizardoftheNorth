@@ -9,10 +9,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.battle.battlegui.BattleMenu;
+import com.icnhdevelopment.wotn.battle.battlegui.BattleMenuMain;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.players.Character;
+import com.icnhdevelopment.wotn.players.Monster;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class Battle {
     Texture battleTransition;
     Texture background;
     String state = "fadein";
+    String stateState = "chooseaction";
     int battleStage = 7;
     Vector2 charPos;
     Character enemy;
@@ -48,12 +52,13 @@ public class Battle {
     Rectangle antDataPos;
     ArrayList<Character> protSide;
     ArrayList<Character> antSide;
+    ArrayList<Integer> expValues;
     ArrayList<Character> fightOrder;
     ArrayList<CharacterData> characterData;
-    Rectangle optionsRec;
-    BattleOptions bo;
+    BattleMenuMain bm;
     Character charTurn;
     int whoseturn = 0;
+    ActionDoer actionDoer;
 
     public void create(BattleInfo battleInfo){
         font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
@@ -61,11 +66,12 @@ public class Battle {
         wisBar = new Texture("ui/hud/WisdomMeter.png");
         orderBack = new Texture("ui/battle/orderUnderlay.png");
         orderOver = new Texture("ui/battle/orderOverlay.png");
-        randomGenerator = new Random(System.currentTimeMillis());
+        randomGenerator = new Random();
         background = new Texture(battleInfo.getBackFile());
         battleTransition = battleInfo.battleTex;
         protSide = battleInfo.getProtSide();
         antSide = battleInfo.getAntSide();
+        expValues = battleInfo.getExpAmounts();
         charPos = battleInfo.getCharacterWorldPosition();
         enemy = battleInfo.getEnemy();
         world = battleInfo.getWorld();
@@ -76,8 +82,8 @@ public class Battle {
         characterData = new ArrayList<>();
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
-        bo = new BattleOptions();
-        bo.create(protSide.get(0), optionsRec);
+        bm = new BattleMenuMain();
+        actionDoer = new ActionDoer();
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -85,21 +91,20 @@ public class Battle {
     void loadPositions(){
         protPositions = new ArrayList<>();
         protPositions.add(new Rectangle(387, 351, 90, 90));
-        protPositions.add(new Rectangle(387, 447, 90, 90));
-        protPositions.add(new Rectangle(387, 255, 90, 90));
+        protPositions.add(new Rectangle(297, 447, 90, 90));
+        protPositions.add(new Rectangle(297, 255, 90, 90));
         protPositions.add(new Rectangle(195, 351, 90, 90));
-        protPositions.add(new Rectangle(195, 447, 90, 90));
-        protPositions.add(new Rectangle(195, 255, 90, 90));
+        protPositions.add(new Rectangle(105, 447, 90, 90));
+        protPositions.add(new Rectangle(105, 255, 90, 90));
         protDataPos = new Rectangle(6, 6, 351, 228);
         antPositions = new ArrayList<>();
         antPositions.add(new Rectangle(867, 351, 90, 90));
-        antPositions.add(new Rectangle(867, 447, 90, 90));
-        antPositions.add(new Rectangle(867, 255, 90, 90));
+        antPositions.add(new Rectangle(957, 447, 90, 90));
+        antPositions.add(new Rectangle(957, 255, 90, 90));
         antPositions.add(new Rectangle(1059, 351, 90, 90));
-        antPositions.add(new Rectangle(1059, 447, 90, 90));
-        antPositions.add(new Rectangle(1059, 255, 90, 90));
+        antPositions.add(new Rectangle(1149, 447, 90, 90));
+        antPositions.add(new Rectangle(1149, 255, 90, 90));
         antDataPos = new Rectangle(924, 6, 351, 228);
-        optionsRec = new Rectangle(369, 6, 543, 228);
     }
 
     void setPositions(ArrayList<Character> side, ArrayList<Rectangle> recs){
@@ -125,6 +130,8 @@ public class Battle {
                 Character c2 = fightOrder.get(i+1);
                 if (c2.getAgility()>c1.getAgility()){
                     fightOrder.set(i, c2);
+                    CharacterData cd2 = characterData.get(i+1);
+                    characterData.set(i, cd2);
                     changed = true;
                 }
             }
@@ -155,18 +162,97 @@ public class Battle {
                 charTurn = fightOrder.get(whoseturn);
             }
         } else if (state.equals("fight")){
-            if (protSide.contains(charTurn)){
-                showOptions = true;
-                bo.update(input);
-            }else{
-                showOptions = false;
+            if (charTurn.getCurrentVitality()<=0){
+                switchTurn();
+            } else {
+                if (protSide.contains(charTurn)) {
+                    if (stateState.equals("chooseaction")) {
+                        showOptions = true;
+                        bm.update(input, this);
+                        if (BattleMenuMain.choseAction) {
+                            stateState = "doaction";
+                            BattleMenuMain.choseAction = false;
+                            bm = new BattleMenuMain();
+                        }
+                    } else if (stateState.equals("doaction")) {
+                        showOptions = false;
+                        switchTurn();
+                    }
+                } else {
+                    showOptions = false;
+                    if (stateState.equals("chooseaction")) {
+                        Object[] acts = ((Monster) charTurn).possibleActions();
+                        Object action = acts[randomGenerator.nextInt(acts.length)];
+                        if (action instanceof String) {
+                            String realAction = (String) action;
+                            if (realAction.startsWith("A")) {
+                                Character target = protSide.get(randomGenerator.nextInt(protSide.size()));
+                                setAction(realAction.substring(1), false, charTurn, target);
+                                stateState = "doaction";
+                            } else if (realAction.startsWith("S")) {
+                                setAction(realAction.substring(1), false, charTurn, charTurn);
+                                stateState = "doaction";
+                            }
+                        }
+                    } else if (stateState.equals("doaction")) {
+                        switchTurn();
+                    }
+                }
             }
             if (input.isKeyDown(Input.Keys.ESCAPE)){
-                protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
-                world.kill(enemy);
-                Game.GAME_STATE = GameState.WORLD;
+                backToWorldWin();
             }
-            characterData.forEach(CharacterData::updateData);
+            for (CharacterData cd : characterData){
+                cd.updateData();
+            }
+        }
+    }
+
+    void checkForWinner(){
+        boolean anyAlive = false;
+        for (Character c : antSide){
+            if (c.getCurrentVitality()>0){
+                anyAlive = true;
+            }
+        }
+        if (!anyAlive){
+            backToWorldWin();
+            return;
+        }
+        anyAlive = false;
+        for (Character c : protSide){
+            if (c.getCurrentVitality()>0){
+                anyAlive = true;
+            }
+        }
+        if (!anyAlive){
+            backToWorldLose();
+            return;
+        }
+    }
+
+    void backToWorldLose(){
+        Game.GAME_STATE = GameState.WORLD;
+        protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
+    }
+
+    public void backToWorldWin(){
+        world.kill(enemy);
+        for (Integer i : expValues) {
+            protSide.get(0).addExperience(i);
+        }
+        backToWorldLose();
+    }
+
+    void switchTurn(){
+        if (actionDoer.doAction(this)){
+            stateState = "chooseaction";
+            checkForWinner();
+            whoseturn++;
+            if (whoseturn>=fightOrder.size()){
+                whoseturn = 0;
+            }
+            charTurn = fightOrder.get(whoseturn);
         }
     }
 
@@ -183,6 +269,7 @@ public class Battle {
                 batch.draw(orderOver, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
             }
         }
+        actionDoer.render(batch);
         for (CharacterData cd : characterData){
             Character c = cd.getCharacter();
             String name = cd.getName();
@@ -202,12 +289,33 @@ public class Battle {
             }
         }
         if (showOptions) {
-            bo.render(batch);
+            bm.render(batch);
         }
         if (state.equals("fadein")){
             TextureRegion tr = new TextureRegion(battleTransition, ((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
             batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
         }
         batch.end();
+    }
+
+    public ArrayList<Character> getAntagonists(){
+        return antSide;
+    }
+
+    public ArrayList<Character> getFightOrder(){
+        return fightOrder;
+    }
+
+    public ArrayList<CharacterData> getCharacterData(){
+        return characterData;
+    }
+
+    public Character currentTurn(){
+        return charTurn;
+    }
+
+    public void setAction(Object o, boolean gg, Character d, Character r){
+        actionDoer.setAction(o, gg);
+        actionDoer.setCharacters(d, r);
     }
 }

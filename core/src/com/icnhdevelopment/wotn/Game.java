@@ -2,7 +2,6 @@ package com.icnhdevelopment.wotn;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -119,6 +118,7 @@ public class Game extends ApplicationAdapter {
 			currentBattle.render(batch);
 		}
 		inputProcessor.update();
+
 		Vector2 mouse = inputProcessor.getMousePosition();
 		if (mouse.x>1270){
 			Gdx.input.setCursorPosition(1270, HEIGHT-(int)mouse.y);

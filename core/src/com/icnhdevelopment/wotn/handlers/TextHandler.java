@@ -1,5 +1,9 @@
 package com.icnhdevelopment.wotn.handlers;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.gui.Fonts;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,13 +12,22 @@ import java.util.Arrays;
  */
 public class TextHandler {
 
-	String currentText;
+	String currentText, newText;
 	int scrollSpeed;
+	static int counter = 0;
 	final int maxCharactersPerLine = 0; //Change This Later
 	final int maxNumOfLines = 0; //Change This Later
+
+	BitmapFont font;
+	Vector2 topLeft;
+	
+	public TextHandler(String text){
+	    currentText = text;
+		font = Fonts.loadFont(Fonts.OPEN_SANS, 14);
+	}
  	
  	public ArrayList<String> textToLines(String text){
- 		ArrayList<String> t = new ArrayList(Arrays.asList(text.split(" "))); //Added temporary parameter because errors
+ 		ArrayList<String> t = new ArrayList(Arrays.asList(text.split("\\s+"))); //Added temporary parameter because errors
  		ArrayList<String> lines = new ArrayList<>();
  		String temp="";
  		int count = 0;
@@ -22,45 +35,49 @@ public class TextHandler {
  		//Might change this into a for-each loop later
  		for (int i = 0; i < t.size(); i++){
  			if (t.get(i).length() + (count + 1) <= maxCharactersPerLine){// There will always be a space at the end, I don't want to make a seperate case.
- 				temp.concat(t.get(i) + " "); //Adds text to string if total character length doesn't exceed max
+ 				temp = temp.concat(t.get(i).concat(" ")); //Adds text to string if total character length doesn't exceed max
+ 				System.out.println(temp);
  				count += t.get(i).length() + 1; //Updates characters count
+ 				if (i == t.size() - 1) lines.add(temp);
  			}
- 			else if (t.get(i).length() + (count + 1) <= maxCharactersPerLine){
+ 			else if (t.get(i).length() + (count + 1) >= maxCharactersPerLine){
  				count = 0;
  				lines.add(temp); //Sets concated string as line and starts concating a new line
  				temp = "";
  				
- 				temp.concat(t.get(i) + " ");
- 				count += count += t.get(i).length() + 1;
- 			}
- 			else if(lines.size() > maxNumOfLines){
- 				//textBox.setText(1, "") where textBox.setText(int lineNumber, string text);
- 				//or something like textBox.clear();
- 				
- 				count = 0;
- 				lines.add(temp);
- 				temp = "";
- 				
- 				temp.concat(t.get(i) + " ");
- 				count += count += t.get(i).length() + 1;
+ 				temp = temp.concat(t.get(i).concat(" "));
+ 				count += t.get(i).length() + 1;
  			}
  		}
-		return null;
+		return lines;
  	}
  	
+ 	public void scrollText(String oldText, String text){
+ 	    newText = text.substring(0, oldText.length() + 1);
+ 	}
+ 	
+ 	/*
  	public void scrollText(ArrayList<String> t, int scrollSpeed){
+ 	    int count = 0;
+ 	    String temp = "";
  		for (int i = 0; i < t.size(); i++){
- 			for (int j = 0; j < t.get(i).length(); j++){
- 				//Something
+ 			for (int j = 0; j < t.get(i).length()*scrollSpeed; j++){
+ 				count++;
+ 				if (count%scrollSpeed==0) temp = t.get(i).substring(0,i+1); //replace temp with line[i].text or something like that to indicate which line
  			}
  		}
  	}
+ 	*/
  	
  	public void setText(String text){
  		currentText = text;
  	}
  	
  	public void setScrollSpeed(int speed){
- 		scrollSpeed = speed;
+ 		//scrollSpeed = speed;
+ 	}
+ 	
+ 	public void update(){
+ 		scrollText(newText, currentText);
  	}
 }

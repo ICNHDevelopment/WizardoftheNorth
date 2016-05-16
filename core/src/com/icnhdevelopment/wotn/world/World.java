@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.Game;
+import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.battle.BattleInfo;
 import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
@@ -89,7 +90,7 @@ public class World {
         mapRenderer.setView(camera);
 
         mainCharacter = new Character();
-        mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5, true, true);
+        mainCharacter.create("characters/images/MainSS.png", null, 7, new Vector2(10*32, (int)(16.5*32)), 5, true, true);
         multiDSprites.add(mainCharacter);
 
         toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
@@ -159,7 +160,7 @@ public class World {
             Monster mon = Monster.getMonster(type);
             assert mon != null;
             mon.battleDataFile = fileLocation + battleDataFile + ".txt";
-            mon.create(mon.defaultFile, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
+            mon.create(mon.defaultFile, mon.defaultAttack, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
             this.spawn(mon);
         }
     }
@@ -177,7 +178,7 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             String file = "world/images/" + name + "SS.png";
             AnimatedSprite temp = new AnimatedSprite();
-            temp.create(file, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
+            temp.create(file, null, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
             animatedSprites.add(temp);
         }
     }
@@ -300,6 +301,7 @@ public class World {
                     battleStage = -1;
                     state = "fadein";
                     alpha = 1;
+                    Game.currentBattle = new Battle();
                     Game.currentBattle.create(bi);
                     Game.GAME_STATE = GameState.BATTLE;
                 }
@@ -327,6 +329,7 @@ public class World {
                 }
                 mainCharacter.updateWalls(map, overWalls);
                 mainCharacter.updateInteractObjects(collideObjects);
+                mainCharacter.heal(1f/300f);
                 if (input.isKeyDown(Input.Keys.F)){
                     mainCharacter.interact();
                 }
@@ -343,6 +346,7 @@ public class World {
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
                     inventory.setVisible(true);
+                    mainCharacter.setFrame(0);
                 }
                 if (input.isKeyDown(Input.Keys.T)) {
                     changeToBattle = true;
@@ -372,6 +376,8 @@ public class World {
             if (m.getHitBox().overlaps(mainCharacter.getHitBox())){
                 changeToBattle = true;
                 battleChar = m;
+                mainCharacter.setFrame(0);
+                mainCharacter.setDirection(1);
                 Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.wav")), .1f);
                 return;
             }

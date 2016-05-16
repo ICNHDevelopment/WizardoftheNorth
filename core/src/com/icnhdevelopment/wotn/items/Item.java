@@ -40,13 +40,6 @@ public class Item {
                 si.WisdomBonus = Integer.valueOf(data[8]);
                 if (over!=null){
                     si.setCharacterOverlay(over);
-                    Rectangle r = null;
-                    if (k.contains("Helm")){
-                        r = new Rectangle(5, 0, 23, 23);
-                    }
-                    if (r!=null){
-                        si.setOverlayRectangle(r);
-                    }
                 }
                 SPECIAL_ITEMS.put(k, si);
             }else {
