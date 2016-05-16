@@ -346,6 +346,7 @@ public class World {
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
                     inventory.setVisible(true);
+                    mainCharacter.setFrame(0);
                 }
                 if (input.isKeyDown(Input.Keys.T)) {
                     changeToBattle = true;
@@ -375,6 +376,8 @@ public class World {
             if (m.getHitBox().overlaps(mainCharacter.getHitBox())){
                 changeToBattle = true;
                 battleChar = m;
+                mainCharacter.setFrame(0);
+                mainCharacter.setDirection(1);
                 Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.wav")), .1f);
                 return;
             }

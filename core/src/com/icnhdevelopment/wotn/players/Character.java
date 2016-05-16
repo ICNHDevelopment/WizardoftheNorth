@@ -364,9 +364,9 @@ public class Character extends AnimatedSprite {
                 if (gear[i]!=null){
                     SpecialItem si = (SpecialItem)gear[i];
                     if (si.getCharacterOverlay()!=null){
-                        Texture t = si.getCharacterOverlay();
-                        Rectangle r = si.getOverlayRectangle();
-                        batch.draw(t, getPosition().x+r.x+drawOffset.x, getPosition().y+getSize().y-r.y-r.height+drawOffset.y, r.width, r.height);
+                        TextureRegion t = si.getTextureRegion(direction, frame);
+                        Rectangle r = new Rectangle(getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width, height);
+                        batch.draw(t, r.x, r.y, r.width, r.height);
                     }
                 }
             }
@@ -378,11 +378,35 @@ public class Character extends AnimatedSprite {
         TextureRegion tr = TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
         batch.setColor(drawTint);
         batch.draw(tr, getPosition().x-(width*(scale-1)/2)+drawOffset.x, getPosition().y+drawOffset.y, width*scale, height*scale);
+        if (isPlayer()){
+            for (int i = 0; i<9; i++){
+                if (gear[i]!=null){
+                    SpecialItem si = (SpecialItem)gear[i];
+                    if (si.getCharacterOverlay()!=null){
+                        TextureRegion t = si.getTextureRegion(direction, frame);
+                        Rectangle r = new Rectangle(getPosition().x-(width*(scale-1)/2)+drawOffset.x, getPosition().y+drawOffset.y, width*scale, height*scale);
+                        batch.draw(t, r.x, r.y, r.width, r.height);
+                    }
+                }
+            }
+        }
         batch.setColor(new Color(Color.WHITE));
     }
 
     public TextureRegion getImage(){
         return TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][frame];
+    }
+
+    public int getDirection(){
+        return direction;
+    }
+
+    public void setDirection(int dir){
+        this.direction = dir;
+    }
+
+    public void setFrame(int frame){
+        this.frame = frame;
     }
 
     public void interact(){

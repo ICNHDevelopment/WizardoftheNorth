@@ -107,7 +107,7 @@ public class CharacterStats {
         else {
             returnVal = ((((currentLevel)/2.0f)+32)/50.0f)*nCube;
         }
-        return (float)Math.floor(returnVal);    
+        return (float)Math.floor(returnVal);
     }
 
     float CalculateDamage(Character attacker, Character taker){
