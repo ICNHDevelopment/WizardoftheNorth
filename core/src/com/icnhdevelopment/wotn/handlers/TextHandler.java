@@ -1,5 +1,9 @@
 package com.icnhdevelopment.wotn.handlers;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.gui.Fonts;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -13,9 +17,13 @@ public class TextHandler {
 	static int counter = 0;
 	final int maxCharactersPerLine = 0; //Change This Later
 	final int maxNumOfLines = 0; //Change This Later
+
+	BitmapFont font;
+	Vector2 topLeft;
 	
 	public TextHandler(String text){
 	    currentText = text;
+		font = Fonts.loadFont(Fonts.OPEN_SANS, 14);
 	}
  	
  	public ArrayList<String> textToLines(String text){
