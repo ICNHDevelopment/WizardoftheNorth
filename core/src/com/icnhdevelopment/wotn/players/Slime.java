@@ -17,6 +17,7 @@ public class Slime extends Monster{
     @Override
     public void setDefaults() {
         defaultFile = "characters/images/SlimeSS.png";
+        defaultAttack = "characters/images/blueSlimeAttackSS.png";
         defaultMaxFrames = 9;
         defaultMaxSpawns = 3;
     }

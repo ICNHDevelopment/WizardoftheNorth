@@ -69,7 +69,7 @@ public class TextHandler {
  		//scrollSpeed = speed;
  	}
  	
- 	public static void update(){
+ 	public void update(){
  		scrollText(newText, currentText);
  	}
 }

@@ -269,6 +269,7 @@ public class Battle {
                 batch.draw(orderOver, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
             }
         }
+        actionDoer.render(batch);
         for (CharacterData cd : characterData){
             Character c = cd.getCharacter();
             String name = cd.getName();

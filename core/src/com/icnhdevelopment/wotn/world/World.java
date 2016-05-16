@@ -90,7 +90,7 @@ public class World {
         mapRenderer.setView(camera);
 
         mainCharacter = new Character();
-        mainCharacter.create("characters/images/MainSS.png", 7, new Vector2(10*32, (int)(16.5*32)), 5, true, true);
+        mainCharacter.create("characters/images/MainSS.png", null, 7, new Vector2(10*32, (int)(16.5*32)), 5, true, true);
         multiDSprites.add(mainCharacter);
 
         toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
@@ -160,7 +160,7 @@ public class World {
             Monster mon = Monster.getMonster(type);
             assert mon != null;
             mon.battleDataFile = fileLocation + battleDataFile + ".txt";
-            mon.create(mon.defaultFile, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
+            mon.create(mon.defaultFile, mon.defaultAttack, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
             this.spawn(mon);
         }
     }
@@ -178,7 +178,7 @@ public class World {
             float th = (float) obj.getProperties().get("height");
             String file = "world/images/" + name + "SS.png";
             AnimatedSprite temp = new AnimatedSprite();
-            temp.create(file, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
+            temp.create(file, null, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
             animatedSprites.add(temp);
         }
     }
