@@ -8,10 +8,15 @@ import java.util.Arrays;
  */
 public class TextHandler {
 
-	String currentText;
+	String currentText, newText;
 	int scrollSpeed;
+	static int counter = 0;
 	final int maxCharactersPerLine = 0; //Change This Later
 	final int maxNumOfLines = 0; //Change This Later
+	
+	public TextHandler(String text){
+	    currentText = text;
+	}
  	
  	public ArrayList<String> textToLines(String text){
  		ArrayList<String> t = new ArrayList(Arrays.asList(text.split("\\s+"))); //Added temporary parameter because errors
@@ -39,6 +44,11 @@ public class TextHandler {
 		return lines;
  	}
  	
+ 	public void scrollText(String oldText, String text){
+ 	    newText = text.substring(0, text.indexOf(oldText) + 1); //It might be +1 for the index or -1.
+ 	}
+ 	
+ 	/*
  	public void scrollText(ArrayList<String> t, int scrollSpeed){
  	    int count = 0;
  	    String temp = "";
@@ -49,12 +59,17 @@ public class TextHandler {
  			}
  		}
  	}
+ 	*/
  	
  	public void setText(String text){
  		currentText = text;
  	}
  	
  	public void setScrollSpeed(int speed){
- 		scrollSpeed = speed;
+ 		//scrollSpeed = speed;
+ 	}
+ 	
+ 	public static void update(){
+ 		scrollText(newText, currentText);
  	}
 }
