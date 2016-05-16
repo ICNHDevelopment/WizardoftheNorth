@@ -45,7 +45,7 @@ public class TextHandler {
  	}
  	
  	public void scrollText(String oldText, String text){
- 	    newText = text.substring(0, text.indexOf(oldText) + 1); //It might be +1 for the index or -1.
+ 	    newText = text.substring(0, oldText.length() + 1);
  	}
  	
  	/*
