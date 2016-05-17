@@ -15,6 +15,9 @@ import com.icnhdevelopment.wotn.players.Projectile;
 public class ActionDoer {
 
     Object action = null;
+    String actionType = "";
+    final String ATTACK = "slash.range";
+    final String SUPPORT = "protect.focus";
     Character doer, receiver;
     boolean goodGuy;
     float actionDuration = 0; //IN SECONDS ie. 0.5 = 500ms
@@ -23,11 +26,23 @@ public class ActionDoer {
 
     public void setAction(Object o, boolean gg){
         action = o;
+        setActionType(o);
         goodGuy = gg;
         actionDuration = 0;
         if (o instanceof String){
             if (o.equals("range")){
                 projectile = new Projectile();
+            }
+        }
+    }
+
+    void setActionType(Object action){
+        if (action instanceof String){
+            String strAct = (String)action;
+            if (ATTACK.contains(strAct)){
+                actionType = "Attack";
+            } else if (SUPPORT.contains(strAct)){
+                actionType = "Support";
             }
         }
     }
@@ -128,6 +143,10 @@ public class ActionDoer {
             }
         }
         return false;
+    }
+
+    public String getActionDescription(){
+        return doer.getName() + " chose to use a " + action + " " + actionType.toLowerCase() + " move...";
     }
 
     public void render(SpriteBatch batch){
