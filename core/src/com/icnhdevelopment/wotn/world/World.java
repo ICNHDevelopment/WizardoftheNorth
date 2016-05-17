@@ -282,7 +282,7 @@ public class World {
             alpha -= .02f;
             if (alpha<=0){
                 state="";
-                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.wav")), .1f);
+                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/sewerMusic.ogg")), .1f);
             }
         }else {
             if (changeToBattle) {
@@ -378,7 +378,7 @@ public class World {
                 battleChar = m;
                 mainCharacter.setFrame(0);
                 mainCharacter.setDirection(1);
-                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.wav")), .1f);
+                Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.ogg")), .1f);
                 return;
             }
         }

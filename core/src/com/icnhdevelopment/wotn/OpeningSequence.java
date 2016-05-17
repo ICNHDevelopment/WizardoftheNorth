@@ -60,7 +60,7 @@ public class OpeningSequence {
         lymrics = new ArrayList<>();
         for (int i = 1; i<=NUMofLYMRICS; i++){
             Lymric l = new Lymric();
-            l.sound = Gdx.audio.newSound(Gdx.files.internal("audio/lymrics/lymric" + i + ".wav"));
+            l.sound = Gdx.audio.newSound(Gdx.files.internal("audio/lymrics/lymric" + i + ".ogg"));
             l.text = Gdx.files.internal("audio/lymrics/lymric" + i + ".txt").readString().split("\n");
             l.time = Float.valueOf(l.text[l.text.length-1]);
             lymrics.add(l);

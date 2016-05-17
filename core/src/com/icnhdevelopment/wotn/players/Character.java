@@ -428,7 +428,7 @@ public class Character extends AnimatedSprite {
                             }
                         }
                         invenObject.setOpened(true);
-                        Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.wav")).play();
+                        Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.ogg")).play();
                     }
                 } else {
                     if (interactObject.isBreakable()) {
