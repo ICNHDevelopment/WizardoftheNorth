@@ -176,7 +176,7 @@ public class Battle {
                         bm.update(input, this);
                         if (BattleMenuMain.choseAction) {
                             state = "scrollText";
-                            outputText.setText(actionDoer.getActionDescription());
+                            outputText.setText(actionDoer.getActionDescription() + "                       ");
                             stateState = "doaction";
                             BattleMenuMain.choseAction = false;
                             bm = new BattleMenuMain();
@@ -196,12 +196,12 @@ public class Battle {
                                 Character target = protSide.get(randomGenerator.nextInt(protSide.size()));
                                 setAction(realAction.substring(1), false, charTurn, target);
                                 state = "scrollText";
-                                outputText.setText(actionDoer.getActionDescription());
+                                outputText.setText(actionDoer.getActionDescription() + "                       ");
                                 stateState = "doaction";
                             } else if (realAction.startsWith("S")) {
                                 setAction(realAction.substring(1), false, charTurn, charTurn);
                                 state = "scrollText";
-                                outputText.setText(actionDoer.getActionDescription());
+                                outputText.setText(actionDoer.getActionDescription() + "                       ");
                                 stateState = "doaction";
                             }
                         }
@@ -260,7 +260,8 @@ public class Battle {
     }
 
     void switchTurn(){
-        if (actionDoer.doAction(this)){
+        String result = actionDoer.doAction(this);
+        if (result.equals("true")){
             stateState = "chooseaction";
             checkForWinner();
             whoseturn++;
@@ -268,6 +269,17 @@ public class Battle {
                 whoseturn = 0;
             }
             charTurn = fightOrder.get(whoseturn);
+        } else if (result.equals("miss")){
+            state = "scrollText";
+            outputText.setText("The attack missed!                       ");
+            stateState = "chooseaction";
+            checkForWinner();
+            whoseturn++;
+            if (whoseturn>=fightOrder.size()){
+                whoseturn = 0;
+            }
+            charTurn = fightOrder.get(whoseturn);
+
         }
     }
 
@@ -331,7 +343,7 @@ public class Battle {
     }
 
     public void setAction(Object o, boolean gg, Character d, Character r){
-        actionDoer.setAction(o, gg);
         actionDoer.setCharacters(d, r);
+        actionDoer.setAction(this, o, gg);
     }
 }

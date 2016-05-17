@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.players.Character;
 
+import java.util.Random;
+
 /**
  * Created by kyle on 1/24/16.
  */
@@ -18,15 +20,32 @@ public class CharacterData {
     private float vitPerc;
     private float wisPerc;
     boolean showNumbers;
+    int focuses = 0;
+
+    Random random;
 
     public CharacterData(Character c, Rectangle pos, boolean sn){
         this.character = c;
         this.position = pos;
         this.showNumbers = sn;
         name = c.getName();
+        random = new Random();
         updateData();
 
         setPositions();
+    }
+
+    public void focus(){
+        focuses++;
+    }
+
+    public boolean willHit(){
+        if (focuses>0){
+            focuses--;
+            return true;
+        } else {
+            return random.nextBoolean();
+        }
     }
 
     void setPositions(){
