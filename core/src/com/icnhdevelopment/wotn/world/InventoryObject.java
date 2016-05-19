@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
+import com.icnhdevelopment.wotn.items.BattleItem;
 import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.items.SpecialItem;
 
@@ -34,6 +35,9 @@ public class InventoryObject extends CollideObject {
                 this.items.add(new Item(it));
             } else if (Item.SPECIAL_ITEMS.containsKey(items[i])){
                 SpecialItem it = Item.SPECIAL_ITEMS.get(items[i]);
+                this.items.add(it);
+            } else if (Item.BATTLE_ITEMS.containsKey(items[i])){
+                BattleItem it = Item.BATTLE_ITEMS.get(items[i]);
                 this.items.add(it);
             }
         }

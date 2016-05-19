@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.handlers.WizardHelper;
+import com.icnhdevelopment.wotn.items.BattleItem;
 import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.world.CollideObject;
@@ -423,6 +424,8 @@ public class Character extends AnimatedSprite {
                         for (Item i : its) {
                             if (i instanceof SpecialItem) {
                                 addToInventory(new SpecialItem((SpecialItem) i));
+                            } else if (i instanceof BattleItem){
+                                addToInventory(new BattleItem((BattleItem) i));
                             } else {
                                 addToInventory(new Item(i));
                             }
@@ -474,6 +477,26 @@ public class Character extends AnimatedSprite {
 
     public Item[] getInventory() {
         return WizardHelper.concat(WizardHelper.concat(inventory, gear), toolbar);
+    }
+
+    public ArrayList<BattleItem> getBattleItems(){
+        ArrayList<BattleItem> items = new ArrayList<>();
+        for (Item i : inventory){
+            if (i instanceof BattleItem){
+                items.add((BattleItem)i);
+            }
+        }
+        for (Item i : gear){
+            if (i instanceof BattleItem){
+                items.add((BattleItem)i);
+            }
+        }
+        for (Item i : toolbar){
+            if (i instanceof BattleItem){
+                items.add((BattleItem)i);
+            }
+        }
+        return items;
     }
 
     public Item[] getToolbar(){
