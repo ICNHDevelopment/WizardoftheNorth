@@ -14,6 +14,7 @@ import com.icnhdevelopment.wotn.battle.battlegui.BattleMenuMain;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
+import com.icnhdevelopment.wotn.handlers.TextHandler;
 import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.players.Monster;
 import com.icnhdevelopment.wotn.world.World;
@@ -59,6 +60,8 @@ public class Battle {
     Character charTurn;
     int whoseturn = 0;
     ActionDoer actionDoer;
+    TextHandler outputText;
+    Rectangle outputRectangle;
 
     public void create(BattleInfo battleInfo){
         font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
@@ -84,6 +87,7 @@ public class Battle {
         setData(antSide, antDataPos, false);
         bm = new BattleMenuMain();
         actionDoer = new ActionDoer();
+        outputText = new TextHandler("", outputRectangle);
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -105,6 +109,7 @@ public class Battle {
         antPositions.add(new Rectangle(1149, 447, 90, 90));
         antPositions.add(new Rectangle(1149, 255, 90, 90));
         antDataPos = new Rectangle(924, 6, 351, 228);
+        outputRectangle = new Rectangle(375, 12, 543, 58);
     }
 
     void setPositions(ArrayList<Character> side, ArrayList<Rectangle> recs){
@@ -170,6 +175,8 @@ public class Battle {
                         showOptions = true;
                         bm.update(input, this);
                         if (BattleMenuMain.choseAction) {
+                            state = "scrollText";
+                            outputText.setText(actionDoer.getActionDescription() + "                       ");
                             stateState = "doaction";
                             BattleMenuMain.choseAction = false;
                             bm = new BattleMenuMain();
@@ -188,9 +195,13 @@ public class Battle {
                             if (realAction.startsWith("A")) {
                                 Character target = protSide.get(randomGenerator.nextInt(protSide.size()));
                                 setAction(realAction.substring(1), false, charTurn, target);
+                                state = "scrollText";
+                                outputText.setText(actionDoer.getActionDescription() + "                       ");
                                 stateState = "doaction";
                             } else if (realAction.startsWith("S")) {
                                 setAction(realAction.substring(1), false, charTurn, charTurn);
+                                state = "scrollText";
+                                outputText.setText(actionDoer.getActionDescription() + "                       ");
                                 stateState = "doaction";
                             }
                         }
@@ -204,6 +215,10 @@ public class Battle {
             }
             for (CharacterData cd : characterData){
                 cd.updateData();
+            }
+        } else if (state.equals("scrollText")){
+            if (outputText.update()){
+                state = "fight";
             }
         }
     }
@@ -245,7 +260,8 @@ public class Battle {
     }
 
     void switchTurn(){
-        if (actionDoer.doAction(this)){
+        String result = actionDoer.doAction(this);
+        if (result.equals("true")){
             stateState = "chooseaction";
             checkForWinner();
             whoseturn++;
@@ -253,6 +269,17 @@ public class Battle {
                 whoseturn = 0;
             }
             charTurn = fightOrder.get(whoseturn);
+        } else if (result.equals("miss")){
+            state = "scrollText";
+            outputText.setText("The attack missed!                       ");
+            stateState = "chooseaction";
+            checkForWinner();
+            whoseturn++;
+            if (whoseturn>=fightOrder.size()){
+                whoseturn = 0;
+            }
+            charTurn = fightOrder.get(whoseturn);
+
         }
     }
 
@@ -291,6 +318,7 @@ public class Battle {
         if (showOptions) {
             bm.render(batch);
         }
+        outputText.render(batch);
         if (state.equals("fadein")){
             TextureRegion tr = new TextureRegion(battleTransition, ((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
             batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
@@ -315,7 +343,7 @@ public class Battle {
     }
 
     public void setAction(Object o, boolean gg, Character d, Character r){
-        actionDoer.setAction(o, gg);
         actionDoer.setCharacters(d, r);
+        actionDoer.setAction(this, o, gg);
     }
 }

@@ -15,19 +15,44 @@ import com.icnhdevelopment.wotn.players.Projectile;
 public class ActionDoer {
 
     Object action = null;
+    String actionType = "";
+    final String ATTACK = "slash.range";
+    final String SUPPORT = "protect.focus";
     Character doer, receiver;
     boolean goodGuy;
     float actionDuration = 0; //IN SECONDS ie. 0.5 = 500ms
+    boolean attackMiss = false;
 
     Projectile projectile;
 
-    public void setAction(Object o, boolean gg){
+    public void setAction(Battle battle, Object o, boolean gg){
         action = o;
+        setActionType(o);
         goodGuy = gg;
         actionDuration = 0;
         if (o instanceof String){
             if (o.equals("range")){
                 projectile = new Projectile();
+            }
+        }
+        if (actionType.equals("Attack")){
+            int index = battle.getFightOrder().indexOf(doer);
+            CharacterData dat = battle.getCharacterData().get(index);
+            doer.setDrawOffset(new Vector2(0, 0));
+            attackMiss = !dat.willHit();
+            if (doer.getCurrentVitality()<=0){
+                attackMiss = false;
+            }
+        }
+    }
+
+    void setActionType(Object action){
+        if (action instanceof String){
+            String strAct = (String)action;
+            if (ATTACK.contains(strAct)){
+                actionType = "Attack";
+            } else if (SUPPORT.contains(strAct)){
+                actionType = "Support";
             }
         }
     }
@@ -37,37 +62,43 @@ public class ActionDoer {
         receiver = r;
     }
 
-    public boolean doAction(Battle battle){
+    public String doAction(Battle battle){
         if (action instanceof String){
             if (action.equals("protect")){
                 if (flashColor(doer, Color.BLUE, 2, 1)){
                     CharacterStats stats = doer.getCharacterStats();
                     stats.addModifiers(new int[] {0, 0, 1, 0, 0});
-                    return true;
+                    return "true";
                 }
             } else if (action.equals("focus")){
                 if (flashColor(doer, Color.MAGENTA, 2, 1)){
-                    for (Character a : battle.getAntagonists()){
-                        a.getCharacterStats().addModifiers(new int[] {0, -1, 0, 0, 0});
-                    }
-                    return true;
+                    int index = battle.getFightOrder().indexOf(doer);
+                    CharacterData dat = battle.getCharacterData().get(index);
+                    dat.focus();
+                    return "true";
                 }
             } else if (action.equals("slash")){
                 if (attackActorWithActor(doer, receiver, 0.8f)){
-                    receiver.damage(doer.getDamage(doer, receiver));
-                    doer.setDrawOffset(new Vector2(0, 0));
-                    return true;
+                    if (!attackMiss){
+                        receiver.damage(doer.getDamage(doer, receiver));
+                        return "true";
+                    } else {
+                        return "miss";
+                    }
                 }
             } else if (action.equals("range")){
                 if (doRangedAttack(doer, receiver, 2f)){
-                    receiver.damage(doer.getDamage(doer, receiver));
-                    doer.setDrawOffset(new Vector2(0, 0));
-                    return true;
+                    if (!attackMiss){
+                        receiver.damage(doer.getDamage(doer, receiver));
+                        return "true";
+                    } else {
+                        return "miss";
+                    }
                 }
             }
         }
         actionDuration += Gdx.graphics.getDeltaTime();
-        return false;
+        return "false";
     }
 
     boolean doRangedAttack(Character mover, Character getHit, float time){
@@ -86,7 +117,9 @@ public class ActionDoer {
                 projectile.create(mover.getAttackAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize());
             }
             projectile.setPosition(new Vector2(projectile.getPosition().x+5*direction, projectile.getPosition().y));
-            getHit.setDrawTint(new Color(Color.RED));
+            if (!attackMiss) {
+                flashColor(getHit, new Color(Color.RED), time, 2);
+            }
         } else {
             projectile = null;
             getHit.setDrawTint(new Color(Color.WHITE));
@@ -103,10 +136,11 @@ public class ActionDoer {
             mover.changeDrawOffset(new Vector2(deltaMove, 0));
         } else if (actionDuration<time){
             mover.changeDrawOffset(new Vector2(-deltaMove, 0));
-            flashColor(getHit, new Color(Color.RED), time, 2);
+            if (!attackMiss) {
+                flashColor(getHit, new Color(Color.RED), time, 2);
+            }
         } else {
             doer.setDrawTint(new Color(Color.WHITE));
-            flashColor(getHit, new Color(Color.RED), time, 2);
             return true;
         }
         return false;
@@ -128,6 +162,10 @@ public class ActionDoer {
             }
         }
         return false;
+    }
+
+    public String getActionDescription(){
+        return doer.getName() + " chose to use a " + action + " " + actionType.toLowerCase() + " move...";
     }
 
     public void render(SpriteBatch batch){

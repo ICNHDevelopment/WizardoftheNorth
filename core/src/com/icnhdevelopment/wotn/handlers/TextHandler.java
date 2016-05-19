@@ -1,6 +1,8 @@
 package com.icnhdevelopment.wotn.handlers;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.Fonts;
 
@@ -12,18 +14,19 @@ import java.util.Arrays;
  */
 public class TextHandler {
 
-	String currentText, newText;
+	String currentText, newText = "";
 	int scrollSpeed;
 	static int counter = 0;
 	final int maxCharactersPerLine = 0; //Change This Later
 	final int maxNumOfLines = 0; //Change This Later
 
 	BitmapFont font;
-	Vector2 topLeft;
+	Rectangle container;
 	
-	public TextHandler(String text){
-	    currentText = text;
-		font = Fonts.loadFont(Fonts.OPEN_SANS, 14);
+	public TextHandler(String text, Rectangle container){
+		setText(text);
+		this.container = container;
+		font = Fonts.loadFont(Fonts.OPEN_SANS, 20);
 	}
  	
  	public ArrayList<String> textToLines(String text){
@@ -52,8 +55,12 @@ public class TextHandler {
 		return lines;
  	}
  	
- 	public void scrollText(String oldText, String text){
- 	    newText = text.substring(0, oldText.length() + 1);
+ 	public boolean scrollText(String oldText, String text){
+		if (text.length() == oldText.length()) return true;
+		else {
+			newText = text.substring(0, oldText.length() + 1);
+		}
+		return false;
  	}
  	
  	/*
@@ -71,13 +78,18 @@ public class TextHandler {
  	
  	public void setText(String text){
  		currentText = text;
+		newText = "";
  	}
  	
  	public void setScrollSpeed(int speed){
  		//scrollSpeed = speed;
  	}
  	
- 	public void update(){
- 		scrollText(newText, currentText);
+ 	public boolean update(){
+ 		return scrollText(newText, currentText);
  	}
+
+	public void render(SpriteBatch batch){
+		font.draw(batch, newText, container.x, container.y+font.getBounds(newText).height);
+	}
 }

@@ -15,10 +15,12 @@ public class Item {
 
     public static HashMap<String, Item> ITEMS;
     public static HashMap<String, SpecialItem> SPECIAL_ITEMS;
+    public static HashMap<String, BattleItem> BATTLE_ITEMS;
 
     public static void InitItems(){
         ITEMS = new HashMap<>();
         SPECIAL_ITEMS = new HashMap<>();
+        BATTLE_ITEMS = new HashMap<>();
         String[] items = Gdx.files.internal("Items/Items.txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 1; i<items.length; i++){
             String t = items[i];
@@ -26,11 +28,11 @@ public class Item {
             String k = data[0];
             String name = data[1];
             SlotType st = SlotType.valueOf(data[2]);
-            boolean spec = Boolean.valueOf(data[3]);
+            String spec = data[3];
             Texture tex = new Texture("Items/" + k + ".png");
             Texture over = null;
             try { over = new Texture("Items/" + k + "E.png"); } catch (Exception e){}
-            if (spec){
+            if (spec.equals("spec")){
                 SpecialItem si = new SpecialItem(tex, st);
                 si.name = name;
                 si.VitalityBonus = Integer.valueOf(data[4]);
@@ -42,7 +44,13 @@ public class Item {
                     si.setCharacterOverlay(over);
                 }
                 SPECIAL_ITEMS.put(k, si);
-            }else {
+            } else if (spec.equals("bat")){
+                String stt = data[4];
+                BattleItem bi = new BattleItem(tex, stt);
+                bi.name = name;
+                bi.value = Integer.valueOf(data[5]);
+                BATTLE_ITEMS.put(k, bi);
+            } else{
                 Item it = new Item(tex);
                 it.name = name;
                 ITEMS.put(k, it);
