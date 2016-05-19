@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.battle.Battle;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
+import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.players.Sprite;
 
 /**
@@ -16,11 +17,11 @@ public class BattleMenuMain extends BattleMenu {
     static BattleMenu current;
     public static boolean choseAction = false;
 
-    public BattleMenuMain() {
+    public BattleMenuMain(Character main) {
         super();
         current = this;
         attack = new BattleMenuButton("Attack", buttonSpots[0], new BattleMenuAttack());
-        items = new BattleMenuButton("Items", buttonSpots[1], new BattleMenuItems());
+        items = new BattleMenuButton("Items", buttonSpots[1], new BattleMenuItems(main));
         support = new BattleMenuButton("Support", buttonSpots[2], new BattleMenuSupport());
         magic = new BattleMenuButton("Magic", buttonSpots[3], new BattleMenuMagic());
     }

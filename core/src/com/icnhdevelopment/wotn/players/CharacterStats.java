@@ -103,6 +103,14 @@ public class CharacterStats {
         double result = 5 + (((BaseWisdom+IvWisdom+character.getBonusWisdom())*2)*level)/100;
         return (int)Math.floor(result+character.getBonusWisdom()/20) + modifiers[4];
     }
+    public void remember(float rem){
+        if (CurrentWisdom<getWisdom()){
+            CurrentWisdom += rem;
+        }
+        if (CurrentWisdom>getWisdom()){
+            CurrentWisdom = getWisdom();
+        }
+    }
 
     float CalculateLevelExp(int currentLevel){
         float nCube = (float)Math.pow((double)currentLevel, 3.0);

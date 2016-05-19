@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class Monster extends Character {
 
-    public String defaultFile, defaultAttack;
+    public String defaultFile, prefix;
     public int defaultMaxFrames, defaultMaxSpawns;
     public Spawner spawner;
     public String battleDataFile;

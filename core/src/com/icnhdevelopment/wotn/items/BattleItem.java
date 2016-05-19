@@ -57,6 +57,7 @@ public class BattleItem extends Item {
             String temp = "+" + value + " " + type + " " + stat;
             r.add(temp);
         }
+        r.add("Upon Consumption");
         return r;
     }
 }

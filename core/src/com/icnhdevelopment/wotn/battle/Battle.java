@@ -85,7 +85,7 @@ public class Battle {
         characterData = new ArrayList<>();
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
-        bm = new BattleMenuMain();
+        bm = new BattleMenuMain(protSide.get(0));
         actionDoer = new ActionDoer();
         outputText = new TextHandler("", outputRectangle);
 
@@ -179,7 +179,7 @@ public class Battle {
                             outputText.setText(actionDoer.getActionDescription() + "                       ");
                             stateState = "doaction";
                             BattleMenuMain.choseAction = false;
-                            bm = new BattleMenuMain();
+                            bm = new BattleMenuMain(protSide.get(0));
                         }
                     } else if (stateState.equals("doaction")) {
                         showOptions = false;
@@ -291,7 +291,7 @@ public class Battle {
             c.render(batch, SCALE);
             Rectangle orderSpot = new Rectangle(orderContainerRec.x + orderWidth*i+orderSpace*i, orderContainerRec.y, orderWidth, orderWidth);
             batch.draw(orderBack, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
-            batch.draw(c.getImage(), orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
+            batch.draw(c.getHead(), orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
             if (i==whoseturn) {
                 batch.draw(orderOver, orderSpot.x, orderSpot.y, orderSpot.width, orderSpot.height);
             }

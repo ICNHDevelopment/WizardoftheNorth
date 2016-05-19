@@ -3,7 +3,6 @@ package com.icnhdevelopment.wotn.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.players.CharacterStats;
@@ -108,13 +107,13 @@ public class ActionDoer {
             mover.setDrawOffset(new Vector2(direction*250, (getHit.getPosition().y-mover.getPosition().y)));
             mover.setFrame(0);
         } else if (actionDuration < oneEighthTime*5){
-            mover.animateAttack(oneEighthTime*4, actionDuration-oneEighthTime);
+            mover.animateRanged(oneEighthTime*4, actionDuration-oneEighthTime);
         } else if (actionDuration < oneEighthTime*8){
-            mover.animateAttack(oneEighthTime*4, actionDuration-oneEighthTime);
+            mover.animateRanged(oneEighthTime*4, actionDuration-oneEighthTime);
             mover.setDrawOffset(new Vector2(0, 0));
             mover.setFrame(0);
             if (projectile.getPosition() == null){
-                projectile.create(mover.getAttackAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize());
+                projectile.create(mover.getRangeAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize());
             }
             projectile.setPosition(new Vector2(projectile.getPosition().x+5*direction, projectile.getPosition().y));
             if (!attackMiss) {
