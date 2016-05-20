@@ -16,9 +16,14 @@ public class BattleMenuMain extends BattleMenu {
     BattleMenuButton attack, support, items, magic;
     static BattleMenu current;
     public static boolean choseAction = false;
+    Rectangle[] buttonSpots = new Rectangle[4];
 
     public BattleMenuMain(Character main) {
         super();
+        buttonSpots[0] = new Rectangle(container.x+(container.width-(182*2))/2-4, container.y+container.height-(6+76), 182, 76);
+        buttonSpots[1] = new Rectangle(container.x+(container.width-(182*2))/2+186, container.y+container.height-(6+76), 182, 76);
+        buttonSpots[2] = new Rectangle(container.x+(container.width-(182*2))/2-4, container.y+container.height-(12+152), 182, 76);
+        buttonSpots[3] = new Rectangle(container.x+(container.width-(182*2))/2+186, container.y+container.height-(12+152), 182, 76);
         current = this;
         attack = new BattleMenuButton("Attack", buttonSpots[0], new BattleMenuAttack());
         items = new BattleMenuButton("Items", buttonSpots[1], new BattleMenuItems(main));

@@ -161,7 +161,6 @@ public class Battle {
             if (TICK % 9 == 0 && battleStage > 0) {
                 battleStage--;
             }
-            TICK++;
             if (battleStage == 0 && TICK % 9 == 8) {
                 state = "fight";
                 charTurn = fightOrder.get(whoseturn);
@@ -170,8 +169,18 @@ public class Battle {
             if (charTurn.getCurrentVitality()<=0){
                 switchTurn();
             } else {
+                if (TICK % 25 == 0) {
+                    for (Character c : fightOrder) {
+                        if (c != charTurn && c.getCurrentVitality() > 0) {
+                            c.animateIdle();
+                        }
+                    }
+                }
                 if (protSide.contains(charTurn)) {
                     if (stateState.equals("chooseaction")) {
+                        if (TICK % 25 == 0) {
+                            charTurn.animateIdle();
+                        }
                         showOptions = true;
                         bm.update(input, this);
                         if (BattleMenuMain.choseAction) {
@@ -188,6 +197,7 @@ public class Battle {
                 } else {
                     showOptions = false;
                     if (stateState.equals("chooseaction")) {
+                        charTurn.animateIdle();
                         Object[] acts = ((Monster) charTurn).possibleActions();
                         Object action = acts[randomGenerator.nextInt(acts.length)];
                         if (action instanceof String) {
@@ -210,10 +220,10 @@ public class Battle {
                     }
                 }
             }
-            if (input.isKeyDown(Input.Keys.ESCAPE)){
+            if (input.isKeyDown(Input.Keys.ESCAPE)) {
                 backToWorldWin();
             }
-            for (CharacterData cd : characterData){
+            for (CharacterData cd : characterData) {
                 cd.updateData();
             }
         } else if (state.equals("scrollText")){
@@ -221,6 +231,7 @@ public class Battle {
                 state = "fight";
             }
         }
+        TICK++;
     }
 
     void checkForWinner(){
@@ -249,6 +260,7 @@ public class Battle {
     void backToWorldLose(){
         Game.GAME_STATE = GameState.WORLD;
         protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
+        protSide.get(0).animate(false);
     }
 
     public void backToWorldWin(){

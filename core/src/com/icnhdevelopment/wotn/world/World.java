@@ -378,7 +378,7 @@ public class World {
                 changeToBattle = true;
                 battleChar = m;
                 mainCharacter.setFrame(0);
-                mainCharacter.setDirection(1);
+                mainCharacter.setDirection(0);
                 Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.ogg")), .1f);
                 return;
             }

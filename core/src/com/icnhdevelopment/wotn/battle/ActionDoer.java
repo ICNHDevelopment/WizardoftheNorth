@@ -77,7 +77,7 @@ public class ActionDoer {
                     return "true";
                 }
             } else if (action.equals("slash")){
-                if (attackActorWithActor(doer, receiver, 0.8f)){
+                if (attackActorWithActor(doer, receiver, 2f)){
                     if (!attackMiss){
                         receiver.damage(doer.getDamage(doer, receiver));
                         return "true";
@@ -129,6 +129,23 @@ public class ActionDoer {
 
     boolean attackActorWithActor(Character mover, Character getHit, float time){
         int direction = goodGuy?1:-1;
+        mover.animateAttack();
+        if (actionDuration<time/8f){
+            float diffY = getHit.getPosition().y - mover.getPosition().y;
+            float diffX = getHit.getPosition().x - mover.getPosition().x - (getHit.getSize().x*2)*direction;
+            mover.setFrame(2);
+            mover.setDrawOffset(new Vector2(diffX, diffY));
+        } else if (actionDuration<time*(3f/4f)){
+            mover.setFrame(3);
+            getHit.setDrawTint(new Color(Color.RED));
+        } else if (actionDuration<time){
+            mover.animateIdle();
+            getHit.setDrawTint(new Color(Color.WHITE));
+            mover.setDrawOffset(Vector2.Zero);
+        } else {
+            return true;
+        }
+        /*
         float moveDisplacement = 250;
         float deltaMove = (moveDisplacement/time)*Gdx.graphics.getDeltaTime()*direction;
         if (actionDuration<time/2){
@@ -142,6 +159,7 @@ public class ActionDoer {
             doer.setDrawTint(new Color(Color.WHITE));
             return true;
         }
+        */
         return false;
     }
 

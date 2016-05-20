@@ -22,7 +22,12 @@ public class Slime extends Monster{
         defaultMaxSpawns = 3;
     }
 
+    public void animateIdle(){
+        return;
+    }
+
     public void animate() {
+        currentTexture = texture;
         if (World.TICK % speed == 0) {
             if (animUp) {
                 frame++;

@@ -341,6 +341,7 @@ public class Character extends AnimatedSprite {
     }
 
     public void animate(boolean moving) {
+        currentTexture = texture;
         if (World.TICK % speed == 0) {
             if (moving) {
                 this.animate();
@@ -384,15 +385,26 @@ public class Character extends AnimatedSprite {
     }
 
     public void render(SpriteBatch batch, float scale){
+        batch.setColor(drawTint);
         if (currentTexture.equals(texture)) {
             TextureRegion tr = TextureRegion.split(texture, (int) regWidth, (int) regHeight)[direction][frame];
             batch.setColor(drawTint);
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
-            batch.setColor(new Color(Color.WHITE));
-        } else {
+        } else if(currentTexture.equals(rangeAnimation)) {
             TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[frame/9][frame%9];
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+        } else if (currentTexture.equals(attackAnimation)){
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)64)[0][frame];
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+            if (frame == 3){
+                tr = TextureRegion.split(currentTexture, (int)regWidth, (int)64)[0][4];
+                batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+            }
+        } else {
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][frame];
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
         }
+        batch.setColor(new Color(Color.WHITE));
     }
 
     public void animateRanged(float maxTime, float time){
@@ -404,12 +416,18 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    public void animateAttack(){
+    public void animateIdle(){
+        currentTexture = attackAnimation;
+        frame++;
+        if (frame>1) frame = 0;
+    }
 
+    public void animateAttack(){
+        currentTexture = attackAnimation;
     }
 
     public TextureRegion getImage(){
-        return TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][0];
+        return TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[direction][0];
     }
 
     public TextureRegion getHead(){
