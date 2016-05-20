@@ -19,17 +19,15 @@ public class Monster extends Character {
         if (type.equals("Slime")){
             return new Slime();
         }
+        if (type.equals("SpiderBoss")){
+            return new BossSpider();
+        }
         return null;
     }
 
     public Object[] possibleActions(){
         //Temporary
         return new Object[] { "Arange", "Sprotect", "Sfocus" };
-    }
-
-    public void animateAttack(float time){
-        assert attackAnimation != null;
-
     }
 
 }

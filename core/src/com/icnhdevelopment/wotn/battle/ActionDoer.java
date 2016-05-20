@@ -145,21 +145,6 @@ public class ActionDoer {
         } else {
             return true;
         }
-        /*
-        float moveDisplacement = 250;
-        float deltaMove = (moveDisplacement/time)*Gdx.graphics.getDeltaTime()*direction;
-        if (actionDuration<time/2){
-            mover.changeDrawOffset(new Vector2(deltaMove, 0));
-        } else if (actionDuration<time){
-            mover.changeDrawOffset(new Vector2(-deltaMove, 0));
-            if (!attackMiss) {
-                flashColor(getHit, new Color(Color.RED), time, 2);
-            }
-        } else {
-            doer.setDrawTint(new Color(Color.WHITE));
-            return true;
-        }
-        */
         return false;
     }
 
