@@ -16,13 +16,18 @@ public class Slime extends Monster{
 
     @Override
     public void setDefaults() {
-        defaultFile = "characters/images/SlimeSS.png";
-        defaultAttack = "characters/images/blueSlimeAttackSS.png";
+        defaultFile = "characters/images/";
+        prefix = "Slime";
         defaultMaxFrames = 9;
         defaultMaxSpawns = 3;
     }
 
+    public void animateIdle(){
+        return;
+    }
+
     public void animate() {
+        currentTexture = texture;
         if (World.TICK % speed == 0) {
             if (animUp) {
                 frame++;

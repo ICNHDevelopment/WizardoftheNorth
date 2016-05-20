@@ -53,7 +53,7 @@ public class Spawner {
             int tx, ty;
             tx = (int) (center.x - 4 + new Random().nextInt(8));
             ty = (int) (center.y - 4 + new Random().nextInt(8));
-            m.create(m.defaultFile, m.defaultAttack, m.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
+            m.create(m.defaultFile, m.prefix, m.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
             m.spawner = this;
             world.spawn(m);
             children++;

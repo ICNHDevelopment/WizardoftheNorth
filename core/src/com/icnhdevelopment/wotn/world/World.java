@@ -90,7 +90,7 @@ public class World {
         mapRenderer.setView(camera);
 
         mainCharacter = new Character();
-        mainCharacter.create("characters/images/MainSS.png", null, 7, new Vector2(10*32, (int)(16.5*32)), 5, true, true);
+        mainCharacter.create("characters/images/", "Main", 7, new Vector2(10*32, (int)(16.5*32)), 5, true, true);
         multiDSprites.add(mainCharacter);
 
         toolbar = new Toolbar("ui/hud/ToolbarRotated.png");
@@ -160,7 +160,7 @@ public class World {
             Monster mon = Monster.getMonster(type);
             assert mon != null;
             mon.battleDataFile = fileLocation + battleDataFile + ".txt";
-            mon.create(mon.defaultFile, mon.defaultAttack, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
+            mon.create(mon.defaultFile, mon.prefix, mon.defaultMaxFrames, new Vector2(tx, ty), 2, false, false);
             this.spawn(mon);
         }
     }
@@ -176,9 +176,9 @@ public class World {
             float ty = (float) obj.getProperties().get("y");
             float tw = (float) obj.getProperties().get("width");
             float th = (float) obj.getProperties().get("height");
-            String file = "world/images/" + name + "SS.png";
+            String file = "world/images/";
             AnimatedSprite temp = new AnimatedSprite();
-            temp.create(file, null, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
+            temp.create(file, name, f, new Vector2(tx+tw/2, ty+th/2), new Vector2(tw, th), 8);
             animatedSprites.add(temp);
         }
     }
@@ -330,6 +330,7 @@ public class World {
                 mainCharacter.updateWalls(map, overWalls);
                 mainCharacter.updateInteractObjects(collideObjects);
                 mainCharacter.heal(1f/300f);
+                mainCharacter.remember(1f/300f);
                 if (input.isKeyDown(Input.Keys.F)){
                     mainCharacter.interact();
                 }
@@ -377,7 +378,7 @@ public class World {
                 changeToBattle = true;
                 battleChar = m;
                 mainCharacter.setFrame(0);
-                mainCharacter.setDirection(1);
+                mainCharacter.setDirection(0);
                 Game.soundHandler.PlaySoundLooping(Gdx.audio.newSound(Gdx.files.internal("audio/battleMusic.ogg")), .1f);
                 return;
             }

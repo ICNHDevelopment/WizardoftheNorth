@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.Game;
 import com.icnhdevelopment.wotn.gui.Fonts;
 import com.icnhdevelopment.wotn.items.Item;
 
@@ -60,6 +61,10 @@ public class Tooltip {
             Vector2 topRight = inventory.mousePosition;
             float width = getLongestLineLength();
             float height = getHeight();
+            if (topRight.x > Game.WIDTH()) topRight.x = Game.WIDTH();
+            if (topRight.y > Game.HEIGHT()) topRight.y = Game.HEIGHT();
+            if (topRight.x-width < 0) topRight.x = width+20;
+            if (topRight.y-height < 0) topRight.y = height;
             Rectangle TRRec = new Rectangle(topRight.x-sections[2].getWidth(), topRight.y-sections[2].getHeight(), sections[2].getWidth(), sections[2].getHeight());
             Rectangle TRec = new Rectangle(TRRec.x-width, TRRec.y, width, sections[1].getHeight());
             Rectangle TLRec = new Rectangle(TRec.x-sections[0].getWidth(), TRec.y, sections[0].getWidth(), sections[0].getHeight());

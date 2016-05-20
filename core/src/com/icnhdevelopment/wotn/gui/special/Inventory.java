@@ -161,7 +161,7 @@ public class Inventory extends Container {
                     if (is.getItem()!=null) {
                         changedTooltipTrue = true;
                         Item imanitem = is.getItem();
-                        tooltip.update(imanitem instanceof SpecialItem ? (SpecialItem)imanitem : imanitem);
+                        tooltip.update(imanitem);
                     }
                     if (processor.didMouseClick()) {
                         if (mouseItem != null) {
@@ -280,6 +280,10 @@ public class Inventory extends Container {
                     } else {
                         tooltip.render(batch);
                     }
+                } else {
+                    batch.begin();
+                    this.render(batch);
+                    batch.end();
                 }
             }
         }

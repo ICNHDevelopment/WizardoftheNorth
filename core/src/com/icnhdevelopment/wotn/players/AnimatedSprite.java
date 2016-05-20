@@ -24,16 +24,24 @@ public class AnimatedSprite extends Sprite {
 
     Texture currentTexture;
     Texture attackAnimation;
+    Texture rangeAnimation;
+    Texture consumeAnimation;
 
-    public void create(String filename, String attackFile, int maxFrames, Vector2 position, Vector2 size, int animSpeed){
-        super.create(filename, position, size);
+    public void create(String filelocation, String prefix, int maxFrames, Vector2 position, Vector2 size, int animSpeed){
+        super.create(filelocation+prefix+"SS.png", position, size);
         this.maxFrames = maxFrames;
         speed = animSpeed;
         regWidth =  texture.getWidth()/maxFrames;
         regHeight = texture.getHeight();
         currentTexture = texture;
         try {
-            attackAnimation = new Texture(attackFile);
+            attackAnimation = new Texture(filelocation + prefix + "AttackSS.png");
+        } catch(Exception e){}
+        try{
+            rangeAnimation = new Texture(filelocation + prefix + "RangeSS.png");
+        } catch(Exception e){}
+        try{
+            consumeAnimation = new Texture(filelocation + prefix + "DrinkSS.png");
         } catch(Exception e){}
         if (!(this instanceof Character)) start();
     }

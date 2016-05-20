@@ -45,7 +45,7 @@ public class BattleInfo {
                 int exp = Integer.valueOf(data[7]);
                 Monster m = Monster.getMonster(type);
                 CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
-                m.create(m.defaultFile, m.defaultAttack, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
+                m.create(m.defaultFile, m.prefix, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
                 antSide.add(m);
                 expAmounts.add(exp);
             }

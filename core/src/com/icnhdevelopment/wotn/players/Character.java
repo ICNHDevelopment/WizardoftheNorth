@@ -124,9 +124,10 @@ public class Character extends AnimatedSprite {
     public float getDamage(Character a, Character b) { return stats.CalculateDamage(a, b); }
     public boolean damage(float damage) { return stats.damage(damage); }
     public void heal(float heal) { stats.heal(heal); }
+    public void remember(float rem) { stats.remember(rem); }
 
-    public void create(String filename, String attackString, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
-        super.create(filename, attackString, maxFrames, position, new Vector2(), animSpeed);
+    public void create(String filelocation, String prefix, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
+        super.create(filelocation, prefix, maxFrames, position, new Vector2(), animSpeed);
         inventory = new Item[12];
         gear = new Item[9];
         toolbar = new Item[4];
@@ -144,8 +145,8 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    public void create(String filename, String attackString, int maxFrames, Vector2 position, int animSpeed, boolean direcMove, CharacterStats stats) {
-        super.create(filename, attackString, maxFrames, position, new Vector2(), animSpeed);
+    public void create(String filelocation, String prefix, int maxFrames, Vector2 position, int animSpeed, boolean direcMove, CharacterStats stats) {
+        super.create(filelocation, prefix, maxFrames, position, new Vector2(), animSpeed);
         regHeight = texture.getHeight()/2;
         width = (int)(regWidth);//*World.SCALE);
         height = (int)(regHeight);//* World.SCALE);
@@ -340,6 +341,7 @@ public class Character extends AnimatedSprite {
     }
 
     public void animate(boolean moving) {
+        currentTexture = texture;
         if (World.TICK % speed == 0) {
             if (moving) {
                 this.animate();
@@ -358,10 +360,7 @@ public class Character extends AnimatedSprite {
     }
 
     public void render(SpriteBatch batch){
-        render(batch, 1);
-    }
-
-    public void render(SpriteBatch batch, float scale){
+        int scale = 1;
         if (currentTexture.equals(texture)) {
             TextureRegion tr = TextureRegion.split(texture, (int) regWidth, (int) regHeight)[direction][frame];
             batch.setColor(drawTint);
@@ -385,8 +384,31 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    public void animateAttack(float maxTime, float time){
-        currentTexture = attackAnimation;
+    public void render(SpriteBatch batch, float scale){
+        batch.setColor(drawTint);
+        if (currentTexture.equals(texture)) {
+            TextureRegion tr = TextureRegion.split(texture, (int) regWidth, (int) regHeight)[direction][frame];
+            batch.setColor(drawTint);
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+        } else if(currentTexture.equals(rangeAnimation)) {
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[frame/9][frame%9];
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+        } else if (currentTexture.equals(attackAnimation)){
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)64)[0][frame];
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+            if (frame == 3){
+                tr = TextureRegion.split(currentTexture, (int)regWidth, (int)64)[0][4];
+                batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+            }
+        } else {
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][frame];
+            batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
+        }
+        batch.setColor(new Color(Color.WHITE));
+    }
+
+    public void animateRanged(float maxTime, float time){
+        currentTexture = rangeAnimation;
         float switchLen = maxTime/13;
         frame = (int)(time/switchLen);
         if (time>=maxTime){
@@ -394,13 +416,34 @@ public class Character extends AnimatedSprite {
         }
     }
 
+    public void animateIdle(){
+        currentTexture = attackAnimation;
+        frame++;
+        if (frame>1) frame = 0;
+    }
+
+    public void animateAttack(){
+        currentTexture = attackAnimation;
+    }
+
+    public void animateConsume(){
+        currentTexture = consumeAnimation;
+    }
+
     public TextureRegion getImage(){
-        return TextureRegion.split(texture, (int)regWidth, (int)regHeight)[direction][0];
+        return TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[direction][0];
+    }
+
+    public TextureRegion getHead(){
+        int smallSide = (int)Math.min(regWidth, regHeight);
+        return new TextureRegion(texture, 0, (int)regHeight*direction, smallSide, smallSide);
     }
 
     public Texture getAttackAnimation(){
         return attackAnimation;
     }
+
+    public Texture getRangeAnimation() { return rangeAnimation; }
 
     public int getDirection(){
         return direction;

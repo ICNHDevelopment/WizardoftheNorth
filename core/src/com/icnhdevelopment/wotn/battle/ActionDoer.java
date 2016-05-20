@@ -3,7 +3,6 @@ package com.icnhdevelopment.wotn.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.players.CharacterStats;
@@ -18,6 +17,7 @@ public class ActionDoer {
     String actionType = "";
     final String ATTACK = "slash.range";
     final String SUPPORT = "protect.focus";
+    final String ITEM = "consume";
     Character doer, receiver;
     boolean goodGuy;
     float actionDuration = 0; //IN SECONDS ie. 0.5 = 500ms
@@ -53,6 +53,8 @@ public class ActionDoer {
                 actionType = "Attack";
             } else if (SUPPORT.contains(strAct)){
                 actionType = "Support";
+            } else if (ITEM.contains(strAct)){
+                actionType = "Item";
             }
         }
     }
@@ -78,7 +80,7 @@ public class ActionDoer {
                     return "true";
                 }
             } else if (action.equals("slash")){
-                if (attackActorWithActor(doer, receiver, 0.8f)){
+                if (attackActorWithActor(doer, receiver, 2f)){
                     if (!attackMiss){
                         receiver.damage(doer.getDamage(doer, receiver));
                         return "true";
@@ -95,10 +97,31 @@ public class ActionDoer {
                         return "miss";
                     }
                 }
+            } else if (action.equals("consume")){
+                if (doConsume(doer, 2f)){
+                    return "true";
+                }
             }
         }
         actionDuration += Gdx.graphics.getDeltaTime();
         return "false";
+    }
+
+    boolean doConsume(Character character, float time){
+        if (actionDuration<time/3f){
+            character.animateConsume();
+            character.setFrame(0);
+        } else if (actionDuration<time/3f*2f){
+            character.animateConsume();
+            character.setFrame(1);
+        } else if (actionDuration<time) {
+            character.animateConsume();
+            character.setFrame(0);
+        } else {
+            character.animateIdle();
+            return true;
+        }
+        return false;
     }
 
     boolean doRangedAttack(Character mover, Character getHit, float time){
@@ -108,13 +131,13 @@ public class ActionDoer {
             mover.setDrawOffset(new Vector2(direction*250, (getHit.getPosition().y-mover.getPosition().y)));
             mover.setFrame(0);
         } else if (actionDuration < oneEighthTime*5){
-            mover.animateAttack(oneEighthTime*4, actionDuration-oneEighthTime);
+            mover.animateRanged(oneEighthTime*4, actionDuration-oneEighthTime);
         } else if (actionDuration < oneEighthTime*8){
-            mover.animateAttack(oneEighthTime*4, actionDuration-oneEighthTime);
+            mover.animateRanged(oneEighthTime*4, actionDuration-oneEighthTime);
             mover.setDrawOffset(new Vector2(0, 0));
             mover.setFrame(0);
             if (projectile.getPosition() == null){
-                projectile.create(mover.getAttackAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize());
+                projectile.create(mover.getRangeAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize());
             }
             projectile.setPosition(new Vector2(projectile.getPosition().x+5*direction, projectile.getPosition().y));
             if (!attackMiss) {
@@ -130,17 +153,22 @@ public class ActionDoer {
 
     boolean attackActorWithActor(Character mover, Character getHit, float time){
         int direction = goodGuy?1:-1;
-        float moveDisplacement = 250;
-        float deltaMove = (moveDisplacement/time)*Gdx.graphics.getDeltaTime()*direction;
-        if (actionDuration<time/2){
-            mover.changeDrawOffset(new Vector2(deltaMove, 0));
-        } else if (actionDuration<time){
-            mover.changeDrawOffset(new Vector2(-deltaMove, 0));
+        mover.animateAttack();
+        if (actionDuration<time/8f){
+            float diffY = getHit.getPosition().y - mover.getPosition().y;
+            float diffX = getHit.getPosition().x - mover.getPosition().x - (getHit.getSize().x*2)*direction;
+            mover.setFrame(2);
+            mover.setDrawOffset(new Vector2(diffX, diffY));
+        } else if (actionDuration<time*(3f/4f)){
+            mover.setFrame(3);
             if (!attackMiss) {
-                flashColor(getHit, new Color(Color.RED), time, 2);
+                getHit.setDrawTint(new Color(Color.RED));
             }
+        } else if (actionDuration<time){
+            mover.animateIdle();
+            getHit.setDrawTint(new Color(Color.WHITE));
+            mover.setDrawOffset(Vector2.Zero);
         } else {
-            doer.setDrawTint(new Color(Color.WHITE));
             return true;
         }
         return false;
@@ -165,7 +193,11 @@ public class ActionDoer {
     }
 
     public String getActionDescription(){
-        return doer.getName() + " chose to use a " + action + " " + actionType.toLowerCase() + " move...";
+        if (actionType.equals("Item")){
+            return doer.getName() + " chose to " + action + " an " + actionType.toLowerCase() + "...";
+        } else {
+            return doer.getName() + " chose to use a " + action + " " + actionType.toLowerCase() + " move...";
+        }
     }
 
     public void render(SpriteBatch batch){
