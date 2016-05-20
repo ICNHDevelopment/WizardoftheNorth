@@ -1,6 +1,7 @@
 package com.icnhdevelopment.wotn.items;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.icnhdevelopment.wotn.players.Character;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,26 @@ public class BattleItem extends Item {
         super (b);
         this.modStat = b.modStat;
         this.value = b.value;
+    }
+
+    public void performFunction(Character character){
+        switch(modStat){
+            case "VIT":
+                character.heal(value);
+                break;
+            case "WIS":
+                character.remember(value);
+                break;
+            case "AGL":
+                character.getCharacterStats().addModifiers(new int[] { 0, 1, 0, 0, 0});
+                break;
+            case "RES":
+                character.getCharacterStats().addModifiers(new int[] { 0, 0, 1, 0, 0});
+                break;
+            case "STR":
+                character.getCharacterStats().addModifiers(new int[] { 0, 0, 0, 1, 0});
+                break;
+        }
     }
 
     public ArrayList<String> getTooltipData(){

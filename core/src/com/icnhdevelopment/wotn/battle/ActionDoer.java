@@ -17,6 +17,7 @@ public class ActionDoer {
     String actionType = "";
     final String ATTACK = "slash.range";
     final String SUPPORT = "protect.focus";
+    final String ITEM = "consume";
     Character doer, receiver;
     boolean goodGuy;
     float actionDuration = 0; //IN SECONDS ie. 0.5 = 500ms
@@ -52,6 +53,8 @@ public class ActionDoer {
                 actionType = "Attack";
             } else if (SUPPORT.contains(strAct)){
                 actionType = "Support";
+            } else if (ITEM.contains(strAct)){
+                actionType = "Item";
             }
         }
     }
@@ -94,10 +97,31 @@ public class ActionDoer {
                         return "miss";
                     }
                 }
+            } else if (action.equals("consume")){
+                if (doConsume(doer, 2f)){
+                    return "true";
+                }
             }
         }
         actionDuration += Gdx.graphics.getDeltaTime();
         return "false";
+    }
+
+    boolean doConsume(Character character, float time){
+        if (actionDuration<time/3f){
+            character.animateConsume();
+            character.setFrame(0);
+        } else if (actionDuration<time/3f*2f){
+            character.animateConsume();
+            character.setFrame(1);
+        } else if (actionDuration<time) {
+            character.animateConsume();
+            character.setFrame(0);
+        } else {
+            character.animateIdle();
+            return true;
+        }
+        return false;
     }
 
     boolean doRangedAttack(Character mover, Character getHit, float time){
@@ -137,7 +161,9 @@ public class ActionDoer {
             mover.setDrawOffset(new Vector2(diffX, diffY));
         } else if (actionDuration<time*(3f/4f)){
             mover.setFrame(3);
-            getHit.setDrawTint(new Color(Color.RED));
+            if (!attackMiss) {
+                getHit.setDrawTint(new Color(Color.RED));
+            }
         } else if (actionDuration<time){
             mover.animateIdle();
             getHit.setDrawTint(new Color(Color.WHITE));
@@ -167,7 +193,11 @@ public class ActionDoer {
     }
 
     public String getActionDescription(){
-        return doer.getName() + " chose to use a " + action + " " + actionType.toLowerCase() + " move...";
+        if (actionType.equals("Item")){
+            return doer.getName() + " chose to " + action + " an " + actionType.toLowerCase() + "...";
+        } else {
+            return doer.getName() + " chose to use a " + action + " " + actionType.toLowerCase() + " move...";
+        }
     }
 
     public void render(SpriteBatch batch){

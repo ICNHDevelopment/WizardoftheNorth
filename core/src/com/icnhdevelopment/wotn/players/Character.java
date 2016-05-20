@@ -426,6 +426,10 @@ public class Character extends AnimatedSprite {
         currentTexture = attackAnimation;
     }
 
+    public void animateConsume(){
+        currentTexture = consumeAnimation;
+    }
+
     public TextureRegion getImage(){
         return TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[direction][0];
     }
