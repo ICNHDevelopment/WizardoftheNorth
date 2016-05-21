@@ -1,5 +1,6 @@
 package com.icnhdevelopment.wotn.players;
 
+import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.world.World;
 
 /**
@@ -20,6 +21,16 @@ public class Slime extends Monster{
         prefix = "Slime";
         defaultMaxFrames = 9;
         defaultMaxSpawns = 3;
+    }
+
+    public void create(String filelocation, String prefix, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove){
+        super.create(filelocation, prefix, maxFrames, position, animSpeed, player, direcMove);
+        direction = 0;
+    }
+
+    public Object[] possibleActions(){
+        //Temporary
+        return new Object[] { "Arange", "Sprotect", "Sfocus" };
     }
 
     public void animateIdle(){

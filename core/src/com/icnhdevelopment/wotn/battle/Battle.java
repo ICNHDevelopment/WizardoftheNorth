@@ -81,10 +81,10 @@ public class Battle {
         loadPositions();
         setPositions(protSide, protPositions);
         setPositions(antSide, antPositions);
-        setBattleOrder();
         characterData = new ArrayList<>();
         setData(protSide, protDataPos, true);
         setData(antSide, antDataPos, false);
+        setBattleOrder();
         bm = new BattleMenuMain(protSide.get(0));
         actionDoer = new ActionDoer();
         outputText = new TextHandler("", outputRectangle);
@@ -135,8 +135,11 @@ public class Battle {
                 Character c2 = fightOrder.get(i+1);
                 if (c2.getAgility()>c1.getAgility()){
                     fightOrder.set(i, c2);
+                    fightOrder.set(i+1, c1);
+                    CharacterData cd1 = characterData.get(i);
                     CharacterData cd2 = characterData.get(i+1);
                     characterData.set(i, cd2);
+                    characterData.set(i+1, cd1);
                     changed = true;
                 }
             }

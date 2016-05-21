@@ -255,7 +255,9 @@ public class World {
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
-        m.setRandomMovementTimer(walls, collideObjects, this);
+        if (!(m instanceof BossSpider)) {
+            m.setRandomMovementTimer(walls, collideObjects, this);
+        }
     }
 
     public void kill(Character c){

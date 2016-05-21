@@ -135,7 +135,7 @@ public class Character extends AnimatedSprite {
         width = (int)(regWidth);//*World.SCALE);
         height = (int)(regHeight);//* World.SCALE);
         frame = 0;
-        direction = 0;
+        direction = 1;
         footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
         this.player = player;
         this.directionalMovement = direcMove;
@@ -394,10 +394,10 @@ public class Character extends AnimatedSprite {
             TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[frame/9][frame%9];
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
         } else if (currentTexture.equals(attackAnimation)){
-            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)64)[0][frame];
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][frame];
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
             if (frame == 3){
-                tr = TextureRegion.split(currentTexture, (int)regWidth, (int)64)[0][4];
+                tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][4];
                 batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
             }
         } else {
