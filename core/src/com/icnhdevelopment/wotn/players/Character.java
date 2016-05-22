@@ -30,7 +30,7 @@ public class Character extends AnimatedSprite {
     boolean player;
     boolean isTransitioningLayer = false;
     boolean isMovingRandomly = true;
-    private String name;
+    protected String name;
 
     final int SPEED = 2;
     final Random RAN = new Random();
@@ -40,6 +40,9 @@ public class Character extends AnimatedSprite {
     protected Item[] toolbar;
 
     CollideObject interactObject;
+    NPCharacter interactCharacter;
+
+    ArrayList<Character> followers;
 
     CharacterStats stats;
     public int getLevel(){ return stats.getLevel(); }
@@ -139,6 +142,7 @@ public class Character extends AnimatedSprite {
         footBox = new Rectangle(position.x+width*.2f, position.y, width*.6f, height*.15f);
         this.player = player;
         this.directionalMovement = direcMove;
+        followers = new ArrayList<>();
         if (player){
             stats = new CharacterStats(this, 1, 35, 90, 30, 55, 50);
             name = "You";
@@ -163,11 +167,11 @@ public class Character extends AnimatedSprite {
         Rectangle nextFoot = new Rectangle(this.getPosition().x+width*.15f, this.getPosition().y, width*.7f, height*.15f);
     }
 
-    public void move(Vector2 amount, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols){
+    public void move(Vector2 amount, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols, ArrayList<NPCharacter> npcs){
         animate(true);
         Rectangle next = new Rectangle(getPosition().x + amount.x*SPEED, getPosition().y + amount.y*SPEED, width, height);
         Rectangle nextFoot = new Rectangle(next.x+width*.15f, next.y, width*.7f, height*.15f);
-        if (canMove(nextFoot, walls, cols)) {
+        if (canMove(nextFoot, walls, cols, npcs)) {
             footBox = nextFoot;
             getPosition().x += amount.x * SPEED;
             getPosition().y += amount.y * SPEED;
@@ -183,7 +187,7 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    boolean canMove(Rectangle r, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols){
+    boolean canMove(Rectangle r, ArrayList<Rectangle> walls, ArrayList<CollideObject> cols, ArrayList<NPCharacter> npcs){
         for (Rectangle a : walls){
             if (a.overlaps(r)){
                 return false;
@@ -191,6 +195,11 @@ public class Character extends AnimatedSprite {
         }
         for (CollideObject c : cols){
             if (c.isVisible() && r.overlaps(c.getHitBox())){
+                return false;
+            }
+        }
+        for (NPCharacter n : npcs){
+            if (r.overlaps(n.getHitBox())){
                 return false;
             }
         }
@@ -254,6 +263,29 @@ public class Character extends AnimatedSprite {
         }
     }
 
+    public void updateNPCS(ArrayList<NPCharacter> npcs){
+        NPCharacter closest = null;
+        float lowestDistance = Float.MAX_VALUE;
+        for (NPCharacter c : npcs) {
+            float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitBox());
+            if (dis < lowestDistance) {
+                if (closest != null) {
+                    c.setInteractable(false);
+                }
+                lowestDistance = dis;
+                closest = c;
+            }
+        }
+        interactCharacter = closest;
+        if (interactObject==null&&interactCharacter!=null){
+            if (lowestDistance<24) {
+                interactCharacter.setInteractable(true);
+            } else {
+                interactCharacter.setInteractable(false);
+            }
+        }
+    }
+
     void transitionLayer(MapLayer l, float step){
         final MapLayer m = l;
         final float s = step;
@@ -271,7 +303,7 @@ public class Character extends AnimatedSprite {
         }, new Date(), 1);
     }
 
-    public void setRandomMovementTimer(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, World world){
+    public void setRandomMovementTimer(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, World world, ArrayList<NPCharacter> npcs){
         final ArrayList<Rectangle> walls = w;
 
         final Thread movementThread = new Thread(){
@@ -282,7 +314,7 @@ public class Character extends AnimatedSprite {
                     long delay = (long) (1000 * (2 + RAN.nextDouble() * 2));
                     try {
                         Thread.sleep(delay);
-                        moveRandomly(walls, cols, world);
+                        moveRandomly(walls, cols, npcs, world);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         running = false;
@@ -294,16 +326,16 @@ public class Character extends AnimatedSprite {
         movementThread.start();
     }
 
-    void moveRandomly(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, World world){
+    void moveRandomly(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, ArrayList<NPCharacter> npcs, World world){
         if (isMovingRandomly){
             Random r = new Random();
-            ArrayList<Vector2> direcs = getMoveDirections(w, cols);
+            ArrayList<Vector2> direcs = getMoveDirections(w, cols, npcs);
             if (direcs.size()>0) {
                 Vector2 avail = direcs.get(r.nextInt(direcs.size()));
                 int xDir = (int)avail.x, yDir = (int)avail.y;
                 animating = true;
                 while (animating&&!world.changeToBattle) {
-                    move(new Vector2(xDir, yDir), w, cols);
+                    move(new Vector2(xDir, yDir), w, cols, npcs);
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
@@ -317,14 +349,14 @@ public class Character extends AnimatedSprite {
         }
     }
 
-    ArrayList<Vector2> getMoveDirections(ArrayList<Rectangle> w, ArrayList<CollideObject> cols){
+    ArrayList<Vector2> getMoveDirections(ArrayList<Rectangle> w, ArrayList<CollideObject> cols, ArrayList<NPCharacter> npcs){
         ArrayList<Vector2> dirs = new ArrayList<>();
         int DistanceNeeded = SPEED*maxFrames;
         for (int i = -1; i<=1; i++){
             for (int j = -1; j<=1; j++){
                 Rectangle next = new Rectangle(getPosition().x + i*DistanceNeeded, getPosition().y + j*DistanceNeeded, width, height);
                 Rectangle nextFoot = new Rectangle(next.x+width*.2f, next.y, width*.6f, height*.15f);
-                if (canMove(nextFoot, w, cols)&&!(i==0&&j==0)){
+                if (canMove(nextFoot, w, cols, npcs)&&!(i==0&&j==0)){
                     int retI = i, retJ = j;
                     if (i!=0&&j!=0){
                         if (RAN.nextBoolean()){
@@ -483,6 +515,14 @@ public class Character extends AnimatedSprite {
                             interactObject.setVisible(false);
                         }
                     }
+                }
+            }
+        } else if (interactCharacter != null){
+            if (interactCharacter.isInteractable()){
+                if (interactCharacter instanceof PartyCharacter){
+
+                } else {
+                    
                 }
             }
         }

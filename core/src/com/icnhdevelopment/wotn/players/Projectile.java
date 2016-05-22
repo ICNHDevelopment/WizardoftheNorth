@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Projectile extends Sprite {
 
     int frame = 0;
+    int tick = 0;
 
     public void create(Texture tex, Vector2 position, Vector2 size){
         texture = tex;
@@ -21,8 +22,12 @@ public class Projectile extends Sprite {
     }
 
     public void render(SpriteBatch batch){
-        TextureRegion drawReg = TextureRegion.split(texture, texture.getWidth()/9, texture.getHeight()/2)[1][frame+4];
+        TextureRegion[][] splits = TextureRegion.split(texture, texture.getWidth()/9, texture.getHeight()/2);
+        TextureRegion drawReg = splits[1][frame+4];
         batch.draw(drawReg, getPosition().x+drawOffset.x, getPosition().y+drawOffset.y, width*2, height*2);
-        frame = Math.min(2, frame+1);
+        tick++;
+        if (tick%4==0) {
+            frame = Math.min(splits[1].length-4, frame + 1);
+        }
     }
 }
