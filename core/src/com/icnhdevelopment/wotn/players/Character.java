@@ -43,6 +43,7 @@ public class Character extends AnimatedSprite {
     NPCharacter interactCharacter;
 
     ArrayList<Character> followers;
+    ArrayList<Vector2> lastPositions;
 
     CharacterStats stats;
     public int getLevel(){ return stats.getLevel(); }
@@ -143,6 +144,7 @@ public class Character extends AnimatedSprite {
         this.player = player;
         this.directionalMovement = direcMove;
         followers = new ArrayList<>();
+        lastPositions = new ArrayList<>();
         if (player){
             stats = new CharacterStats(this, 1, 35, 90, 30, 55, 50);
             name = "You";
@@ -172,6 +174,10 @@ public class Character extends AnimatedSprite {
         Rectangle next = new Rectangle(getPosition().x + amount.x*SPEED, getPosition().y + amount.y*SPEED, width, height);
         Rectangle nextFoot = new Rectangle(next.x+width*.15f, next.y, width*.7f, height*.15f);
         if (canMove(nextFoot, walls, cols, npcs)) {
+            lastPositions.add(0, new Vector2(getPosition()));
+            while (lastPositions.size()>(followers.size()+1)*20) {
+                lastPositions.remove(lastPositions.size()-1);
+            }
             footBox = nextFoot;
             getPosition().x += amount.x * SPEED;
             getPosition().y += amount.y * SPEED;
@@ -199,7 +205,7 @@ public class Character extends AnimatedSprite {
             }
         }
         for (NPCharacter n : npcs){
-            if (r.overlaps(n.getHitBox())){
+            if (!(followers.contains(n)) && r.overlaps(n.getHitBox())){
                 return false;
             }
         }
@@ -259,6 +265,7 @@ public class Character extends AnimatedSprite {
                 interactObject.setInteractable(true);
             } else {
                 interactObject.setInteractable(false);
+                interactObject = null;
             }
         }
     }
@@ -282,6 +289,22 @@ public class Character extends AnimatedSprite {
                 interactCharacter.setInteractable(true);
             } else {
                 interactCharacter.setInteractable(false);
+            }
+        }
+    }
+
+    public void updateFollowers(boolean moving){
+        for (int i = 0; i<followers.size(); i++){
+            if ((i+1)*20-1<lastPositions.size()) {
+                Vector2 newPos = new Vector2(lastPositions.get((i+1)*20-1));
+                Character f = followers.get(i);
+                if (f.getPosition().x<newPos.x){
+                    f.setDirection(1);
+                } else if (f.getPosition().x>newPos.x) {
+                    f.setDirection(0);
+                }
+                f.setPosition(newPos);
+                f.animate(moving);
             }
         }
     }
@@ -520,10 +543,11 @@ public class Character extends AnimatedSprite {
         } else if (interactCharacter != null){
             if (interactCharacter.isInteractable()){
                 if (interactCharacter instanceof PartyCharacter){
-
-                } else {
-                    
+                    if (!followers.contains(interactCharacter)) {
+                        followers.add(interactCharacter);
+                    }
                 }
+                interactCharacter.interact();
             }
         }
     }

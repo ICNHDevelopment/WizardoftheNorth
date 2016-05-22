@@ -265,7 +265,7 @@ public class World {
             float tx = (float)obj.getProperties().get("x");
             float ty = (float)obj.getProperties().get("y");
             NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter();
-            tempChar.create(tempChar.defaultFile, tempChar.prefix, 7, new Vector2(tx, ty), 2, false, false, name);
+            tempChar.create(tempChar.defaultFile, tempChar.prefix, 7, new Vector2(tx, ty), 5, false, false, name);
             npcs.add(tempChar);
             multiDSprites.add(tempChar);
         }
@@ -339,14 +339,19 @@ public class World {
                 }
                 if (input.isKeyDown(Input.Keys.W)) {
                     mainCharacter.move(new Vector2(0, 1), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else if (input.isKeyDown(Input.Keys.S)) {
                     mainCharacter.move(new Vector2(0, -1), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else if (input.isKeyDown(Input.Keys.A)) {
                     mainCharacter.move(new Vector2(-1, 0), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else if (input.isKeyDown(Input.Keys.D)) {
                     mainCharacter.move(new Vector2(1, 0), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else {
                     mainCharacter.animate(false);
+                    mainCharacter.updateFollowers(false);
                 }
                 mainCharacter.updateWalls(map, overWalls);
                 mainCharacter.updateInteractObjects(collideObjects);
