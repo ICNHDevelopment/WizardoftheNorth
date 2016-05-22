@@ -317,7 +317,6 @@ public class World {
                     bi.setBattleTex(battleTransition);
                     bi.setWorld(this);
                     bi.setCharacterWorldPosition(new Vector2(mainCharacter.getPosition().x, mainCharacter.getPosition().y));
-                    bi.setEnemy(battleChar);
                     changeToBattle = false;
                     battleStage = -1;
                     state = "fadein";

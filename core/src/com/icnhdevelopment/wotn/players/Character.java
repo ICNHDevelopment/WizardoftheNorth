@@ -613,4 +613,8 @@ public class Character extends AnimatedSprite {
     public String getName() {
         return name;
     }
+
+    public ArrayList<Character> getFollowers(){
+        return followers;
+    }
 }
