@@ -49,6 +49,7 @@ public class World {
     ArrayList<InventoryObject> inventoryObjects;
     ArrayList<Rectangle> overWalls;
     ArrayList<AnimatedSprite> animatedSprites;
+    ArrayList<NPCharacter> npcs;
     ArrayList<Sprite> multiDSprites;
     ArrayList<Sprite> items;
 
@@ -73,6 +74,7 @@ public class World {
         inventoryObjects = new ArrayList<>();
         overWalls = new ArrayList<>();
         animatedSprites = new ArrayList<>();
+        npcs = new ArrayList<>();
         multiDSprites = new ArrayList<>();
         items = new ArrayList<>();
 
@@ -118,6 +120,7 @@ public class World {
         loadSpawners(m);
         loadPreSpawns(m);
         loadAnimatedSprites(m);
+        loadNPCS(m);
         loadOverwallRecs(m);
         loadItems(m);
     }
@@ -252,10 +255,28 @@ public class World {
         smoothRecs(overWalls);
     }
 
+    void loadNPCS(TiledMap m){
+        MapLayer layer = m.getLayers().get("npcs");
+        MapObjects objs = layer.getObjects();
+        for (MapObject obj : objs){
+            String[] data = ((String)obj.getProperties().get("type")).split(":");
+            String name = data[0];
+            boolean partyable = data[1].equals("true");
+            float tx = (float)obj.getProperties().get("x");
+            float ty = (float)obj.getProperties().get("y");
+            NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter();
+            tempChar.create(tempChar.defaultFile, tempChar.prefix, 7, new Vector2(tx, ty), 5, false, false, name);
+            npcs.add(tempChar);
+            multiDSprites.add(tempChar);
+        }
+    }
+
     public void spawn(Monster m){
         enemies.add(m);
         multiDSprites.add(m);
-        m.setRandomMovementTimer(walls, collideObjects, this);
+        if (!(m instanceof BossSpider)) {
+            m.setRandomMovementTimer(walls, collideObjects, this, npcs);
+        }
     }
 
     public void kill(Character c){
@@ -317,18 +338,24 @@ public class World {
                     battleStage--;
                 }
                 if (input.isKeyDown(Input.Keys.W)) {
-                    mainCharacter.move(new Vector2(0, 1), walls, collideObjects);
+                    mainCharacter.move(new Vector2(0, 1), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else if (input.isKeyDown(Input.Keys.S)) {
-                    mainCharacter.move(new Vector2(0, -1), walls, collideObjects);
+                    mainCharacter.move(new Vector2(0, -1), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else if (input.isKeyDown(Input.Keys.A)) {
-                    mainCharacter.move(new Vector2(-1, 0), walls, collideObjects);
+                    mainCharacter.move(new Vector2(-1, 0), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else if (input.isKeyDown(Input.Keys.D)) {
-                    mainCharacter.move(new Vector2(1, 0), walls, collideObjects);
+                    mainCharacter.move(new Vector2(1, 0), walls, collideObjects, npcs);
+                    mainCharacter.updateFollowers(true);
                 } else {
                     mainCharacter.animate(false);
+                    mainCharacter.updateFollowers(false);
                 }
                 mainCharacter.updateWalls(map, overWalls);
                 mainCharacter.updateInteractObjects(collideObjects);
+                mainCharacter.updateNPCS(npcs);
                 mainCharacter.heal(1f/300f);
                 mainCharacter.remember(1f/300f);
                 if (input.isKeyDown(Input.Keys.F)){
@@ -349,12 +376,17 @@ public class World {
                     inventory.setVisible(true);
                     mainCharacter.setFrame(0);
                 }
-                if (input.isKeyDown(Input.Keys.T)) {
-                    changeToBattle = true;
-                    battleStage = 0;
-                }
             }
         }
+    }
+
+    boolean isUnderOverWall(Sprite s){
+        for (Rectangle r : overWalls){
+            if (r.overlaps(s.getHitBox())){
+                return true;
+            }
+        }
+        return false;
     }
 
     void sortMultiDSprites(){
@@ -403,7 +435,11 @@ public class World {
             s.render(batch);
         }
         for (Sprite m : multiDSprites){
-            if (!m.equals(mainCharacter)||map.getLayers().get(1).getOpacity()<1) {
+            if (isUnderOverWall(m)){
+                if (map.getLayers().get(1).getOpacity()<1) {
+                    m.render(batch);
+                }
+            }else{
                 m.render(batch);
             }
         }
@@ -412,7 +448,7 @@ public class World {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Sprite m : multiDSprites){
-            if (m.equals(mainCharacter)&&map.getLayers().get(1).getOpacity()==1) {
+            if (!isUnderOverWall(m)){
                 m.render(batch);
             }
         }

@@ -262,7 +262,6 @@ public class Inventory extends Container {
                             else if (val<0){modifiertype = "negative";}
                             whatToWrite2 = val + "";
                         }
-
                         float width = font.getBounds(whatToWrite2).width;
                         batch.begin();
                         font.setColor(Color.WHITE);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="118">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="32" tileheight="32" nextobjectid="120">
  <tileset firstgid="1" name="Sewer" tilewidth="32" tileheight="32" tilecount="400">
   <image source="Sewer.png" trans="ff00ff" width="640" height="640"/>
  </tileset>
@@ -78,6 +78,7 @@
  <objectgroup name="preSpawns">
   <object id="105" type="Slime:slime1" x="768" y="1008" width="32" height="32"/>
   <object id="108" type="Slime:slime2" x="832" y="688" width="32" height="32"/>
+  <object id="118" type="SpiderBoss:spiderboss1" x="129" y="544" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="doors">
   <object id="66" type="LEVEL_NAME_HERE" x="95.2784" y="287.741" width="33.1875" height="15.6949"/>
@@ -109,5 +110,8 @@
   <object id="14" name="Key" type="keySewer" x="1337" y="728.5" width="15" height="15">
    <ellipse/>
   </object>
+ </objectgroup>
+ <objectgroup name="npcs">
+  <object id="119" type="Rathgar:true:Friend" x="640" y="288" width="32" height="32"/>
  </objectgroup>
 </map>
