@@ -73,4 +73,12 @@ public class AnimatedSprite extends Sprite {
     }
 
     public boolean isAnimating() { return animating; }
+
+    public float getRegionWidth(){
+        return regWidth;
+    }
+
+    public float getRegionHeight(){
+        return regHeight;
+    }
 }

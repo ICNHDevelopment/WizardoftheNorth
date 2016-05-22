@@ -7,29 +7,33 @@ import com.badlogic.gdx.Gdx;
  */
 public class PartyCharacter extends NPCharacter {
 
-    String battleFile;
-
     public PartyCharacter(String pref){
-        prefix = pref;
-        setDefaults();
+        super(pref);
         loadStats();
     }
 
     void loadStats(){
-        String[] stats = Gdx.files.internal(battleFile).readString().replace("\n", "").replace("\r", "").split(":");
+        String[] lines = Gdx.files.internal(dataFile).readString().replace("\n", "").replace("\r", "").split(";");
+        String[] stats = lines[lines.length-1].split(":");
         int lv = Integer.valueOf(stats[0]);
         int vit = Integer.valueOf(stats[1]);
         int agi = Integer.valueOf(stats[2]);
         int res = Integer.valueOf(stats[3]);
         int str = Integer.valueOf(stats[4]);
         int wis = Integer.valueOf(stats[5]);
-        CharacterStats stets = new CharacterStats(this, lv, vit, agi, res, str, wis);
-        this.stats = stets;
+        this.stats = new CharacterStats(this, lv, vit, agi, res, str, wis);
+    }
+
+    void loadDialogues(){
+        String[] lines = Gdx.files.internal(dataFile).readString().replace("\n", "").replace("\r", "").split(";");
+        for (int i = 0; i<lines.length-1; i++){
+            dialogues.add(lines[i]);
+        }
     }
 
     public void setDefaults(){
         defaultFile = "characters/images/";
-        battleFile = "characters/stats/" + prefix + ".txt";
+        dataFile = "characters/stats/" + prefix + ".txt";
     }
 
     public void interact(){

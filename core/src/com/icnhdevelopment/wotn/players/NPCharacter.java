@@ -1,9 +1,12 @@
 package com.icnhdevelopment.wotn.players;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
 
 /**
  * Created by kyle on 5/21/16.
@@ -11,8 +14,19 @@ import com.badlogic.gdx.math.Vector2;
 public class NPCharacter extends Character {
 
     public String defaultFile, prefix;
+    String dataFile;
     boolean interactable;
     Texture interactImage;
+
+    ArrayList<String> dialogues;
+    int currentDialogue = 0;
+
+    public NPCharacter(String pref){
+        prefix = pref;
+        dialogues = new ArrayList<>();
+        setDefaults();
+        loadDialogues();
+    }
 
     public void create(String filelocation, String prefix, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove, String name){
         super.create(filelocation, prefix, maxFrames, position, animSpeed, player, direcMove);
@@ -20,7 +34,16 @@ public class NPCharacter extends Character {
         interactImage = texture;
     }
 
-    public void setDefaults(){}
+    public void setDefaults(){
+        dataFile = "characters/stats/" + prefix + ".txt";
+    }
+
+    void loadDialogues(){
+        String[] lines = Gdx.files.internal(dataFile).readString().replace("\n", "").replace("\r", "").split(";");
+        for (int i = 0; i<lines.length; i++){
+            dialogues.add(lines[i]);
+        }
+    }
 
     public void interact(){
 

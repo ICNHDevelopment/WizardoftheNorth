@@ -446,7 +446,7 @@ public class Character extends AnimatedSprite {
             batch.setColor(drawTint);
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
         } else if(currentTexture.equals(rangeAnimation)) {
-            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[frame/9][frame%9];
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][frame];
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
         } else if (currentTexture.equals(attackAnimation)){
             TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[0][frame];
@@ -462,12 +462,17 @@ public class Character extends AnimatedSprite {
         batch.setColor(new Color(Color.WHITE));
     }
 
-    public void animateRanged(float maxTime, float time){
+    public void animateRanged(boolean up, float maxTime, float time){
         currentTexture = rangeAnimation;
-        float switchLen = maxTime/13;
-        frame = (int)(time/switchLen);
-        if (time>=maxTime){
-            currentTexture = texture;
+        float switchLen = maxTime/((rangeAnimation.getWidth()/regWidth)-4);
+        if (up) {
+            frame = (int) (time / switchLen);
+        } else {
+            float frac = time/maxTime;
+            frame = frac<.25?3:(frac<.50?2:(frac<.75?1:0));
+            if (time >= maxTime) {
+                currentTexture = texture;
+            }
         }
     }
 

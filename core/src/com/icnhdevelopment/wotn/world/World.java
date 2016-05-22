@@ -63,6 +63,7 @@ public class World {
     Character battleChar;
 
     String state = "fadein";
+    String stateState = "normal";
     float alpha = 1f;
 
     public void create(String filename){
@@ -264,7 +265,7 @@ public class World {
             boolean partyable = data[1].equals("true");
             float tx = (float)obj.getProperties().get("x");
             float ty = (float)obj.getProperties().get("y");
-            NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter();
+            NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter(data[2]);
             tempChar.create(tempChar.defaultFile, tempChar.prefix, 7, new Vector2(tx, ty), 5, false, false, name);
             npcs.add(tempChar);
             multiDSprites.add(tempChar);
@@ -311,7 +312,7 @@ public class World {
                     battleStage++;
                 }
                 TICK++;
-                if (battleStage == 7 && TICK%9==8) {
+                if (battleStage == 7 && TICK % 9 == 8) {
                     BattleInfo bi = new BattleInfo(mainCharacter, battleChar);
                     bi.setBackFile(fileLocation + "BattleScene.png");
                     bi.setBattleTex(battleTransition);
@@ -331,7 +332,9 @@ public class World {
                 if (input.isKeyDown(Input.Keys.ESCAPE)) {
                     inventory.setVisible(false);
                 }
-            } else {
+            } else if (stateState.equals("dialogue")){
+                //Yada yada. Rada rada!
+            }else {
                 battleChar = null;
                 if (battleStage > -1 && TICK % 9 == 0) {
                     battleStage--;
