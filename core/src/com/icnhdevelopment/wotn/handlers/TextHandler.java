@@ -14,82 +14,143 @@ import java.util.Arrays;
  */
 public class TextHandler {
 
-	String currentText, newText = "";
-	int scrollSpeed;
-	static int counter = 0;
-	final int maxCharactersPerLine = 0; //Change This Later
-	final int maxNumOfLines = 0; //Change This Later
+	ArrayList<ArrayList<String>> fullText;
+	ArrayList<String> renderedText;
+	int lines = 0;
+	int frame = 0;
 
 	BitmapFont font;
 	Rectangle container;
+
+	int maxLinesHigh;
 	
 	public TextHandler(String text, Rectangle container){
-		setText(text);
 		this.container = container;
 		font = Fonts.loadFont(Fonts.OPEN_SANS, 20);
+		maxLinesHigh = (int)(container.getHeight()/(font.getBounds("Tyk").height+8));
+		setText(text);
 	}
  	
  	public ArrayList<String> textToLines(String text){
- 		ArrayList<String> t = new ArrayList(Arrays.asList(text.split("\\s+"))); //Added temporary parameter because errors
  		ArrayList<String> lines = new ArrayList<>();
- 		String temp="";
- 		int count = 0;
- 		
- 		//Might change this into a for-each loop later
- 		for (int i = 0; i < t.size(); i++){
- 			if (t.get(i).length() + (count + 1) <= maxCharactersPerLine){// There will always be a space at the end, I don't want to make a seperate case.
- 				temp = temp.concat(t.get(i).concat(" ")); //Adds text to string if total character length doesn't exceed max
- 				System.out.println(temp);
- 				count += t.get(i).length() + 1; //Updates characters count
- 				if (i == t.size() - 1) lines.add(temp);
- 			}
- 			else if (t.get(i).length() + (count + 1) >= maxCharactersPerLine){
- 				count = 0;
- 				lines.add(temp); //Sets concated string as line and starts concating a new line
- 				temp = "";
- 				
- 				temp = temp.concat(t.get(i).concat(" "));
- 				count += t.get(i).length() + 1;
- 			}
- 		}
+		String tempLine = "";
+		String[] words = text.split(" ");
+		for (String s : words){
+			String newTemp = tempLine + s + " ";
+			if (font.getBounds(newTemp).width>container.width-12){
+				tempLine = tempLine.substring(0, tempLine.length()-1);
+				lines.add(tempLine);
+				tempLine = s + " ";
+				if (lines.size()==maxLinesHigh){
+					return lines;
+				}
+			} else {
+				tempLine += s + " ";
+			}
+		}
+		if (tempLine.length()>0) lines.add(tempLine);
 		return lines;
  	}
  	
- 	public boolean scrollText(String oldText, String text){
-		if (text.length() == oldText.length()) return true;
+ 	public boolean scrollText(){
+		String renderedCurrent = renderedText.get(lines);
+		String fullCurrent = fullText.get(frame).get(lines);
+		String renderedLast = renderedText.get(renderedText.size()-1);
+		String fullLast = fullText.get(frame).get(fullText.size()-1);
+		int renderedCurrentSize = renderedCurrent.length();
+		int fullCurrentSize = fullCurrent.length();
+		if (isTextFinished()) {
+			return true;
+		}
 		else {
-			newText = text.substring(0, oldText.length() + 1);
+			if (renderedCurrentSize<fullCurrentSize){
+				renderedText.set(lines, fullText.get(frame).get(lines).substring(0, renderedCurrent.length()+1));
+			} else {
+				if (lines<renderedText.size()-1) {
+					lines++;
+				}
+			}
 		}
 		return false;
  	}
- 	
- 	/*
- 	public void scrollText(ArrayList<String> t, int scrollSpeed){
- 	    int count = 0;
- 	    String temp = "";
- 		for (int i = 0; i < t.size(); i++){
- 			for (int j = 0; j < t.get(i).length()*scrollSpeed; j++){
- 				count++;
- 				if (count%scrollSpeed==0) temp = t.get(i).substring(0,i+1); //replace temp with line[i].text or something like that to indicate which line
- 			}
- 		}
- 	}
- 	*/
+
+	public boolean isTextFinished(){
+		String renderedCurrent = renderedText.get(lines);
+		String fullCurrent = fullText.get(frame).get(lines);
+		String renderedLast = renderedText.get(renderedText.size()-1);
+		String fullLast = fullText.get(frame).get(fullText.get(frame).size()-1);
+		int renderedCurrentSize = renderedCurrent.length();
+		int fullCurrentSize = fullCurrent.length();
+		return (frame == fullText.size()-1
+			&& renderedLast.length() == fullLast.length()
+			&& renderedCurrentSize == fullCurrentSize);
+	}
+
+	public void goToNextFrame(){
+		frame++;
+		renderedText.clear();
+		for (int i = 0; i<fullText.get(frame).size(); i++){
+			renderedText.add("");
+		}
+	}
+
+	public boolean isFrameFinished(){
+		String renderedCurrent = renderedText.get(lines);
+		String fullCurrent = fullText.get(frame).get(lines);
+		String renderedLast = renderedText.get(renderedText.size()-1);
+		String fullLast = fullText.get(frame).get(fullText.size()-1);
+		int renderedCurrentSize = renderedCurrent.length();
+		int fullCurrentSize = fullCurrent.length();
+		if (renderedLast.length() == fullLast.length()
+				&& renderedCurrentSize == fullCurrentSize) return true;
+		return false;
+	}
+
+	public void skipToEnd(){
+		renderedText = fullText.get(frame);
+		lines = renderedText.size()-1;
+	}
+
+	public String getAllTextInFrame(int frame){
+		return getAllTextInArrayList(fullText.get(frame));
+	}
+
+	public String getAllTextInArrayList(ArrayList<String> ray){
+		String txt = "";
+		for (String s : ray){
+			txt += s + " ";
+		}
+		return txt.substring(0, txt.length()-1);
+	}
  	
  	public void setText(String text){
- 		currentText = text;
-		newText = "";
- 	}
- 	
- 	public void setScrollSpeed(int speed){
- 		//scrollSpeed = speed;
+		int frames = 0;
+		fullText = new ArrayList<>();
+		do {
+			fullText.add(textToLines(text));
+			String frameTxt = getAllTextInFrame(frames);
+			if (frameTxt.length()>=text.length()){
+				text = "";
+			} else {
+				text = text.substring(frameTxt.length());
+			}
+			frames++;
+		} while (text.length()>0);
+		lines = 0;
+		renderedText = new ArrayList<>();
+		for (int i = 0; i<fullText.get(frame).size(); i++){
+			renderedText.add("");
+		}
  	}
  	
  	public boolean update(){
- 		return scrollText(newText, currentText);
+ 		return scrollText();
  	}
 
 	public void render(SpriteBatch batch){
-		font.draw(batch, newText, container.x, container.y+font.getBounds(newText).height);
+		for (int i = 0; i<lines+1; i++){
+			int y = (int)(container.y + container.height - ((i+1)*(font.getBounds("Tyk").height+8)));
+			font.draw(batch, renderedText.get(i), container.x+6, y);
+		}
 	}
 }

@@ -49,8 +49,8 @@ public class NPCharacter extends Character {
         }
     }
 
-    public void interact(){
-
+    public String getCurrentDialogue(){
+        return dialogues.get(currentDialogue);
     }
 
     public boolean isInteractable(){

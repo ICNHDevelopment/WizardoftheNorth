@@ -84,8 +84,8 @@
  </objectgroup>
  <objectgroup name="spawners"/>
  <objectgroup name="preSpawns">
-  <object id="105" type="Slime:slime1" x="768" y="1008" width="32" height="32"/>
-  <object id="108" type="Slime:slime2" x="832" y="688" width="32" height="32"/>
+  <object id="105" type="GreenSlime:slime1" x="768" y="1008" width="32" height="32"/>
+  <object id="108" type="BlueSlime:slime2" x="832" y="688" width="32" height="32"/>
   <object id="118" type="SpiderBoss:spiderboss1" x="129" y="544" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="doors">
@@ -120,7 +120,7 @@
   </object>
  </objectgroup>
  <objectgroup name="npcs">
-  <object id="119" type="Rathgar:true:Friend" x="640" y="288" width="32" height="32"/>
+  <object id="119" type="Rathgar:true:Friend" x="608" y="288" width="32" height="32"/>
   <object id="120" type="Humble Merchant:false:Merchant" x="896" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

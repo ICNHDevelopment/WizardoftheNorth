@@ -31,7 +31,4 @@ public class PartyCharacter extends NPCharacter {
         }
     }
 
-    public void interact(){
-
-    }
 }

@@ -16,8 +16,11 @@ public class Monster extends Character {
     public void setDefaults(){}
 
     public static Monster getMonster(String type){
-        if (type.equals("Slime")){
-            return new Slime();
+        if (type.equals("BlueSlime")){
+            return new Slime(0);
+        }
+        if (type.equals("GreenSlime")){
+            return new Slime(1);
         }
         if (type.equals("SpiderBoss")){
             return new BossSpider();

@@ -47,7 +47,7 @@ public class Spawner {
     public void spawn() {
         Monster m = null;
         if (type instanceof Slime){
-            m = new Slime();
+            //m = new Slime();
         }
         if (m!=null) {
             int tx, ty;

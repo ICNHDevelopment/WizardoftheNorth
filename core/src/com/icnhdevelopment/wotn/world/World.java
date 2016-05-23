@@ -21,6 +21,7 @@ import com.icnhdevelopment.wotn.battle.BattleInfo;
 import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
+import com.icnhdevelopment.wotn.handlers.TextHandler;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
@@ -66,6 +67,11 @@ public class World {
     String stateState = "normal";
     float alpha = 1f;
 
+    TextHandler dialogueScroller;
+    Texture dialogueBox;
+    Rectangle dialogueRectangle;
+    NPCharacter speakingCharacter;
+
     public void create(String filename){
         fileLocation = filename.substring(0, filename.lastIndexOf("/")+1);
         enemies = new ArrayList<>();
@@ -107,6 +113,9 @@ public class World {
         hud = new Hud(mainCharacter);
 
         battleTransition = new Texture("ui/hud/toBlack.png");
+
+        dialogueBox = new Texture("ui/hud/speechPopup.png");
+        dialogueRectangle = new Rectangle((Game.WIDTH()-dialogueBox.getWidth()*2)/2 + dialogueBox.getHeight()*2, dialogueBox.getHeight(), dialogueBox.getWidth()*2 - dialogueBox.getHeight()*2, dialogueBox.getHeight()*2);
     }
 
     void loadMap (String filename){
@@ -338,6 +347,19 @@ public class World {
                 }
             } else if (stateState.equals("dialogue")){
                 //Yada yada. Rada rada!
+                if (TICK%4==0) {
+                    dialogueScroller.update();
+                }
+                if (input.didMouseClick()){
+                    if (dialogueScroller.isTextFinished()){
+                        stateState = "normal";
+                    } else if (dialogueScroller.isFrameFinished()){
+                        dialogueScroller.goToNextFrame();
+                    } else {
+                        dialogueScroller.skipToEnd();
+                    }
+                }
+                TICK++;
             }else {
                 battleChar = null;
                 if (battleStage > -1 && TICK % 9 == 0) {
@@ -365,7 +387,12 @@ public class World {
                 mainCharacter.heal(1f/300f);
                 mainCharacter.remember(1f/300f);
                 if (input.isKeyDown(Input.Keys.F)){
-                    mainCharacter.interact();
+                    NPCharacter inter = mainCharacter.interact();
+                    if (inter!=null){
+                        stateState = "dialogue";
+                        dialogueScroller = new TextHandler(inter.getName() + ": " + inter.getCurrentDialogue(), dialogueRectangle);
+                        speakingCharacter = inter;
+                    }
                 }
 
                 for (Spawner s : spawners) {
@@ -472,6 +499,14 @@ public class World {
         if (inventory.isVisible()) {
             batch.setProjectionMatrix(inventory.getRenderCam().combined);
             inventory.render(batch, mainCharacter.getInventory());
+        }
+        if (stateState.equals("dialogue")){
+            //Render player and speaking character later
+            batch.begin();
+            batch.draw(dialogueBox, dialogueRectangle.x - dialogueRectangle.height, dialogueRectangle.y, dialogueRectangle.width + dialogueRectangle.height, dialogueRectangle.height);
+            dialogueScroller.render(batch);
+            batch.draw(speakingCharacter.getHead(), dialogueRectangle.x - dialogueRectangle.height + 4, dialogueRectangle.y+4, dialogueRectangle.height-8, dialogueRectangle.height-8);
+            batch.end();
         }
         if (battleStage>-1){
             batch.setProjectionMatrix(inventory.getRenderCam().combined);

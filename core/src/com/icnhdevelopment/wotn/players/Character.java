@@ -274,13 +274,15 @@ public class Character extends AnimatedSprite {
         NPCharacter closest = null;
         float lowestDistance = Float.MAX_VALUE;
         for (NPCharacter c : npcs) {
-            float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitBox());
-            if (dis < lowestDistance) {
-                if (closest != null) {
-                    c.setInteractable(false);
+            if (!followers.contains(c)) {
+                float dis = WizardHelper.getDistanceFromCenter(getHitBox(), c.getHitBox());
+                if (dis < lowestDistance) {
+                    if (closest != null) {
+                        c.setInteractable(false);
+                    }
+                    lowestDistance = dis;
+                    closest = c;
                 }
-                lowestDistance = dis;
-                closest = c;
             }
         }
         interactCharacter = closest;
@@ -523,7 +525,7 @@ public class Character extends AnimatedSprite {
         this.frame = frame;
     }
 
-    public void interact(){
+    public NPCharacter interact(){
         if (interactObject!=null) {
             if (interactObject.isInteractable()) {
                 if (interactObject instanceof InventoryObject) {
@@ -567,8 +569,10 @@ public class Character extends AnimatedSprite {
                     interactCharacter.setDirection(0);
                     setDirection(1);
                 }
+                return interactCharacter;
             }
         }
+        return null;
     }
 
     protected void addToInventory(Item item){
