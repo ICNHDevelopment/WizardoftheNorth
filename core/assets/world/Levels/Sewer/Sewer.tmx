@@ -120,7 +120,7 @@
   </object>
  </objectgroup>
  <objectgroup name="npcs">
-  <object id="119" type="Rathgar:true:Friend" x="417" y="803" width="32" height="32"/>
+  <object id="119" type="Rathgar:true:Friend" x="608" y="288" width="32" height="32"/>
   <object id="120" type="Humble Merchant:false:Merchant" x="896" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

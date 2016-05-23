@@ -391,6 +391,7 @@ public class World {
                     if (inter!=null){
                         stateState = "dialogue";
                         dialogueScroller = new TextHandler(inter.getName() + ": " + inter.getCurrentDialogue(), dialogueRectangle);
+                        speakingCharacter = inter;
                     }
                 }
 
@@ -504,6 +505,7 @@ public class World {
             batch.begin();
             batch.draw(dialogueBox, dialogueRectangle.x - dialogueRectangle.height, dialogueRectangle.y, dialogueRectangle.width + dialogueRectangle.height, dialogueRectangle.height);
             dialogueScroller.render(batch);
+            batch.draw(speakingCharacter.getHead(), dialogueRectangle.x - dialogueRectangle.height + 4, dialogueRectangle.y+4, dialogueRectangle.height-8, dialogueRectangle.height-8);
             batch.end();
         }
         if (battleStage>-1){
