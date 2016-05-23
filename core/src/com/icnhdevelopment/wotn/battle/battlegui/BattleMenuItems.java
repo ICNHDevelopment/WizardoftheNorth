@@ -1,9 +1,12 @@
 package com.icnhdevelopment.wotn.battle.battlegui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.battle.Battle;
+import com.icnhdevelopment.wotn.battle.DamageText;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.items.BattleItem;
 import com.icnhdevelopment.wotn.items.Item;
@@ -66,6 +69,9 @@ public class BattleMenuItems extends BattleMenu {
                 BattleMenuAction it = itemSlots[i/width][i%width];
                 if (it.update(input)){
                     items.get(i).performFunction(character);
+                    DamageText dt = new DamageText(items.get(i).getValue()+"", new Vector2(character.getPosition().x, character.getPosition().y + character.getSize().y), -1);
+                    dt.setColor(Color.GREEN);
+                    battle.addDamageText(dt);
                     items.remove(i);
                     loadRectangles();
                     battle.setAction("consume", true, battle.currentTurn(), battle.currentTurn());
