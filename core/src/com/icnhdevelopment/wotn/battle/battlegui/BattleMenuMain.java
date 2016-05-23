@@ -25,10 +25,23 @@ public class BattleMenuMain extends BattleMenu {
         buttonSpots[2] = new Rectangle(container.x+(container.width-(182*2))/2-4, container.y+container.height-(12+152), 182, 76);
         buttonSpots[3] = new Rectangle(container.x+(container.width-(182*2))/2+186, container.y+container.height-(12+152), 182, 76);
         current = this;
-        attack = new BattleMenuButton("Attack", buttonSpots[0], new BattleMenuAttack());
-        items = new BattleMenuButton("Items", buttonSpots[1], new BattleMenuItems(main));
-        support = new BattleMenuButton("Support", buttonSpots[2], new BattleMenuSupport());
-        magic = new BattleMenuButton("Magic", buttonSpots[3], new BattleMenuMagic());
+        BattleMenu battleMenu = new BattleMenuAttack();
+        battleMenu.setParent(this);
+        attack = new BattleMenuButton("Attack", buttonSpots[0], battleMenu);
+        battleMenu = new BattleMenuItems(main);
+        battleMenu.setParent(this);
+        items = new BattleMenuButton("Items", buttonSpots[1], battleMenu);
+        battleMenu = new BattleMenuSupport();
+        battleMenu.setParent(this);
+        support = new BattleMenuButton("Support", buttonSpots[2], battleMenu);
+        battleMenu = new BattleMenuMagic();
+        battleMenu.setParent(this);
+        magic = new BattleMenuButton("Magic", buttonSpots[3], battleMenu);
+    }
+
+    @Override
+    public void setParent(BattleMenu battleMenu) {
+
     }
 
     public void update(CInputProcessor input, Battle battle){
