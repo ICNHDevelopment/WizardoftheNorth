@@ -53,6 +53,7 @@ public class BattleInfo {
                 assert m!=null;
                 CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
                 m.create(m.defaultFile, m.prefix, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
+                m.animateIdle();
                 antSide.add(m);
                 expAmounts.add(exp);
             }

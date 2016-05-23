@@ -31,7 +31,7 @@ public class NPCharacter extends Character {
     public void create(String filelocation, String prefix, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove, String name){
         super.create(filelocation, prefix, maxFrames, position, animSpeed, player, direcMove);
         this.name = name;
-        direction = 0;
+        direction = 1;
         try{
             interactImage = new Texture(filelocation + prefix + "H.png");
         } catch (Exception e){}
@@ -39,6 +39,7 @@ public class NPCharacter extends Character {
 
     public void setDefaults(){
         dataFile = "characters/stats/" + prefix + ".txt";
+        defaultFile = "characters/images/";
     }
 
     void loadDialogues(){

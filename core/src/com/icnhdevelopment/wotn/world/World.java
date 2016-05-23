@@ -266,7 +266,11 @@ public class World {
             float tx = (float)obj.getProperties().get("x");
             float ty = (float)obj.getProperties().get("y");
             NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter(data[2]);
-            tempChar.create(tempChar.defaultFile, tempChar.prefix, 7, new Vector2(tx, ty), 5, false, false, name);
+            int maxFrames = 7;
+            if (!partyable){
+                maxFrames = 1;
+            }
+            tempChar.create(tempChar.defaultFile, tempChar.prefix, maxFrames, new Vector2(tx, ty), 5, false, false, name);
             npcs.add(tempChar);
             multiDSprites.add(tempChar);
         }
@@ -376,7 +380,7 @@ public class World {
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
                     inventory.setVisible(true);
-                    mainCharacter.setFrame(0);
+                    mainCharacter.setFrame(1);
                 }
             }
         }
@@ -426,6 +430,9 @@ public class World {
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
         mapRenderer.render(new int[]{0});
+        try {
+            mapRenderer.render(new int[]{2});
+        } catch (Exception e){}
         batch.begin();
         for (CollideObject c : collideObjects){
             c.render(batch);

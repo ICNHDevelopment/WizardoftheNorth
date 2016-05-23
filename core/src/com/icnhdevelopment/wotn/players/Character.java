@@ -175,7 +175,7 @@ public class Character extends AnimatedSprite {
         Rectangle nextFoot = new Rectangle(next.x+width*.15f, next.y, width*.7f, height*.15f);
         if (canMove(nextFoot, walls, cols, npcs)) {
             lastPositions.add(0, new Vector2(getPosition()));
-            while (lastPositions.size()>(followers.size()+1)*20) {
+            while (lastPositions.size()>(followers.size()+1)*16) {
                 lastPositions.remove(lastPositions.size()-1);
             }
             footBox = nextFoot;
@@ -295,8 +295,8 @@ public class Character extends AnimatedSprite {
 
     public void updateFollowers(boolean moving){
         for (int i = 0; i<followers.size(); i++){
-            if ((i+1)*20-1<lastPositions.size()) {
-                Vector2 newPos = new Vector2(lastPositions.get((i+1)*20-1));
+            if ((i+1)*16-1<lastPositions.size()) {
+                Vector2 newPos = new Vector2(lastPositions.get((i+1)*16-1));
                 Character f = followers.get(i);
                 if (f.getPosition().x<newPos.x){
                     f.setDirection(1);
@@ -556,6 +556,7 @@ public class Character extends AnimatedSprite {
                 if (interactCharacter instanceof PartyCharacter){
                     if (!followers.contains(interactCharacter)) {
                         followers.add(interactCharacter);
+                        interactCharacter.setInteractable(false);
                     }
                 }
                 interactCharacter.interact();
