@@ -25,12 +25,13 @@ import com.icnhdevelopment.wotn.handlers.TextHandler;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by kyle on 6/4/15.
  */
-public class World {
+public class World implements Serializable{
 
     OrthographicCamera camera;
     TiledMapRenderer mapRenderer;

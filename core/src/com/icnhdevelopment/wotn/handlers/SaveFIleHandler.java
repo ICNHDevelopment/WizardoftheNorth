@@ -7,7 +7,7 @@ import java.io.*;
 /**
  * Created by kyle on 5/20/16.
  */
-public class SaveFIleHandler {
+public class SaveFileHandler {
 
 	public static void serialize(World w, File file){
 		try {
