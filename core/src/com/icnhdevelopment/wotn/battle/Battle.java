@@ -63,6 +63,8 @@ public class Battle {
     TextHandler outputText;
     Rectangle outputRectangle;
 
+    boolean outcome;
+
     public void create(BattleInfo battleInfo){
         font = Fonts.loadFont(Fonts.OPEN_SANS, 12, Color.WHITE, Color.BLACK);
         vitBar = new Texture("ui/hud/VitalityMeter.png");
@@ -238,6 +240,21 @@ public class Battle {
                     outputText.skipToEnd();
                 }
             }
+        } else if (state.equals("endbattle")){
+            outputText.update();
+            if (input.didMouseClick()) {
+                if (outputText.isTextFinished()) {
+                    if (outcome){
+                        world.kill(enemy);
+                        protSide.get(0).addExperience(getTotalExperience());
+                    }
+                    Game.GAME_STATE = GameState.WORLD;
+                    protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
+                    protSide.get(0).animate(false);
+                } else {
+                    outputText.skipToEnd();
+                }
+            }
         }
         TICK++;
     }
@@ -266,17 +283,24 @@ public class Battle {
     }
 
     void backToWorldLose(){
-        Game.GAME_STATE = GameState.WORLD;
-        protSide.get(0).setPosition(new Vector2(charPos.x, charPos.y));
-        protSide.get(0).animate(false);
+        outputText.setText("You died :(");
+        outcome = false;
+        state = "endbattle";
     }
 
     public void backToWorldWin(){
-        world.kill(enemy);
+        String text = "You defeated the enemy! You gained " + getTotalExperience() + " experience!";
+        outputText.setText(text);
+        outcome = true;
+        state = "endbattle";
+    }
+
+    int getTotalExperience(){
+        int total = 0;
         for (Integer i : expValues) {
-            protSide.get(0).addExperience(i);
+            total += i;
         }
-        backToWorldLose();
+        return total;
     }
 
     void switchTurn(){
@@ -291,7 +315,7 @@ public class Battle {
             charTurn = fightOrder.get(whoseturn);
         } else if (result.equals("miss")){
             state = "scrollText";
-            outputText.setText("The attack missed!                       ");
+            outputText.setText("The attack missed!");
             stateState = "chooseaction";
             checkForWinner();
             whoseturn++;
