@@ -26,6 +26,7 @@ public class AnimatedSprite extends Sprite {
     Texture attackAnimation;
     Texture rangeAnimation;
     Texture consumeAnimation;
+    Texture deadAnimation;
 
     public void create(String filelocation, String prefix, int maxFrames, Vector2 position, Vector2 size, int animSpeed){
         super.create(filelocation+prefix+"SS.png", position, size);
@@ -42,6 +43,9 @@ public class AnimatedSprite extends Sprite {
         } catch(Exception e){}
         try{
             consumeAnimation = new Texture(filelocation + prefix + "DrinkSS.png");
+        } catch(Exception e){}
+        try{
+            deadAnimation = new Texture(filelocation + prefix + "DeadSS.png");
         } catch(Exception e){}
         if (!(this instanceof Character)) start();
     }

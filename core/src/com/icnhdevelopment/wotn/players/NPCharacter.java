@@ -31,7 +31,10 @@ public class NPCharacter extends Character {
     public void create(String filelocation, String prefix, int maxFrames, Vector2 position, int animSpeed, boolean player, boolean direcMove, String name){
         super.create(filelocation, prefix, maxFrames, position, animSpeed, player, direcMove);
         this.name = name;
-        interactImage = texture;
+        direction = 0;
+        try{
+            interactImage = new Texture(filelocation + prefix + "H.png");
+        } catch (Exception e){}
     }
 
     public void setDefaults(){
@@ -55,7 +58,7 @@ public class NPCharacter extends Character {
 
     public void setInteractable(boolean i){
         interactable = i;
-        if (i){
+        if (i && interactImage != null){
             currentTexture = interactImage;
         } else {
             currentTexture = texture;
@@ -65,7 +68,7 @@ public class NPCharacter extends Character {
     public void render(SpriteBatch batch){
         if (interactable){
             int scale = 1;
-            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[direction][0];
+            TextureRegion tr = TextureRegion.split(currentTexture, (int)regWidth, (int)(regHeight+2))[direction][0];
             batch.draw(tr, getPosition().x - (width * (scale - 1) / 2) + drawOffset.x, getPosition().y + drawOffset.y, width * scale, height * scale);
         } else {
             super.render(batch);

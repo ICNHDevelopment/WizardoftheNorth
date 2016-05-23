@@ -32,6 +32,7 @@ public class PartyCharacter extends NPCharacter {
     }
 
     public void setDefaults(){
+        super.setDefaults();
         defaultFile = "characters/images/";
         dataFile = "characters/stats/" + prefix + ".txt";
     }

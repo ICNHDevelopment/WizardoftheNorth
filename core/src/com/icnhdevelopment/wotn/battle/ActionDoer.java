@@ -83,6 +83,9 @@ public class ActionDoer {
                 if (attackActorWithActor(doer, receiver, 2f)){
                     if (!attackMiss){
                         receiver.damage(doer.getDamage(doer, receiver));
+                        if (receiver.getCurrentVitality()<=0){
+                            receiver.animateDead();
+                        }
                         return "true";
                     } else {
                         return "miss";
@@ -92,6 +95,9 @@ public class ActionDoer {
                 if (doRangedAttack(doer, receiver, 2f)){
                     if (!attackMiss){
                         receiver.damage(doer.getDamage(doer, receiver));
+                        if (receiver.getCurrentVitality()<=0){
+                            receiver.animateDead();
+                        }
                         return "true";
                     } else {
                         return "miss";

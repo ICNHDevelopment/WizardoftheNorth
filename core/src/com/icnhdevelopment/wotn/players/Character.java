@@ -490,6 +490,12 @@ public class Character extends AnimatedSprite {
         currentTexture = consumeAnimation;
     }
 
+    public void animateDead(){
+        currentTexture = deadAnimation;
+        frame = 0;
+        direction = 0;
+    }
+
     public TextureRegion getImage(){
         return TextureRegion.split(currentTexture, (int)regWidth, (int)regHeight)[direction][0];
     }
@@ -553,6 +559,13 @@ public class Character extends AnimatedSprite {
                     }
                 }
                 interactCharacter.interact();
+                if (interactCharacter.getHitBox().x<getHitBox().x){
+                    interactCharacter.setDirection(1);
+                    setDirection(0);
+                } else {
+                    interactCharacter.setDirection(0);
+                    setDirection(1);
+                }
             }
         }
     }
