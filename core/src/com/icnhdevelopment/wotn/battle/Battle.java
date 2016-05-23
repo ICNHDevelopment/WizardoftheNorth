@@ -87,7 +87,7 @@ public class Battle {
         setBattleOrder();
         bm = new BattleMenuMain(protSide.get(0));
         actionDoer = new ActionDoer();
-        outputText = new TextHandler("", outputRectangle);
+        outputText = new TextHandler("Initialize", outputRectangle);
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -188,7 +188,7 @@ public class Battle {
                         bm.update(input, this);
                         if (BattleMenuMain.choseAction) {
                             state = "scrollText";
-                            outputText.setText(actionDoer.getActionDescription() + "                       ");
+                            outputText.setText(actionDoer.getActionDescription());
                             stateState = "doaction";
                             BattleMenuMain.choseAction = false;
                             bm = new BattleMenuMain(protSide.get(0));
@@ -209,12 +209,12 @@ public class Battle {
                                 Character target = protSide.get(randomGenerator.nextInt(protSide.size()));
                                 setAction(realAction.substring(1), false, charTurn, target);
                                 state = "scrollText";
-                                outputText.setText(actionDoer.getActionDescription() + "                       ");
+                                outputText.setText(actionDoer.getActionDescription());
                                 stateState = "doaction";
                             } else if (realAction.startsWith("S")) {
                                 setAction(realAction.substring(1), false, charTurn, charTurn);
                                 state = "scrollText";
-                                outputText.setText(actionDoer.getActionDescription() + "                       ");
+                                outputText.setText(actionDoer.getActionDescription());
                                 stateState = "doaction";
                             }
                         }

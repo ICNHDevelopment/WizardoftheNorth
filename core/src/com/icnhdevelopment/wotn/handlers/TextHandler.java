@@ -36,15 +36,16 @@ public class TextHandler {
 		String tempLine = "";
 		String[] words = text.split(" ");
 		for (String s : words){
-			String newTemp = tempLine + " " + s;
+			String newTemp = tempLine + s + " ";
 			if (font.getBounds(newTemp).width>container.width-12){
+				tempLine = tempLine.substring(0, tempLine.length()-1);
 				lines.add(tempLine);
-				tempLine = s;
+				tempLine = s + " ";
 				if (lines.size()==maxLinesHigh){
 					return lines;
 				}
 			} else {
-				tempLine += " " + s;
+				tempLine += s + " ";
 			}
 		}
 		if (tempLine.length()>0) lines.add(tempLine);
@@ -58,8 +59,9 @@ public class TextHandler {
 		String fullLast = fullText.get(frame).get(fullText.size()-1);
 		int renderedCurrentSize = renderedCurrent.length();
 		int fullCurrentSize = fullCurrent.length();
-		if (lines == fullText.get(frame).size() && renderedLast.length() == fullLast.length()
-		&& renderedCurrentSize == fullCurrentSize) return true;
+		if (isTextFinished()) {
+			return true;
+		}
 		else {
 			if (renderedCurrentSize<fullCurrentSize){
 				renderedText.set(lines, fullText.get(frame).get(lines).substring(0, renderedCurrent.length()+1));
@@ -79,9 +81,9 @@ public class TextHandler {
 		String fullLast = fullText.get(frame).get(fullText.get(frame).size()-1);
 		int renderedCurrentSize = renderedCurrent.length();
 		int fullCurrentSize = fullCurrent.length();
-		if (frame == fullText.size()-1 && renderedLast.length() == fullLast.length()
-				&& renderedCurrentSize == fullCurrentSize) return true;
-		return false;
+		return (frame == fullText.size()-1
+			&& renderedLast.length() == fullLast.length()
+			&& renderedCurrentSize == fullCurrentSize);
 	}
 
 	public void goToNextFrame(){
@@ -118,7 +120,7 @@ public class TextHandler {
 		for (String s : ray){
 			txt += s + " ";
 		}
-		return txt;
+		return txt.substring(0, txt.length()-1);
 	}
  	
  	public void setText(String text){
@@ -127,10 +129,10 @@ public class TextHandler {
 		do {
 			fullText.add(textToLines(text));
 			String frameTxt = getAllTextInFrame(frames);
-			if (frameTxt.length()-2==text.length()){
+			if (frameTxt.length()>=text.length()){
 				text = "";
 			} else {
-				text = text.substring(frameTxt.length() - 1);
+				text = text.substring(frameTxt.length());
 			}
 			frames++;
 		} while (text.length()>0);
