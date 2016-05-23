@@ -14,8 +14,10 @@ import java.util.Arrays;
  */
 public class TextHandler {
 
-	ArrayList<String> fullText, renderedText;
+	ArrayList<ArrayList<String>> fullText;
+	ArrayList<String> renderedText;
 	int lines = 0;
+	int frame = 0;
 
 	BitmapFont font;
 	Rectangle container;
@@ -25,7 +27,7 @@ public class TextHandler {
 	public TextHandler(String text, Rectangle container){
 		this.container = container;
 		font = Fonts.loadFont(Fonts.OPEN_SANS, 20);
-		maxLinesHigh = (int)(container.getHeight()/(font.getBounds("Tyk").height+6));
+		maxLinesHigh = (int)(container.getHeight()/(font.getBounds("Tyk").height+8));
 		setText(text);
 	}
  	
@@ -38,6 +40,9 @@ public class TextHandler {
 			if (font.getBounds(newTemp).width>container.width-12){
 				lines.add(tempLine);
 				tempLine = s;
+				if (lines.size()==maxLinesHigh){
+					return lines;
+				}
 			} else {
 				tempLine += " " + s;
 			}
@@ -48,18 +53,20 @@ public class TextHandler {
  	
  	public boolean scrollText(){
 		String renderedCurrent = renderedText.get(lines);
-		String fullCurrent = fullText.get(lines);
+		String fullCurrent = fullText.get(frame).get(lines);
 		String renderedLast = renderedText.get(renderedText.size()-1);
-		String fullLast = fullText.get(fullText.size()-1);
+		String fullLast = fullText.get(frame).get(fullText.size()-1);
 		int renderedCurrentSize = renderedCurrent.length();
 		int fullCurrentSize = fullCurrent.length();
-		if (renderedLast.length() == fullLast.length()
+		if (lines == fullText.get(frame).size() && renderedLast.length() == fullLast.length()
 		&& renderedCurrentSize == fullCurrentSize) return true;
 		else {
 			if (renderedCurrentSize<fullCurrentSize){
-				renderedText.set(lines, fullText.get(lines).substring(0, renderedCurrent.length()+1));
+				renderedText.set(lines, fullText.get(frame).get(lines).substring(0, renderedCurrent.length()+1));
 			} else {
-				lines++;
+				if (lines<renderedText.size()-1) {
+					lines++;
+				}
 			}
 		}
 		return false;
@@ -67,9 +74,29 @@ public class TextHandler {
 
 	public boolean isTextFinished(){
 		String renderedCurrent = renderedText.get(lines);
-		String fullCurrent = fullText.get(lines);
+		String fullCurrent = fullText.get(frame).get(lines);
 		String renderedLast = renderedText.get(renderedText.size()-1);
-		String fullLast = fullText.get(fullText.size()-1);
+		String fullLast = fullText.get(frame).get(fullText.get(frame).size()-1);
+		int renderedCurrentSize = renderedCurrent.length();
+		int fullCurrentSize = fullCurrent.length();
+		if (frame == fullText.size()-1 && renderedLast.length() == fullLast.length()
+				&& renderedCurrentSize == fullCurrentSize) return true;
+		return false;
+	}
+
+	public void goToNextFrame(){
+		frame++;
+		renderedText.clear();
+		for (int i = 0; i<fullText.get(frame).size(); i++){
+			renderedText.add("");
+		}
+	}
+
+	public boolean isFrameFinished(){
+		String renderedCurrent = renderedText.get(lines);
+		String fullCurrent = fullText.get(frame).get(lines);
+		String renderedLast = renderedText.get(renderedText.size()-1);
+		String fullLast = fullText.get(frame).get(fullText.size()-1);
 		int renderedCurrentSize = renderedCurrent.length();
 		int fullCurrentSize = fullCurrent.length();
 		if (renderedLast.length() == fullLast.length()
@@ -78,15 +105,38 @@ public class TextHandler {
 	}
 
 	public void skipToEnd(){
-		renderedText = fullText;
+		renderedText = fullText.get(frame);
 		lines = renderedText.size()-1;
+	}
+
+	public String getAllTextInFrame(int frame){
+		return getAllTextInArrayList(fullText.get(frame));
+	}
+
+	public String getAllTextInArrayList(ArrayList<String> ray){
+		String txt = "";
+		for (String s : ray){
+			txt += s + " ";
+		}
+		return txt;
 	}
  	
  	public void setText(String text){
-		fullText = textToLines(text);
+		int frames = 0;
+		fullText = new ArrayList<>();
+		do {
+			fullText.add(textToLines(text));
+			String frameTxt = getAllTextInFrame(frames);
+			if (frameTxt.length()-2==text.length()){
+				text = "";
+			} else {
+				text = text.substring(frameTxt.length() - 1);
+			}
+			frames++;
+		} while (text.length()>0);
 		lines = 0;
 		renderedText = new ArrayList<>();
-		for (int i = 0; i<fullText.size(); i++){
+		for (int i = 0; i<fullText.get(frame).size(); i++){
 			renderedText.add("");
 		}
  	}
@@ -97,7 +147,7 @@ public class TextHandler {
 
 	public void render(SpriteBatch batch){
 		for (int i = 0; i<lines+1; i++){
-			int y = (int)(container.y + container.height - (i+1)*(font.getBounds("Tyk").height+6));
+			int y = (int)(container.y + container.height - ((i+1)*(font.getBounds("Tyk").height+8)));
 			font.draw(batch, renderedText.get(i), container.x+6, y);
 		}
 	}

@@ -10,15 +10,21 @@ import com.icnhdevelopment.wotn.world.World;
 public class Slime extends Monster{
 
     boolean animUp = true;
+    int type;
 
-    public Slime(){
+    public Slime(int type){
+        this.type = type;
         setDefaults();
     }
 
     @Override
     public void setDefaults() {
         defaultFile = "characters/images/";
-        prefix = "Slime";
+        if (type == 0) {
+            prefix = "BlueSlime";
+        } else {
+            prefix = "GreenSlime";
+        }
         defaultMaxFrames = 9;
         defaultMaxSpawns = 3;
     }

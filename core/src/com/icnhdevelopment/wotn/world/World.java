@@ -114,8 +114,8 @@ public class World {
 
         battleTransition = new Texture("ui/hud/toBlack.png");
 
-        dialogueBox = new Texture("ui/Menus/Speech.png");
-        dialogueRectangle = new Rectangle((Game.WIDTH()-dialogueBox.getWidth()*3)/2, dialogueBox.getHeight()*3, dialogueBox.getWidth()*3, dialogueBox.getHeight()*3);
+        dialogueBox = new Texture("ui/hud/speechPopup.png");
+        dialogueRectangle = new Rectangle((Game.WIDTH()-dialogueBox.getWidth()*2)/2 + dialogueBox.getHeight()*2, dialogueBox.getHeight(), dialogueBox.getWidth()*2 - dialogueBox.getHeight()*2, dialogueBox.getHeight()*2);
     }
 
     void loadMap (String filename){
@@ -351,10 +351,12 @@ public class World {
                     dialogueScroller.update();
                 }
                 if (input.didMouseClick()){
-                    if (!dialogueScroller.isTextFinished()){
-                        dialogueScroller.skipToEnd();
-                    }else {
+                    if (dialogueScroller.isTextFinished()){
                         stateState = "normal";
+                    } else if (dialogueScroller.isFrameFinished()){
+                        dialogueScroller.goToNextFrame();
+                    } else {
+                        dialogueScroller.skipToEnd();
                     }
                 }
                 TICK++;
@@ -500,7 +502,7 @@ public class World {
         if (stateState.equals("dialogue")){
             //Render player and speaking character later
             batch.begin();
-            batch.draw(dialogueBox, dialogueRectangle.x, dialogueRectangle.y, dialogueRectangle.width, dialogueRectangle.height);
+            batch.draw(dialogueBox, dialogueRectangle.x - dialogueRectangle.height, dialogueRectangle.y, dialogueRectangle.width + dialogueRectangle.height, dialogueRectangle.height);
             dialogueScroller.render(batch);
             batch.end();
         }
