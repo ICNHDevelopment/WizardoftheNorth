@@ -14,82 +14,91 @@ import java.util.Arrays;
  */
 public class TextHandler {
 
-	String currentText, newText = "";
-	int scrollSpeed;
-	static int counter = 0;
-	final int maxCharactersPerLine = 0; //Change This Later
-	final int maxNumOfLines = 0; //Change This Later
+	ArrayList<String> fullText, renderedText;
+	int lines = 0;
 
 	BitmapFont font;
 	Rectangle container;
+
+	int maxLinesHigh;
 	
 	public TextHandler(String text, Rectangle container){
-		setText(text);
 		this.container = container;
 		font = Fonts.loadFont(Fonts.OPEN_SANS, 20);
+		maxLinesHigh = (int)(container.getHeight()/(font.getBounds("Tyk").height+6));
+		setText(text);
 	}
  	
  	public ArrayList<String> textToLines(String text){
- 		ArrayList<String> t = new ArrayList(Arrays.asList(text.split("\\s+"))); //Added temporary parameter because errors
  		ArrayList<String> lines = new ArrayList<>();
- 		String temp="";
- 		int count = 0;
- 		
- 		//Might change this into a for-each loop later
- 		for (int i = 0; i < t.size(); i++){
- 			if (t.get(i).length() + (count + 1) <= maxCharactersPerLine){// There will always be a space at the end, I don't want to make a seperate case.
- 				temp = temp.concat(t.get(i).concat(" ")); //Adds text to string if total character length doesn't exceed max
- 				System.out.println(temp);
- 				count += t.get(i).length() + 1; //Updates characters count
- 				if (i == t.size() - 1) lines.add(temp);
- 			}
- 			else if (t.get(i).length() + (count + 1) >= maxCharactersPerLine){
- 				count = 0;
- 				lines.add(temp); //Sets concated string as line and starts concating a new line
- 				temp = "";
- 				
- 				temp = temp.concat(t.get(i).concat(" "));
- 				count += t.get(i).length() + 1;
- 			}
- 		}
+		String tempLine = "";
+		String[] words = text.split(" ");
+		for (String s : words){
+			String newTemp = tempLine + " " + s;
+			if (font.getBounds(newTemp).width>container.width-12){
+				lines.add(tempLine);
+				tempLine = s;
+			} else {
+				tempLine += " " + s;
+			}
+		}
+		if (tempLine.length()>0) lines.add(tempLine);
 		return lines;
  	}
  	
- 	public boolean scrollText(String oldText, String text){
-		if (text.length() == oldText.length()) return true;
+ 	public boolean scrollText(){
+		String renderedCurrent = renderedText.get(lines);
+		String fullCurrent = fullText.get(lines);
+		String renderedLast = renderedText.get(renderedText.size()-1);
+		String fullLast = fullText.get(fullText.size()-1);
+		int renderedCurrentSize = renderedCurrent.length();
+		int fullCurrentSize = fullCurrent.length();
+		if (renderedLast.length() == fullLast.length()
+		&& renderedCurrentSize == fullCurrentSize) return true;
 		else {
-			newText = text.substring(0, oldText.length() + 1);
+			if (renderedCurrentSize<fullCurrentSize){
+				renderedText.set(lines, fullText.get(lines).substring(0, renderedCurrent.length()+1));
+			} else {
+				lines++;
+			}
 		}
 		return false;
  	}
- 	
- 	/*
- 	public void scrollText(ArrayList<String> t, int scrollSpeed){
- 	    int count = 0;
- 	    String temp = "";
- 		for (int i = 0; i < t.size(); i++){
- 			for (int j = 0; j < t.get(i).length()*scrollSpeed; j++){
- 				count++;
- 				if (count%scrollSpeed==0) temp = t.get(i).substring(0,i+1); //replace temp with line[i].text or something like that to indicate which line
- 			}
- 		}
- 	}
- 	*/
+
+	public boolean isTextFinished(){
+		String renderedCurrent = renderedText.get(lines);
+		String fullCurrent = fullText.get(lines);
+		String renderedLast = renderedText.get(renderedText.size()-1);
+		String fullLast = fullText.get(fullText.size()-1);
+		int renderedCurrentSize = renderedCurrent.length();
+		int fullCurrentSize = fullCurrent.length();
+		if (renderedLast.length() == fullLast.length()
+				&& renderedCurrentSize == fullCurrentSize) return true;
+		return false;
+	}
+
+	public void skipToEnd(){
+		renderedText = fullText;
+		lines = renderedText.size()-1;
+	}
  	
  	public void setText(String text){
- 		currentText = text;
-		newText = "";
- 	}
- 	
- 	public void setScrollSpeed(int speed){
- 		//scrollSpeed = speed;
+		fullText = textToLines(text);
+		lines = 0;
+		renderedText = new ArrayList<>();
+		for (int i = 0; i<fullText.size(); i++){
+			renderedText.add("");
+		}
  	}
  	
  	public boolean update(){
- 		return scrollText(newText, currentText);
+ 		return scrollText();
  	}
 
 	public void render(SpriteBatch batch){
-		font.draw(batch, newText, container.x, container.y+font.getBounds(newText).height);
+		for (int i = 0; i<lines+1; i++){
+			int y = (int)(container.y + container.height - (i+1)*(font.getBounds("Tyk").height+6));
+			font.draw(batch, renderedText.get(i), container.x+6, y);
+		}
 	}
 }
