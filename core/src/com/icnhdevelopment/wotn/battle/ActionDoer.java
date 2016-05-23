@@ -83,6 +83,9 @@ public class ActionDoer {
                 if (attackActorWithActor(doer, receiver, 2f)){
                     if (!attackMiss){
                         receiver.damage(doer.getDamage(doer, receiver));
+                        if (receiver.getCurrentVitality()<=0){
+                            receiver.animateDead();
+                        }
                         return "true";
                     } else {
                         return "miss";
@@ -92,6 +95,9 @@ public class ActionDoer {
                 if (doRangedAttack(doer, receiver, 2f)){
                     if (!attackMiss){
                         receiver.damage(doer.getDamage(doer, receiver));
+                        if (receiver.getCurrentVitality()<=0){
+                            receiver.animateDead();
+                        }
                         return "true";
                     } else {
                         return "miss";
@@ -131,19 +137,19 @@ public class ActionDoer {
             mover.setDrawOffset(new Vector2(direction*250, (getHit.getPosition().y-mover.getPosition().y)));
             mover.setFrame(0);
         } else if (actionDuration < oneEighthTime*5){
-            mover.animateRanged(oneEighthTime*4, actionDuration-oneEighthTime);
+            mover.animateRanged(true, oneEighthTime*4, actionDuration-oneEighthTime);
         } else if (actionDuration < oneEighthTime*8){
-            mover.animateRanged(oneEighthTime*4, actionDuration-oneEighthTime);
-            mover.setDrawOffset(new Vector2(0, 0));
-            mover.setFrame(0);
+            mover.animateRanged(false, oneEighthTime, actionDuration-oneEighthTime*5);
             if (projectile.getPosition() == null){
-                projectile.create(mover.getRangeAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize());
+                projectile.create(mover.getRangeAnimation(), new Vector2(mover.getPosition().x + direction*250, mover.getPosition().y+(getHit.getPosition().y-mover.getPosition().y)), mover.getSize(), mover.getRegionWidth(), mover.getRegionHeight());
             }
             projectile.setPosition(new Vector2(projectile.getPosition().x+5*direction, projectile.getPosition().y));
             if (!attackMiss) {
                 flashColor(getHit, new Color(Color.RED), time, 2);
             }
         } else {
+            mover.setDrawOffset(new Vector2(0, 0));
+            mover.setFrame(0);
             projectile = null;
             getHit.setDrawTint(new Color(Color.WHITE));
             return true;

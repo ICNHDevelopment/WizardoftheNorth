@@ -33,10 +33,6 @@ public class Slime extends Monster{
         return new Object[] { "Arange", "Sprotect", "Sfocus" };
     }
 
-    public void animateIdle(){
-        return;
-    }
-
     public void animate() {
         currentTexture = texture;
         if (World.TICK % speed == 0) {

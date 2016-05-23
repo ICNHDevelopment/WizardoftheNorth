@@ -63,6 +63,7 @@ public class World {
     Character battleChar;
 
     String state = "fadein";
+    String stateState = "normal";
     float alpha = 1f;
 
     public void create(String filename){
@@ -264,8 +265,12 @@ public class World {
             boolean partyable = data[1].equals("true");
             float tx = (float)obj.getProperties().get("x");
             float ty = (float)obj.getProperties().get("y");
-            NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter();
-            tempChar.create(tempChar.defaultFile, tempChar.prefix, 7, new Vector2(tx, ty), 5, false, false, name);
+            NPCharacter tempChar = partyable ? new PartyCharacter(data[2]) : new NPCharacter(data[2]);
+            int maxFrames = 7;
+            if (!partyable){
+                maxFrames = 1;
+            }
+            tempChar.create(tempChar.defaultFile, tempChar.prefix, maxFrames, new Vector2(tx, ty), 5, false, false, name);
             npcs.add(tempChar);
             multiDSprites.add(tempChar);
         }
@@ -311,13 +316,12 @@ public class World {
                     battleStage++;
                 }
                 TICK++;
-                if (battleStage == 7 && TICK%9==8) {
+                if (battleStage == 7 && TICK % 9 == 8) {
                     BattleInfo bi = new BattleInfo(mainCharacter, battleChar);
                     bi.setBackFile(fileLocation + "BattleScene.png");
                     bi.setBattleTex(battleTransition);
                     bi.setWorld(this);
                     bi.setCharacterWorldPosition(new Vector2(mainCharacter.getPosition().x, mainCharacter.getPosition().y));
-                    bi.setEnemy(battleChar);
                     changeToBattle = false;
                     battleStage = -1;
                     state = "fadein";
@@ -332,7 +336,9 @@ public class World {
                 if (input.isKeyDown(Input.Keys.ESCAPE)) {
                     inventory.setVisible(false);
                 }
-            } else {
+            } else if (stateState.equals("dialogue")){
+                //Yada yada. Rada rada!
+            }else {
                 battleChar = null;
                 if (battleStage > -1 && TICK % 9 == 0) {
                     battleStage--;
@@ -374,7 +380,7 @@ public class World {
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
                     inventory.setVisible(true);
-                    mainCharacter.setFrame(0);
+                    mainCharacter.setFrame(1);
                 }
             }
         }
@@ -424,6 +430,9 @@ public class World {
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
         mapRenderer.render(new int[]{0});
+        try {
+            mapRenderer.render(new int[]{2});
+        } catch (Exception e){}
         batch.begin();
         for (CollideObject c : collideObjects){
             c.render(batch);

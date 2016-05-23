@@ -30,6 +30,12 @@ public class BattleInfo {
         antSide = new ArrayList<>();
         expAmounts = new ArrayList<>();
         protSide.add(ch1);
+        enemy = ch2;
+        if (ch1.isPlayer()){
+            for (Character c : ch1.getFollowers()){
+                protSide.add(c);
+            }
+        }
         if (ch2 instanceof Monster){
             Monster monster = (Monster)ch2;
             String[] monstas = Gdx.files.internal(monster.battleDataFile).readString().replace("\n", "").replace("\r", "").split(";");
@@ -44,8 +50,10 @@ public class BattleInfo {
                 int wis = Integer.valueOf(data[6]);
                 int exp = Integer.valueOf(data[7]);
                 Monster m = Monster.getMonster(type);
+                assert m!=null;
                 CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
                 m.create(m.defaultFile, m.prefix, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
+                m.animateIdle();
                 antSide.add(m);
                 expAmounts.add(exp);
             }
@@ -98,9 +106,5 @@ public class BattleInfo {
 
     public Character getEnemy() {
         return enemy;
-    }
-
-    public void setEnemy(Character enemy) {
-        this.enemy = enemy;
     }
 }
