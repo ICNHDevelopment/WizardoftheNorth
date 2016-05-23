@@ -230,8 +230,13 @@ public class Battle {
                 cd.updateData();
             }
         } else if (state.equals("scrollText")){
-            if (outputText.update()){
-                state = "fight";
+            outputText.update();
+            if (input.didMouseClick()) {
+                if (outputText.isTextFinished()) {
+                    state = "fight";
+                } else {
+                    outputText.skipToEnd();
+                }
             }
         }
         TICK++;
