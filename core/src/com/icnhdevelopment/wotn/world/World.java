@@ -22,6 +22,7 @@ import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.handlers.TextHandler;
+import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
@@ -295,6 +296,19 @@ public class World implements Serializable{
     }
 
     public void kill(Character c){
+        if (c instanceof Monster){
+            Monster m = (Monster)c;
+            ArrayList<Item> droppedItems = m.getDrops();
+            if (droppedItems!=null){
+                InventoryObject io = new InventoryObject();
+                io.create("world/images/Bag.png", c.getPosition(), new Vector2(32, 32), true, SlotType.NORM, "Bag");
+                for (Item i : droppedItems){
+                    io.addItem(i);
+                }
+                collideObjects.add(io);
+                inventoryObjects.add(io);
+            }
+        }
         if (enemies.contains(c)){
             enemies.remove(c);
         }

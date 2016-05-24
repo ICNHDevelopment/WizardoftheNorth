@@ -45,6 +45,7 @@ public class Inventory extends Container {
         statSlots = new ArrayList<>();
         loadInventorySlots();
         loadStatSlots();
+        loadScrollSlots();
         tooltip = new Tooltip(this);
     }
 
@@ -136,6 +137,18 @@ public class Inventory extends Container {
         }
     }
 
+    void loadScrollSlots(){
+        int startX = 254, startY=(int)textureSize.y-(470+60);
+        for (int i = 0; i<2; i++){
+            ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), startY), new Vector2(60, 60), null, false);
+            is.setSlotType(SlotType.SCROLL);
+            is.setHoverImage(new Texture("Items/highlight.png"));
+            is.setDefaultImage(new Texture("Items/DefaultScroll.png"));
+            is.setImagealignment(Alignment.STRETCHED);
+            defaultInventory.add(is);
+        }
+    }
+
     public void setToolbar(Toolbar toolbar){
         this.toolbar = toolbar;
         for (ItemSlot i : toolbar.defaultInventory){
@@ -171,8 +184,10 @@ public class Inventory extends Container {
                                     character.swapItemFromInventory(mouseItem, i);
                                 } else if (i<21){
                                     character.swapItemFromGear(mouseItem, i);
-                                } else {
+                                } else if (i>25) {
                                     character.swapItemFromToolbar(mouseItem, i);
+                                } else {
+                                    character.swapItemFromScrolls(mouseItem, i);
                                 }
                                 mouseItem = temp;
                             }
@@ -182,8 +197,10 @@ public class Inventory extends Container {
                                 character.swapItemFromInventory(mouseItem, i);
                             } else if (i<21){
                                 character.swapItemFromGear(mouseItem, i);
-                            } else {
+                            } else if (i>25) {
                                 character.swapItemFromToolbar(mouseItem, i);
+                            } else {
+                                character.swapItemFromScrolls(mouseItem, i);
                             }
                             mouseItem = temp;
                         }
@@ -207,7 +224,7 @@ public class Inventory extends Container {
                 renderChildren(batch);
                 TextureRegion temp = character.getImage();
                 Rectangle tempRec = new Rectangle(invenImage.getAbsolutePosition().x+(invenImage.getSize().x-temp.getRegionWidth()*3)/2,
-                        defaultInventory.get(defaultInventory.size()-1).getAbsolutePosition().y+40,
+                        defaultInventory.get(defaultInventory.size()-3).getAbsolutePosition().y+40,
                         temp.getRegionWidth()*3, temp.getRegionHeight()*3);
                 if (!(this instanceof Toolbar)) {
                     batch.begin();

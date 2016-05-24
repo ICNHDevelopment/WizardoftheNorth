@@ -59,10 +59,11 @@ public class Game extends ApplicationAdapter {
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init("ui/Menus/MNUMain.txt");
-		currentWorld = SaveFileHandler.deserialize(new File(System.getProperty("user.dir") + "wizardsave.dat"));
+		/*currentWorld = SaveFileHandler.deserialize(new File(System.getProperty("user.dir") + "wizardsave.dat"));
 		if (currentWorld==null){
 			currentWorld = new World();
-		}
+		}*/
+		currentWorld = new World();
 		currentBattle = new Battle();
 		mouseCursor = new Texture("ui/cursor.png");
 		os = new OpeningSequence();
@@ -75,6 +76,7 @@ public class Game extends ApplicationAdapter {
 		lightningTime = System.currentTimeMillis();
 	}
 
+	/*
 	public void dispose(){
 		try {
 			SaveFileHandler.serialize(currentWorld, new File(System.getProperty("user.dir") + "wizardsave.dat"));
@@ -83,6 +85,7 @@ public class Game extends ApplicationAdapter {
 		}
 		super.dispose();
 	}
+	*/
 
 	@Override
 	public void render () {
