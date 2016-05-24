@@ -304,7 +304,7 @@ public class World implements Serializable{
             ArrayList<Item> droppedItems = m.getDrops();
             if (droppedItems!=null){
                 InventoryObject io = new InventoryObject();
-                io.create("world/images/Bag.png", c.getPosition(), new Vector2(32, 32), true, SlotType.NORM, "Bag");
+                io.create("world/images/Bag.png", new Vector2(c.getPosition()), new Vector2(32, 32), true, SlotType.NORM, "Bag");
                 for (Item i : droppedItems){
                     io.addItem(i);
                 }
