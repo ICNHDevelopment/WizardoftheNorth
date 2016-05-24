@@ -35,6 +35,10 @@ public class Toolbar extends Inventory {
         }
     }
 
+    void loadScrollSlots(){
+
+    }
+
     public void render(SpriteBatch batch){
         batch.draw(character.getHead(), characterImage.x, characterImage.y, characterImage.width, characterImage.height);
     }

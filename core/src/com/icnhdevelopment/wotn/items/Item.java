@@ -2,7 +2,9 @@ package com.icnhdevelopment.wotn.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 
 import java.util.ArrayList;
@@ -87,9 +89,15 @@ public class Item {
     public Texture image;
     private SlotType type = SlotType.NORM;
     String name;
+    Rectangle position;
 
     public Item(Texture im){
         image = im;
+    }
+
+    public Item(Item i, Rectangle rectangle){
+        this(i);
+        this.position = rectangle;
     }
 
     public Item(Item i){
@@ -110,5 +118,17 @@ public class Item {
         ArrayList<String> r = new ArrayList<>();
         r.add(name);
         return r;
+    }
+
+    public Vector2 getPosition(){
+        return new Vector2(position.x, position.y);
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void render(SpriteBatch batch){
+        batch.draw(image, position.x, position.y, position.width, position.height);
     }
 }

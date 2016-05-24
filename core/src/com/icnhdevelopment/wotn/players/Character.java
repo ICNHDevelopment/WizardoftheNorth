@@ -587,7 +587,7 @@ public class Character extends AnimatedSprite {
         return null;
     }
 
-    protected void addToInventory(Item item){
+    public void addToInventory(Item item){
         for (int i = 0; i<inventory.length; i++){
             if (inventory[i] == null){
                 inventory[i] = item;
@@ -605,10 +605,12 @@ public class Character extends AnimatedSprite {
     }
 
     public void swapItemFromToolbar(Item mouse, int itemSlot){
-        toolbar[itemSlot-21] = mouse;
+        toolbar[itemSlot-23] = mouse;
     }
 
-    public void swapItemFromScrolls(Item mouse, int itemSlot) { toolbar[itemSlot-25] = mouse; }
+    public void swapItemFromScrolls(Item mouse, int itemSlot) {
+        scrolls[itemSlot-21] = mouse;
+    }
 
     public boolean isPlayer() { return player; }
 
@@ -620,7 +622,7 @@ public class Character extends AnimatedSprite {
     public Rectangle getHitBox() { return new Rectangle(footBox.x, footBox.y, footBox.width, footBox.height); }
 
     public Item[] getInventory() {
-        return WizardHelper.concat(WizardHelper.concat(WizardHelper.concat(inventory, gear), toolbar), scrolls);
+        return WizardHelper.concat(WizardHelper.concat(WizardHelper.concat(inventory, gear), scrolls), toolbar);
     }
 
     public ArrayList<BattleItem> getBattleItems(){
@@ -646,6 +648,8 @@ public class Character extends AnimatedSprite {
     public Item[] getToolbar(){
         return toolbar;
     }
+
+    public Item[] getScrolls() { return scrolls; }
 
     public String getName() {
         return name;
