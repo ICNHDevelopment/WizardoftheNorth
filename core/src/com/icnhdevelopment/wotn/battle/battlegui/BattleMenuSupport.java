@@ -25,6 +25,11 @@ public class BattleMenuSupport extends BattleMenu {
     }
 
     @Override
+    public void setParent(BattleMenu battleMenu) {
+        parent = battleMenu;
+    }
+
+    @Override
     public void update(CInputProcessor input, Battle battle) {
         updateMenu(input, battle);
     }
@@ -38,6 +43,11 @@ public class BattleMenuSupport extends BattleMenu {
             battle.setAction("protect", true, battle.currentTurn(), battle.currentTurn());
             BattleMenuMain.choseAction = true;
         }
+        if (input.didMouseClick()){
+            if (new Rectangle(input.getMousePosition().x, input.getMousePosition().y, 1, 1).overlaps(backRec)){
+                BattleMenuMain.current = parent;
+            }
+        }
     }
 
     @Override
@@ -49,5 +59,6 @@ public class BattleMenuSupport extends BattleMenu {
     public void renderMenu(SpriteBatch batch) {
         focus.render(batch);
         protect.render(batch);
+        batch.draw(backButton, backRec.x, backRec.y, backRec.width, backRec.height);
     }
 }

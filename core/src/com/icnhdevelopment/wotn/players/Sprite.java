@@ -6,16 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.Serializable;
+
 /**
  * Created by kyle on 10/23/15.
  */
-public class Sprite {
+public class Sprite implements Serializable {
 
     protected Texture texture;
     protected Vector2 position;
-    protected  Vector2 drawOffset;
+    protected Vector2 drawOffset;
     protected int width, height;
-    protected Color drawTint = new Color(Color.WHITE);
+    protected transient Color drawTint = new Color(Color.WHITE);
 
     public void create(String filename, Vector2 position, Vector2 size){
         texture = new Texture(filename);

@@ -20,6 +20,7 @@ import com.icnhdevelopment.wotn.players.Monster;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -62,6 +63,7 @@ public class Battle {
     ActionDoer actionDoer;
     TextHandler outputText;
     Rectangle outputRectangle;
+    ArrayList<DamageText> texts;
 
     boolean outcome;
 
@@ -90,6 +92,7 @@ public class Battle {
         bm = new BattleMenuMain(protSide.get(0));
         actionDoer = new ActionDoer();
         outputText = new TextHandler("Initialize", outputRectangle);
+        texts = new ArrayList<>();
 
         orderContainerRec = new Rectangle((Game.WIDTH()-(orderWidth*fightOrder.size()+orderSpace*(fightOrder.size()-1)))/2, Game.HEIGHT()-80, (70*fightOrder.size()+5*(fightOrder.size()-1)), 70);
     }
@@ -256,6 +259,13 @@ public class Battle {
                 }
             }
         }
+        Iterator<DamageText> iter = texts.iterator();
+        while (iter.hasNext()){
+            DamageText dt = iter.next();
+            if (dt.update()){
+                iter.remove();
+            }
+        }
         TICK++;
     }
 
@@ -301,6 +311,15 @@ public class Battle {
             total += i;
         }
         return total;
+    }
+
+    public void addDamageText(String text, Vector2 pos, int dir){
+        DamageText dt = new DamageText(text, pos, dir);
+        addDamageText(dt);
+    }
+
+    public void addDamageText(DamageText dt){
+        texts.add(dt);
     }
 
     void switchTurn(){
@@ -366,6 +385,9 @@ public class Battle {
         if (state.equals("fadein")){
             TextureRegion tr = new TextureRegion(battleTransition, ((battleStage%4)*160), (int)Math.floor((battleStage/4)*90), 160, 90);
             batch.draw(tr, 0, 0, Game.WIDTH(), Game.HEIGHT());
+        }
+        for (DamageText dt : texts){
+            dt.render(batch);
         }
         batch.end();
     }

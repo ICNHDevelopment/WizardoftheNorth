@@ -13,6 +13,7 @@ import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.world.World;
 
 import java.awt.*;
+import java.io.File;
 import java.util.Random;
 
 public class Game extends ApplicationAdapter {
@@ -58,6 +59,10 @@ public class Game extends ApplicationAdapter {
 		GAME_STATE = GameState.MENU;
 		currentMenu = new Menu();
 		currentMenu.init("ui/Menus/MNUMain.txt");
+		/*currentWorld = SaveFileHandler.deserialize(new File(System.getProperty("user.dir") + "wizardsave.dat"));
+		if (currentWorld==null){
+			currentWorld = new World();
+		}*/
 		currentWorld = new World();
 		currentBattle = new Battle();
 		mouseCursor = new Texture("ui/cursor.png");
@@ -70,6 +75,17 @@ public class Game extends ApplicationAdapter {
 		lightningTimeNext = 500 + (long)(random.nextDouble()*3000L);
 		lightningTime = System.currentTimeMillis();
 	}
+
+	/*
+	public void dispose(){
+		try {
+			SaveFileHandler.serialize(currentWorld, new File(System.getProperty("user.dir") + "wizardsave.dat"));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		super.dispose();
+	}
+	*/
 
 	@Override
 	public void render () {

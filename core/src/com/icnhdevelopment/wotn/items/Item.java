@@ -2,7 +2,9 @@ package com.icnhdevelopment.wotn.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.icnhdevelopment.wotn.gui.special.SlotType;
 
 import java.util.ArrayList;
@@ -16,11 +18,26 @@ public class Item {
     public static HashMap<String, Item> ITEMS;
     public static HashMap<String, SpecialItem> SPECIAL_ITEMS;
     public static HashMap<String, BattleItem> BATTLE_ITEMS;
+    public static HashMap<String, Scroll> SCROLLS;
+
+    public static Item GetItemByName(String name){
+        if (ITEMS.containsKey(name)){
+            return ITEMS.get(name);
+        } else if (SPECIAL_ITEMS.containsKey(name)) {
+            return SPECIAL_ITEMS.get(name);
+        } else if (BATTLE_ITEMS.containsKey(name)) {
+            return BATTLE_ITEMS.get(name);
+        } else if (SCROLLS.containsKey(name)) {
+            return SCROLLS.get(name);
+        }
+        return null;
+    }
 
     public static void InitItems(){
         ITEMS = new HashMap<>();
         SPECIAL_ITEMS = new HashMap<>();
         BATTLE_ITEMS = new HashMap<>();
+        SCROLLS = new HashMap<>();
         String[] items = Gdx.files.internal("Items/Items.txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 1; i<items.length; i++){
             String t = items[i];
@@ -29,7 +46,12 @@ public class Item {
             String name = data[1];
             SlotType st = SlotType.valueOf(data[2]);
             String spec = data[3];
-            Texture tex = new Texture("Items/" + k + ".png");
+            Texture tex;
+            try {
+                tex = new Texture("Items/" + k + ".png");
+            } catch (Exception e){
+                tex = new Texture("Items/Scroll.png");
+            }
             Texture over = null;
             try { over = new Texture("Items/" + k + "E.png"); } catch (Exception e){}
             if (spec.equals("spec")){
@@ -50,7 +72,13 @@ public class Item {
                 bi.name = name;
                 bi.value = Integer.valueOf(data[5]);
                 BATTLE_ITEMS.put(k, bi);
-            } else{
+            } else if (spec.equals("scr")){
+                Scroll scroll = new Scroll(tex);
+                scroll.name = name;
+                scroll.setType(SlotType.SCROLL);
+                SCROLLS.put(k, scroll);
+            }
+            else{
                 Item it = new Item(tex);
                 it.name = name;
                 ITEMS.put(k, it);
@@ -61,9 +89,15 @@ public class Item {
     public Texture image;
     private SlotType type = SlotType.NORM;
     String name;
+    Rectangle position;
 
     public Item(Texture im){
         image = im;
+    }
+
+    public Item(Item i, Rectangle rectangle){
+        this(i);
+        this.position = rectangle;
     }
 
     public Item(Item i){
@@ -84,5 +118,17 @@ public class Item {
         ArrayList<String> r = new ArrayList<>();
         r.add(name);
         return r;
+    }
+
+    public Vector2 getPosition(){
+        return new Vector2(position.x, position.y);
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void render(SpriteBatch batch){
+        batch.draw(image, position.x, position.y, position.width, position.height);
     }
 }

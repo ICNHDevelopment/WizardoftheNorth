@@ -24,20 +24,24 @@ public class InventoryObject extends CollideObject {
 
     private ArrayList<Item> items;
 
+    public void create(String filename, Vector2 position, Vector2 size, boolean b, SlotType st, String name){
+        super.create(filename, position, size, b, st);
+        currentImage = this.texture;
+        String loc = filename.substring(0, filename.lastIndexOf("/")+1);
+        interactImage = new Texture(loc + name + "H.png");
+        if (!b) {
+            openImage = new Texture(loc + name + "O.png");
+        }
+    }
+
     public void create(String filename, Vector2 position, Vector2 size, boolean b, SlotType st, String name, String invenFile){
         super.create(filename, position, size, b, st);
 
         this.items = new ArrayList<>();
         String[] items = Gdx.files.internal(invenFile + ".txt").readString().replace("\n", "").replace("\r", "").split(";");
         for (int i = 0; i<items.length; i++){
-            if (Item.ITEMS.containsKey(items[i])){
-                Item it = Item.ITEMS.get(items[i]);
-                this.items.add(new Item(it));
-            } else if (Item.SPECIAL_ITEMS.containsKey(items[i])){
-                SpecialItem it = Item.SPECIAL_ITEMS.get(items[i]);
-                this.items.add(it);
-            } else if (Item.BATTLE_ITEMS.containsKey(items[i])){
-                BattleItem it = Item.BATTLE_ITEMS.get(items[i]);
+            Item it = Item.GetItemByName(items[i]);
+            if (it != null){
                 this.items.add(it);
             }
         }
@@ -48,7 +52,9 @@ public class InventoryObject extends CollideObject {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(currentImage, getPosition().x, getPosition().y, width, height);
+        if (isVisible()) {
+            batch.draw(currentImage, getPosition().x, getPosition().y, width, height);
+        }
     }
 
     public boolean isOpened() {
@@ -71,6 +77,13 @@ public class InventoryObject extends CollideObject {
         if (opened){
             currentImage = openImage;
         }
+    }
+
+    public void addItem(Item i){
+        if (items == null){
+            items = new ArrayList<>();
+        }
+        items.add(i);
     }
 
     public ArrayList<Item> getItems() {

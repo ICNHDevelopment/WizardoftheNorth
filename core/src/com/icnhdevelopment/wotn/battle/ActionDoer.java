@@ -82,7 +82,10 @@ public class ActionDoer {
             } else if (action.equals("slash")){
                 if (attackActorWithActor(doer, receiver, 2f)){
                     if (!attackMiss){
-                        receiver.damage(doer.getDamage(doer, receiver));
+                        float damage = doer.getDamage(doer, receiver);
+                        receiver.damage(damage);
+                        DamageText dt = new DamageText((int)damage + "", new Vector2(receiver.getPosition().x, receiver.getPosition().y + receiver.getSize().y), (goodGuy?1:-1));
+                        battle.addDamageText(dt);
                         if (receiver.getCurrentVitality()<=0){
                             receiver.animateDead();
                         }
@@ -94,7 +97,10 @@ public class ActionDoer {
             } else if (action.equals("range")){
                 if (doRangedAttack(doer, receiver, 2f)){
                     if (!attackMiss){
-                        receiver.damage(doer.getDamage(doer, receiver));
+                        float damage = doer.getDamage(doer, receiver);
+                        receiver.damage(damage);
+                        DamageText dt = new DamageText((int)damage + "", new Vector2(receiver.getPosition().x, receiver.getPosition().y + receiver.getSize().y), (goodGuy?1:-1));
+                        battle.addDamageText(dt);
                         if (receiver.getCurrentVitality()<=0){
                             receiver.animateDead();
                         }

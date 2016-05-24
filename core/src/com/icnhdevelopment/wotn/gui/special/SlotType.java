@@ -5,5 +5,5 @@ package com.icnhdevelopment.wotn.gui.special;
  */
 public enum SlotType {
 
-    NORM, HEAD, CHEST, LEGS, FEET, WEAPON, AMULET, GAUNT, RING
+    NORM, HEAD, CHEST, LEGS, FEET, WEAPON, AMULET, GAUNT, RING, SCROLL
 }

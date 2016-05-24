@@ -10,3 +10,5 @@ LegsIron:Iron Leggings:LEGS:spec:0:0:6:0:0;
 RingGold:Gold Ring:RING:spec:15:0:0:0:15;
 RingSilver:Silver Ring:RING:spec:5:0:0:0:5;
 SwordStone:Stone Sword:WEAPON:spec:0:0:0:25:0;
+Telekinesis:Telekinesis Scroll:SCROLL:scr;
+KeySewer:Sewer Key:NORM:nor

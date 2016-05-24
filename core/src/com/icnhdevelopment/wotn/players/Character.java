@@ -13,6 +13,7 @@ import com.icnhdevelopment.wotn.gui.special.SlotType;
 import com.icnhdevelopment.wotn.handlers.WizardHelper;
 import com.icnhdevelopment.wotn.items.BattleItem;
 import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.items.Scroll;
 import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.world.CollideObject;
 import com.icnhdevelopment.wotn.world.InventoryObject;
@@ -38,6 +39,7 @@ public class Character extends AnimatedSprite {
     protected Item[] inventory;
     protected Item[] gear;
     protected Item[] toolbar;
+    protected Item[] scrolls;
 
     CollideObject interactObject;
     NPCharacter interactCharacter;
@@ -135,6 +137,7 @@ public class Character extends AnimatedSprite {
         inventory = new Item[12];
         gear = new Item[9];
         toolbar = new Item[4];
+        scrolls = new Item[2];
         regHeight = texture.getHeight()/2;
         width = (int)(regWidth);//*World.SCALE);
         height = (int)(regHeight);//* World.SCALE);
@@ -537,11 +540,20 @@ public class Character extends AnimatedSprite {
                                 addToInventory(new SpecialItem((SpecialItem) i));
                             } else if (i instanceof BattleItem){
                                 addToInventory(new BattleItem((BattleItem) i));
-                            } else {
+                            } else if (i instanceof Scroll){
+                                addToInventory(new Scroll((Scroll) i));
+                            }
+                            else {
                                 addToInventory(new Item(i));
                             }
                         }
                         invenObject.setOpened(true);
+                        if (interactObject.isBreakable()) {
+                            SlotType bi = interactObject.getBreakItem();
+                            if (bi.equals(SlotType.NORM) || (bi.equals(SlotType.WEAPON) && gear[8] != null)) {
+                                interactObject.setVisible(false);
+                            }
+                        }
                         Gdx.audio.newSound(Gdx.files.internal("audio/openInventoryObject.ogg")).play();
                     }
                 } else {
@@ -575,7 +587,7 @@ public class Character extends AnimatedSprite {
         return null;
     }
 
-    protected void addToInventory(Item item){
+    public void addToInventory(Item item){
         for (int i = 0; i<inventory.length; i++){
             if (inventory[i] == null){
                 inventory[i] = item;
@@ -593,7 +605,11 @@ public class Character extends AnimatedSprite {
     }
 
     public void swapItemFromToolbar(Item mouse, int itemSlot){
-        toolbar[itemSlot-21] = mouse;
+        toolbar[itemSlot-23] = mouse;
+    }
+
+    public void swapItemFromScrolls(Item mouse, int itemSlot) {
+        scrolls[itemSlot-21] = mouse;
     }
 
     public boolean isPlayer() { return player; }
@@ -606,7 +622,7 @@ public class Character extends AnimatedSprite {
     public Rectangle getHitBox() { return new Rectangle(footBox.x, footBox.y, footBox.width, footBox.height); }
 
     public Item[] getInventory() {
-        return WizardHelper.concat(WizardHelper.concat(inventory, gear), toolbar);
+        return WizardHelper.concat(WizardHelper.concat(WizardHelper.concat(inventory, gear), scrolls), toolbar);
     }
 
     public ArrayList<BattleItem> getBattleItems(){
@@ -632,6 +648,8 @@ public class Character extends AnimatedSprite {
     public Item[] getToolbar(){
         return toolbar;
     }
+
+    public Item[] getScrolls() { return scrolls; }
 
     public String getName() {
         return name;

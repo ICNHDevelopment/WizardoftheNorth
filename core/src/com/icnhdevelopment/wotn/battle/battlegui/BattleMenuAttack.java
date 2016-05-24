@@ -27,6 +27,11 @@ public class BattleMenuAttack extends BattleMenu {
     }
 
     @Override
+    public void setParent(BattleMenu battleMenu) {
+        parent = battleMenu;
+    }
+
+    @Override
     public void update(CInputProcessor input, Battle battle) {
         updateMenu(input, battle);
     }
@@ -51,6 +56,12 @@ public class BattleMenuAttack extends BattleMenu {
                 }
             }
         }
+        if (input.didMouseClick()){
+            if (new Rectangle(input.getMousePosition().x, input.getMousePosition().y, 1, 1).overlaps(backRec)){
+                choosingWhat = "action";
+                BattleMenuMain.current = parent;
+            }
+        }
     }
 
     @Override
@@ -61,5 +72,6 @@ public class BattleMenuAttack extends BattleMenu {
     @Override
     public void renderMenu(SpriteBatch batch) {
         onlyAction.render(batch);
+        batch.draw(backButton, backRec.x, backRec.y, backRec.width, backRec.height);
     }
 }

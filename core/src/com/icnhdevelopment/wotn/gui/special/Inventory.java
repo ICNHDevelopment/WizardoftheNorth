@@ -16,6 +16,7 @@ import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.items.SpecialItem;
 import com.icnhdevelopment.wotn.players.Character;
 
+import javax.tools.Tool;
 import java.util.ArrayList;
 
 /**
@@ -68,7 +69,7 @@ public class Inventory extends Container {
         for (int j = 0; j<4; j++){
             for (int i = 0; i<3; i++){
                 boolean b = false;
-                if (j>1) {
+                if (j>2) {
                     b = true;
                 }
                 ItemSlot is = new ItemSlot(invenImage, new Vector2(startX + (i*60), textureSize.y-(startY + (j*60))), new Vector2(60, 60), null, b);
@@ -121,12 +122,24 @@ public class Inventory extends Container {
             is.setImagealignment(Alignment.STRETCHED);
             defaultInventory.add(is);
         }
+        //Weapon
         ItemSlot is = new ItemSlot(invenImage, new Vector2(160, textureSize.y-(286)), new Vector2(60, 60), null, false);
         is.setSlotType(SlotType.WEAPON);
         is.setDefaultImage(new Texture("Items/DefaultWeapon.png"));
         is.setHoverImage(new Texture("Items/highlight.png"));
         is.setImagealignment(Alignment.STRETCHED);
         defaultInventory.add(is);
+        //Scrolls
+        startX = 254;
+        startY = (int) textureSize.y - (470 + 60);
+        for (int i = 0; i < 2; i++) {
+            is = new ItemSlot(invenImage, new Vector2(startX + (i * 60), startY), new Vector2(60, 60), null, false);
+            is.setSlotType(SlotType.SCROLL);
+            is.setHoverImage(new Texture("Items/highlight.png"));
+            is.setDefaultImage(new Texture("Items/DefaultScroll.png"));
+            is.setImagealignment(Alignment.STRETCHED);
+            defaultInventory.add(is);
+        }
     }
 
     void loadStatSlots(){
@@ -171,6 +184,8 @@ public class Inventory extends Container {
                                     character.swapItemFromInventory(mouseItem, i);
                                 } else if (i<21){
                                     character.swapItemFromGear(mouseItem, i);
+                                } else if (i<23) {
+                                    character.swapItemFromScrolls(mouseItem, i);
                                 } else {
                                     character.swapItemFromToolbar(mouseItem, i);
                                 }
@@ -182,6 +197,8 @@ public class Inventory extends Container {
                                 character.swapItemFromInventory(mouseItem, i);
                             } else if (i<21){
                                 character.swapItemFromGear(mouseItem, i);
+                            } else if (i<23) {
+                                character.swapItemFromScrolls(mouseItem, i);
                             } else {
                                 character.swapItemFromToolbar(mouseItem, i);
                             }
@@ -205,12 +222,12 @@ public class Inventory extends Container {
                 }
                 renderBackground(batch);
                 renderChildren(batch);
-                TextureRegion temp = character.getImage();
-                Rectangle tempRec = new Rectangle(invenImage.getAbsolutePosition().x+(invenImage.getSize().x-temp.getRegionWidth()*3)/2,
-                        defaultInventory.get(defaultInventory.size()-1).getAbsolutePosition().y+40,
-                        temp.getRegionWidth()*3, temp.getRegionHeight()*3);
                 if (!(this instanceof Toolbar)) {
                     batch.begin();
+                    TextureRegion temp = character.getImage();
+                    Rectangle tempRec = new Rectangle(invenImage.getAbsolutePosition().x+(invenImage.getSize().x-temp.getRegionWidth()*3)/2,
+                            defaultInventory.get(defaultInventory.size()-1).getAbsolutePosition().y+40,
+                            temp.getRegionWidth()*3, temp.getRegionHeight()*3);
                     batch.draw(temp, tempRec.x, tempRec.y, tempRec.width, tempRec.height);
                     Item[] gear = character.getInventory();
                     for (int i = 12; i<21; i++){

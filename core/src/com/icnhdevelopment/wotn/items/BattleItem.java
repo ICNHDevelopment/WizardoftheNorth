@@ -25,6 +25,10 @@ public class BattleItem extends Item {
         this.value = b.value;
     }
 
+    public int getValue(){
+        return value;
+    }
+
     public void performFunction(Character character){
         switch(modStat){
             case "VIT":

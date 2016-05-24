@@ -3,6 +3,7 @@ package com.icnhdevelopment.wotn.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.icnhdevelopment.wotn.items.Item;
 import com.icnhdevelopment.wotn.players.Character;
 import com.icnhdevelopment.wotn.players.CharacterStats;
 import com.icnhdevelopment.wotn.players.Monster;
@@ -41,21 +42,29 @@ public class BattleInfo {
             String[] monstas = Gdx.files.internal(monster.battleDataFile).readString().replace("\n", "").replace("\r", "").split(";");
             for (int i = 1; i<monstas.length; i++){
                 String[] data = monstas[i].split(":");
-                String type = data[0];
-                int level = Integer.valueOf(data[1]);
-                int vit = Integer.valueOf(data[2]);
-                int agl = Integer.valueOf(data[3]);
-                int res = Integer.valueOf(data[4]);
-                int str = Integer.valueOf(data[5]);
-                int wis = Integer.valueOf(data[6]);
-                int exp = Integer.valueOf(data[7]);
-                Monster m = Monster.getMonster(type);
-                assert m!=null;
-                CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
-                m.create(m.defaultFile, m.prefix, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
-                m.animateIdle();
-                antSide.add(m);
-                expAmounts.add(exp);
+                if (data.length==1&&i==monstas.length-1&&enemy instanceof Monster){
+                    String[] its = data[0].split(",");
+                    for (int j = 0; j<its.length; j++){
+                        Item dr = Item.GetItemByName(its[j]);
+                        ((Monster)enemy).addDrop(dr);
+                    }
+                } else {
+                    String type = data[0];
+                    int level = Integer.valueOf(data[1]);
+                    int vit = Integer.valueOf(data[2]);
+                    int agl = Integer.valueOf(data[3]);
+                    int res = Integer.valueOf(data[4]);
+                    int str = Integer.valueOf(data[5]);
+                    int wis = Integer.valueOf(data[6]);
+                    int exp = Integer.valueOf(data[7]);
+                    Monster m = Monster.getMonster(type);
+                    assert m != null;
+                    CharacterStats cs = new CharacterStats(m, level, vit, agl, res, str, wis);
+                    m.create(m.defaultFile, m.prefix, m.defaultMaxFrames, new Vector2(0, 0), 2, false, cs);
+                    m.animateIdle();
+                    antSide.add(m);
+                    expAmounts.add(exp);
+                }
             }
         } else {
             antSide.add(ch2);

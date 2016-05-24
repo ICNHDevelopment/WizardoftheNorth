@@ -22,15 +22,19 @@ import com.icnhdevelopment.wotn.gui.special.*;
 import com.icnhdevelopment.wotn.handlers.CInputProcessor;
 import com.icnhdevelopment.wotn.handlers.GameState;
 import com.icnhdevelopment.wotn.handlers.TextHandler;
+import com.icnhdevelopment.wotn.handlers.WizardHelper;
+import com.icnhdevelopment.wotn.items.Item;
+import com.icnhdevelopment.wotn.items.Scroll;
 import com.icnhdevelopment.wotn.players.*;
 import com.icnhdevelopment.wotn.players.Character;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by kyle on 6/4/15.
  */
-public class World {
+public class World implements Serializable{
 
     OrthographicCamera camera;
     TiledMapRenderer mapRenderer;
@@ -52,7 +56,7 @@ public class World {
     ArrayList<AnimatedSprite> animatedSprites;
     ArrayList<NPCharacter> npcs;
     ArrayList<Sprite> multiDSprites;
-    ArrayList<Sprite> items;
+    ArrayList<Item> items;
 
     Toolbar toolbar;
     Inventory inventory;
@@ -245,10 +249,11 @@ public class World {
             float ty = (float) obj.getProperties().get("y");
             float tw = (float) obj.getProperties().get("width");
             float th = (float) obj.getProperties().get("height");
-            String file = "Items/" + name + ".png";
-            Sprite temp = new Sprite();
-            temp.create(file, new Vector2(tx, ty), new Vector2(tw, th));
-            items.add(temp);
+            Rectangle rec = new Rectangle(tx, ty, tw, th);
+            Item i = Item.GetItemByName(name);
+            if (i!=null) {
+                items.add(new Item(i, rec));
+            }
         }
     }
 
@@ -294,6 +299,19 @@ public class World {
     }
 
     public void kill(Character c){
+        if (c instanceof Monster){
+            Monster m = (Monster)c;
+            ArrayList<Item> droppedItems = m.getDrops();
+            if (droppedItems!=null){
+                InventoryObject io = new InventoryObject();
+                io.create("world/images/Bag.png", c.getPosition(), new Vector2(32, 32), true, SlotType.NORM, "Bag");
+                for (Item i : droppedItems){
+                    io.addItem(i);
+                }
+                collideObjects.add(io);
+                inventoryObjects.add(io);
+            }
+        }
         if (enemies.contains(c)){
             enemies.remove(c);
         }
@@ -394,7 +412,6 @@ public class World {
                         speakingCharacter = inter;
                     }
                 }
-
                 for (Spawner s : spawners) {
                     if (s.spawn) {
                         s.spawn();
@@ -403,6 +420,31 @@ public class World {
                 }
                 sortMultiDSprites();
                 testForBattle();
+                if (input.isKeyDown(Input.Keys.NUM_1)){
+                    Item[] sc = mainCharacter.getScrolls();
+                    if (sc[0] != null){
+                        if (sc[0].getName().equals("Telekinesis")) {
+                            Item closest = null;
+                            float least = Float.MAX_VALUE;
+                            for (Item i : items) {
+                                float dist = WizardHelper.getDistanceFromPoint(mainCharacter.getPosition(), i.getPosition());
+                                if (dist < least) {
+                                    least = dist;
+                                    closest = i;
+                                }
+                            }
+                            if (closest != null) {
+                                Vector2 iPos = closest.getPosition();
+                                if (Math.abs(iPos.x - mainCharacter.getPosition().x) < Game.WIDTH() / 2) {
+                                    if (Math.abs(iPos.y - mainCharacter.getPosition().y) < Game.HEIGHT() / 2) {
+                                        mainCharacter.addToInventory(new Item(closest));
+                                        items.remove(closest);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 TICK++;
                 if (input.isKeyDown(Input.Keys.E)) {
@@ -467,7 +509,7 @@ public class World {
         for (AnimatedSprite as : animatedSprites){
             as.render(batch);
         }
-        for (Sprite s : items){
+        for (Item s : items){
             s.render(batch);
         }
         for (Sprite m : multiDSprites){
