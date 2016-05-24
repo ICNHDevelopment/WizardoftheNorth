@@ -423,23 +423,21 @@ public class World implements Serializable{
                 if (input.isKeyDown(Input.Keys.NUM_1)){
                     Item[] sc = mainCharacter.getScrolls();
                     if (sc[0] != null){
-                        if (sc[0].getName().equals("Telekinesis")) {
-                            Item closest = null;
-                            float least = Float.MAX_VALUE;
-                            for (Item i : items) {
-                                float dist = WizardHelper.getDistanceFromPoint(mainCharacter.getPosition(), i.getPosition());
-                                if (dist < least) {
-                                    least = dist;
-                                    closest = i;
-                                }
+                        Item closest = null;
+                        float least = Float.MAX_VALUE;
+                        for (Item i : items) {
+                            float dist = WizardHelper.getDistanceFromPoint(mainCharacter.getPosition(), i.getPosition());
+                            if (dist < least) {
+                                least = dist;
+                                closest = i;
                             }
-                            if (closest != null) {
-                                Vector2 iPos = closest.getPosition();
-                                if (Math.abs(iPos.x - mainCharacter.getPosition().x) < Game.WIDTH() / 2) {
-                                    if (Math.abs(iPos.y - mainCharacter.getPosition().y) < Game.HEIGHT() / 2) {
-                                        mainCharacter.addToInventory(new Item(closest));
-                                        items.remove(closest);
-                                    }
+                        }
+                        if (closest != null) {
+                            Vector2 iPos = closest.getPosition();
+                            if (Math.abs(iPos.x - mainCharacter.getPosition().x) < Game.WIDTH() / 2) {
+                                if (Math.abs(iPos.y - mainCharacter.getPosition().y) < Game.HEIGHT() / 2) {
+                                    mainCharacter.addToInventory(new Item(closest));
+                                    items.remove(closest);
                                 }
                             }
                         }
